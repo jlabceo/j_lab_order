@@ -152,6 +152,41 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 .rh-amt{font-size:14px;font-weight:900;color:var(--red);white-space:nowrap}
 .rh-items{margin-top:8px;font-size:11px;color:var(--sub);border-top:1px solid #EEF;padding-top:7px;line-height:1.6}
 .rh-back{display:flex;align-items:center;gap:5px;color:var(--red);background:none;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:0 16px 12px;-webkit-user-select:none;user-select:none}
+
+/* ── 주문내역 오버레이 ── */
+#history-overlay{display:none;position:fixed;inset:0;background:#EEF2F7;z-index:8000;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#history-overlay.show{display:block}
+.hist-nav{background:var(--blue);color:#fff;padding:calc(12px + var(--safe-top)) 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:1}
+.hist-nav-back{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;padding:5px 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.hist-nav-title{flex:1;font-size:16px;font-weight:800}
+.hist-wrap{max-width:800px;margin:0 auto;padding:16px 12px 40px}
+.hist-empty{text-align:center;padding:60px 20px;color:var(--sub);font-size:14px;line-height:1.7}
+.hist-card{background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:12px;overflow:hidden}
+.hist-card-hdr{padding:12px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;cursor:pointer}
+.hist-card-hdr:hover{background:#FAFBFF}
+.hist-card-meta{flex:1}
+.hist-card-top{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap}
+.hist-mode-badge{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;white-space:nowrap}
+.hist-mode-badge.order{background:var(--blue-lt);color:var(--blue)}
+.hist-mode-badge.return{background:#FFF0F0;color:var(--red)}
+.hist-mode-badge.cancel{background:#F0F0F0;color:#999;text-decoration:line-through}
+.hist-school{font-size:14px;font-weight:700;color:var(--text)}
+.hist-sub{font-size:11px;color:var(--sub);margin-top:2px}
+.hist-total{font-size:14px;font-weight:800;color:var(--blue);white-space:nowrap}
+.hist-card-body{display:none;padding:0 16px 14px;border-top:1px solid #EEF}
+.hist-card-body.open{display:block}
+.hist-item-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid #F5F5F5}
+.hist-item-row:last-child{border-bottom:none}
+.hist-item-name{color:var(--text);flex:1}
+.hist-item-qty{color:var(--sub);white-space:nowrap;margin-left:8px}
+.hist-cancel-btn{width:100%;margin-top:12px;padding:10px;background:#fff;color:var(--red);border:2px solid var(--red);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.hist-cancel-btn:hover{background:var(--red);color:#fff}
+.hist-cancel-btn:disabled{border-color:#ccc;color:#ccc;cursor:not-allowed}
+.hist-loading{text-align:center;padding:40px;color:var(--sub)}
+.hist-filter{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.hist-filter::-webkit-scrollbar{display:none}
+.hist-filter-btn{flex-shrink:0;padding:6px 14px;border:2px solid var(--border);border-radius:20px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--sub);-webkit-user-select:none;user-select:none;transition:all .15s}
+.hist-filter-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
 @media(max-width:480px){
   .school-grid{grid-template-columns:repeat(2,1fr)}
   .logo{font-size:15px}
@@ -162,6 +197,21 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 <body>
 <div id="loading"><div class="spinner"></div></div>
 <div id="toast"></div>
+<div id="history-overlay">
+  <div class="hist-nav">
+    <button class="hist-nav-back" onclick="closeHistory()">← 뒤로</button>
+    <div class="hist-nav-title">📋 내 주문 내역</div>
+  </div>
+  <div class="hist-wrap">
+    <div class="hist-filter" id="hist-filter">
+      <button class="hist-filter-btn active" onclick="histFilter('all',this)">전체</button>
+      <button class="hist-filter-btn" onclick="histFilter('order',this)">주문</button>
+      <button class="hist-filter-btn" onclick="histFilter('return',this)">반품</button>
+      <button class="hist-filter-btn" onclick="histFilter('cancel',this)">취소</button>
+    </div>
+    <div id="history-content"><div class="hist-loading">⏳ 불러오는 중...</div></div>
+  </div>
+</div>
 <div id="modal">
   <div class="modal-box">
     <div class="modal-icon">✅</div>
@@ -174,6 +224,7 @@ textarea:focus{outline:none;border-color:var(--blue2)}
   <div class="logo">🏫 J-Lab</div>
   <div class="inst-badge" id="nav-name">주문시스템</div>
   <button class="install-btn" id="install-btn" onclick="installPWA()">📲 앱 설치</button>
+  <button class="install-btn" id="history-btn" onclick="openHistory()" style="display:none">📋 내역</button>
 </nav>
 <main>
   <div id="install-guide">
@@ -864,6 +915,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   renderQuarterPicker();
   renderSchools();
   setupInstall();
+  document.getElementById('history-btn').style.display='';
 });
 
 // ─── Mode ───
@@ -1386,6 +1438,144 @@ function closeModal(){
   document.getElementById('prod-card').style.display='none';
   document.getElementById('order-card').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── 주문내역 조회 ───
+let histAllOrders=[], histCurFilter='all';
+
+async function openHistory(){
+  document.getElementById('history-overlay').classList.add('show');
+  document.getElementById('history-content').innerHTML='<div class="hist-loading">⏳ 불러오는 중...</div>';
+  histCurFilter='all';
+  document.querySelectorAll('.hist-filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+
+  let orders=[];
+  // GAS 우선
+  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
+    try{
+      const url=APPS_SCRIPT_URL+'?action=history&uid='+encodeURIComponent(instId);
+      const res=await fetch(url,{redirect:'follow'});
+      const data=await res.json();
+      if(Array.isArray(data)){ orders=data; }
+    }catch(e){ console.warn('GAS 조회 실패, localStorage 사용',e); }
+  }
+  // localStorage 폴백
+  if(!orders.length){
+    orders=getOrderHistory().map(o=>({
+      mode:o.mode||'order', orderId:String(o.id),
+      orderAt:o.orderAt, school:o.school,
+      quarterLabel:`${o.year}년 ${o.quarter}분기`,
+      items:o.items.map(i=>i.name+'×'+i.qty).join(' / '),
+      qty:o.items.reduce((s,i)=>s+i.qty,0),
+      total:o.total, status:'정상', returnReason:''
+    }));
+  }
+  histAllOrders=orders;
+  renderHistoryList(orders);
+}
+
+function closeHistory(){
+  document.getElementById('history-overlay').classList.remove('show');
+}
+
+function histFilter(type,btn){
+  histCurFilter=type;
+  document.querySelectorAll('.hist-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = type==='all' ? histAllOrders
+    : type==='cancel' ? histAllOrders.filter(o=>o.status==='취소')
+    : histAllOrders.filter(o=>o.mode===type && o.status!=='취소');
+  renderHistoryList(filtered);
+}
+
+function renderHistoryList(orders){
+  const el=document.getElementById('history-content');
+  if(!orders.length){
+    el.innerHTML='<div class="hist-empty">📭 주문 내역이 없습니다.</div>';
+    return;
+  }
+  el.innerHTML=orders.map((o,i)=>{
+    const isCanceled=o.status==='취소';
+    const isRet=o.mode==='return';
+    const badgeClass=isCanceled?'cancel':isRet?'return':'order';
+    const badgeText=isCanceled?'취소됨':isRet?'↩️ 반품':'📦 주문';
+    // 제품 파싱
+    const itemParts=(o.items||'').split(' / ').map(s=>{
+      const m=s.match(/^(.+)×(\d+)/);
+      return m?{name:m[1],qty:m[2]}:{name:s,qty:''};
+    });
+    const itemRows=itemParts.map(p=>`
+      <div class="hist-item-row">
+        <span class="hist-item-name">${p.name}</span>
+        <span class="hist-item-qty">×${p.qty}</span>
+      </div>`).join('');
+    const cancelBtn=(!isCanceled && !isRet)
+      ?`<button class="hist-cancel-btn" onclick="requestCancel('${o.orderId}',${i},this)">🚫 이 주문 취소 요청</button>`:'';
+    const retReason=isRet&&o.returnReason?`<div style="font-size:12px;color:var(--red);margin-top:6px">사유: ${o.returnReason}</div>`:'';
+    return `<div class="hist-card">
+      <div class="hist-card-hdr" onclick="toggleHistCard(this)">
+        <div class="hist-card-meta">
+          <div class="hist-card-top">
+            <span class="hist-mode-badge ${badgeClass}">${badgeText}</span>
+            <span class="hist-school">${o.school}</span>
+          </div>
+          <div class="hist-sub">${o.quarterLabel} · ${o.orderAt}</div>
+        </div>
+        <div class="hist-total">${fmt(o.total)}</div>
+      </div>
+      <div class="hist-card-body">
+        ${itemRows}
+        ${retReason}
+        ${cancelBtn}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleHistCard(hdr){
+  const body=hdr.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+async function requestCancel(orderId, idx, btn){
+  if(!confirm('이 주문을 취소 요청하시겠습니까?\n취소 후에는 되돌릴 수 없습니다.')) return;
+  btn.disabled=true;
+  btn.textContent='⏳ 처리 중...';
+
+  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
+    try{
+      const url=APPS_SCRIPT_URL+'?action=cancel&uid='+encodeURIComponent(instId)+'&orderId='+encodeURIComponent(orderId);
+      const res=await fetch(url,{redirect:'follow'});
+      const data=await res.json();
+      if(data.ok){
+        showToast('✅ 취소 요청이 접수되었습니다');
+        histAllOrders[idx].status='취소';
+        // localStorage도 업데이트
+        updateLocalOrderStatus(orderId,'취소');
+        openHistory();
+        return;
+      }
+    }catch(e){ console.error(e); }
+  } else {
+    // GAS 없을 때 localStorage만 처리
+    updateLocalOrderStatus(orderId,'취소');
+    histAllOrders[idx].status='취소';
+    showToast('✅ 취소 처리되었습니다 (로컬)');
+    openHistory();
+    return;
+  }
+  btn.disabled=false;
+  btn.textContent='🚫 이 주문 취소 요청';
+  showToast('❌ 취소 처리 실패. 다시 시도해주세요.');
+}
+
+function updateLocalOrderStatus(orderId, status){
+  try{
+    const key='orders_'+instId;
+    const hist=JSON.parse(localStorage.getItem(key)||'[]');
+    hist.forEach(o=>{ if(String(o.id)===String(orderId)) o.status=status; });
+    localStorage.setItem(key,JSON.stringify(hist));
+  }catch(e){}
 }
 
 // ─── PWA Install ───
