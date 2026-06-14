@@ -79,6 +79,7 @@ tr:hover td{background:#F8FBFF}
 .cat-aivinu{background:#F3E5F5;color:#7030A0}
 .cat-aero{background:#FCE4D6;color:#C55A11}
 .cat-nemo{background:#BDD7EE;color:#0070C0}
+.cat-connect{background:#FFF2CC;color:#7F6000}
 .price-cell{font-weight:700;color:var(--blue);white-space:nowrap}
 .sub-cell{color:var(--orange);font-weight:700;white-space:nowrap;min-width:80px}
 
@@ -233,19 +234,27 @@ const P = {
     {id:"T1",name:"테크닉 LEVEL 1 KIT",price:132000,cat:"technic"},
     {id:"T2",name:"테크닉 LEVEL 2 KIT",price:132000,cat:"technic"},
     {id:"T3",name:"테크닉 LEVEL 3 KIT",price:132000,cat:"technic"},
-    {id:"T4",name:"테크닉 LEVEL 4 KIT",price:154000,cat:"technic"},
-    {id:"T5",name:"테크닉 LEVEL 5 KIT",price:176000,cat:"technic"},
-    {id:"T6",name:"테크닉 LEVEL 6 KIT (무선)",price:220000,cat:"technic"},
-    {id:"T7",name:"테크닉 LEVEL 7 KIT",price:220000,cat:"technic"},
+    {id:"T4",name:"테크닉 LEVEL 4 KIT",price:132000,cat:"technic"},
+    {id:"T5",name:"테크닉 LEVEL 5 KIT",price:132000,cat:"technic"},
+    {id:"T6",name:"테크닉 LEVEL 6 KIT (무선)",price:132000,cat:"technic"},
+    {id:"T7",name:"테크닉 LEVEL 7 KIT",price:150000,cat:"technic"},
     {id:"TOOL",name:"프로보 공구세트",price:35000,cat:"technic"},
   ],
   malang:[
     {id:"M1",name:"말랑말랑 코딩여행 LEVEL 1 KIT",price:110000,cat:"malang"},
     {id:"M2",name:"말랑말랑 코딩여행 LEVEL 2 KIT",price:110000,cat:"malang"},
     {id:"M3",name:"말랑말랑 코딩여행 LEVEL 3 KIT",price:110000,cat:"malang"},
-    {id:"M4",name:"말랑말랑 코딩여행 LEVEL 4 KIT",price:132000,cat:"malang"},
-    {id:"M5",name:"말랑말랑 코딩여행 LEVEL 5 KIT",price:132000,cat:"malang"},
-    {id:"M6",name:"말랑말랑 코딩여행 LEVEL 6 KIT",price:154000,cat:"malang"},
+    {id:"M4",name:"말랑말랑 코딩여행 LEVEL 4 KIT",price:110000,cat:"malang"},
+    {id:"M5",name:"말랑말랑 코딩 메이커 LEVEL 5",price:110000,cat:"malang"},
+    {id:"M6",name:"말랑말랑 코딩 메이커 LEVEL 6",price:120000,cat:"malang"},
+  ],
+  connect:[
+    {id:"C1",name:"커넥트 LEVEL 1 KIT",price:132000,cat:"connect"},
+    {id:"C2",name:"커넥트 LEVEL 2 KIT",price:132000,cat:"connect"},
+    {id:"C3",name:"커넥트 LEVEL 3 KIT",price:132000,cat:"connect"},
+    {id:"C4",name:"커넥트 LEVEL 4 KIT",price:132000,cat:"connect"},
+    {id:"C5",name:"커넥트 LEVEL 5 KIT",price:132000,cat:"connect"},
+    {id:"C6",name:"커넥트 LEVEL 6 KIT",price:132000,cat:"connect"},
   ],
   aivinu:[
     {id:"AI1",name:"AI VINU LEVEL 1 KIT",price:154000,cat:"aivinu"},
@@ -260,7 +269,7 @@ const P = {
     {id:"AE4",name:"항공과학 종이비행기 KIT",price:66000,cat:"aero"},
   ],
   nemo:[
-    {id:"NE1",name:"NEMO 상판 KIT",price:88000,cat:"nemo"},
+    {id:"NE1",name:"NEMO 상판 KIT",price:30000,cat:"nemo"},
     {id:"NE2",name:"NEMO 하판 KIT",price:99000,cat:"nemo"},
     {id:"NE3",name:"NEMO 공구세트",price:33000,cat:"nemo"},
   ],
@@ -306,7 +315,7 @@ const INST = {
   ]},
   // 테스트 접속
   "admin":{name:"관리자(테스트)",schools:[
-    {name:"테스트 학교",type:"직영",p:["technic","malang","aivinu","aero","nemo"]},
+    {name:"테스트 학교",type:"직영",p:["technic","malang","connect","aivinu","aero","nemo"]},
   ]},
 };
 
@@ -388,7 +397,7 @@ function selectSchool(i,btn){
 }
 
 // ── 제품 렌더링 ───────────────────────────────────
-const catLabel={technic:"테크닉",malang:"말랑코딩",aivinu:"AI VINU",aero:"항공과학",nemo:"네모"};
+const catLabel={technic:"테크닉",malang:"말랑코딩",connect:"커넥트",aivinu:"AI VINU",aero:"항공과학",nemo:"네모"};
 
 function renderProducts(){
   const tbody=document.getElementById("prod-tbody");
@@ -501,15 +510,4 @@ function toast(msg){
 }
 function showLoading(on){document.getElementById("loading").classList.toggle("show",on)}
 function showModal(d){
-  document.getElementById("modal-detail").innerHTML=
-    `<strong>${d.instructor}</strong> 강사 · <strong>${d.school}</strong><br><br>`+
-    d.items.map(it=>`${it.name} × ${it.qty}개`).join("<br>")+
-    `<br><br>합계 <strong>${fmt(d.total)}</strong><br><small style="color:#aaa">관리자에게 카카오 알림이 발송됩니다.</small>`;
-  document.getElementById("modal").classList.add("show");
-}
-function closeModal(){document.getElementById("modal").classList.remove("show")}
-
-init();
-</script>
-</body>
-</html>
+  doc
