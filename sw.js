@@ -1,13 +1,10 @@
 /**
- * 제이랩 주문시스템 Service Worker
- * 오프라인 지원 + 빠른 로딩 (캐시 우선)
+ * 제이랩 주문시스템 Service Worker v3
  */
-const CACHE_NAME = "j-lab-order-v1";
+const CACHE_NAME = "j-lab-order-v3";
 const ASSETS = [
   "./index.html",
   "./manifest.json",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
 ];
 
 // 설치 — 핵심 파일 캐시
@@ -18,7 +15,7 @@ self.addEventListener("install", (e) => {
   self.skipWaiting();
 });
 
-// 활성화 — 이전 캐시 삭제
+// 활성화 — 이전 버전 캐시 전체 삭제
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches.keys().then((keys) =>
@@ -28,21 +25,37 @@ self.addEventListener("activate", (e) => {
   self.clients.claim();
 });
 
-// Fetch — 캐시 우선, 없으면 네트워크
+// Fetch — index.html은 항상 네트워크 우선 (최신 코드 보장)
 self.addEventListener("fetch", (e) => {
-  // POST 요청(주문 전송)은 캐시 안 함
   if (e.request.method !== "GET") return;
 
-  e.respondWith(
-    caches.match(e.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(e.request).then((resp) => {
+  const url = new URL(e.request.url);
+  const isHtml = url.pathname.endsWith("/") || url.pathname.endsWith(".html") || url.pathname.endsWith("/j_lab_order");
+
+  if (isHtml) {
+    // HTML: 네트워크 우선 → 실패 시 캐시
+    e.respondWith(
+      fetch(e.request).then((resp) => {
         if (resp && resp.status === 200) {
           const clone = resp.clone();
           caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
         }
         return resp;
-      });
-    })
-  );
+      }).catch(() => caches.match(e.request))
+    );
+  } else {
+    // 기타 정적 파일: 캐시 우선
+    e.respondWith(
+      caches.match(e.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(e.request).then((resp) => {
+          if (resp && resp.status === 200) {
+            const clone = resp.clone();
+            caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
+          }
+          return resp;
+        });
+      })
+    );
+  }
 });
