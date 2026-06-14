@@ -769,7 +769,7 @@ function getInstructorHistory(uid) {
 
       rows.slice(1).forEach(r => {
         if (String(r[2]) !== uid) return;   // 강사ID = col[2]
-        if (String(r[12] || r[13] || '') === '취소') return; // 취소된 주문 제외
+        if (String(isRet ? r[12] : r[11]) === '취소') return; // 취소된 주문 제외
 
         results.push({
           mode         : isRet ? 'return' : 'order',
@@ -828,7 +828,7 @@ function cancelOrder(uid, orderId) {
       const sheet = admin.getSheetByName(name);
       if (!sheet) return;
       const isRet  = name === '반품내역';
-      const statusCol = isRet ? 16 : 15;
+      const statusCol = isRet ? 15 : 14; // 관리자시트 상태 (주문:col14, 반품:col15)
       const rows   = sheet.getDataRange().getValues();
       rows.slice(1).forEach((r, i) => {
         if (String(r[1]) === orderId && String(r[2]) === uid) {
