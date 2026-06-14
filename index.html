@@ -161,8 +161,8 @@ textarea:focus{outline:none;border-color:var(--blue2)}
     <div class="card-body"><div class="school-grid" id="school-grid"><div class="empty">⏳ 불러오는 중...</div></div></div>
   </div>
   <div class="card" id="prod-card" style="display:none">
-    <div class="card-header">
-      <div class="step-num">2</div>제품 선택
+    <div class="card-header" id="prod-card-hdr">
+      <div class="step-num">2</div><span id="prod-card-title">제품 선택</span>
       <span style="margin-left:auto;font-size:12px;opacity:.8;font-weight:400" id="sel-school-label"></span>
     </div>
     <div class="search-wrap">
@@ -180,7 +180,7 @@ textarea:focus{outline:none;border-color:var(--blue2)}
     <button class="total-bar-btn" id="total-bar-btn-text" onclick="scrollToSummary()">주문 확인 →</button>
   </div>
   <div class="card" id="order-card" style="display:none">
-    <div class="card-header"><div class="step-num">3</div>주문 확인 및 접수</div>
+    <div class="card-header" id="order-card-hdr"><div class="step-num">3</div><span id="order-card-title">주문 확인 및 접수</span></div>
     <div class="card-body">
       <div id="sum-items"></div>
       <div class="total-box">
@@ -692,21 +692,22 @@ function setMode(m){
   mode=m;
   const isReturn=(m==='return');
   document.documentElement.classList.toggle('return-mode', isReturn);
-  document.getElementById('btn-order').className='mode-btn'+(isReturn?'':' active-order');
-  document.getElementById('btn-return').className='mode-btn'+(isReturn?' active-return':'');
-  document.getElementById('prod-card-hdr').style.background=isReturn?'var(--red)':'var(--blue)';
-  document.getElementById('order-card-hdr').style.background=isReturn?'var(--red)':'var(--blue)';
-  document.getElementById('prod-card-title').textContent=isReturn?'반품할 제품 선택':'제품 선택';
-  document.getElementById('order-card-title').textContent=isReturn?'반품 확인 및 접수':'주문 확인 및 접수';
-  document.getElementById('return-reason-wrap').style.display=isReturn?'block':'none';
-  document.getElementById('submit-btn').textContent=isReturn?'↩️ 반품 접수하기':'📦 주문 접수하기';
-  document.getElementById('submit-btn').style.background=isReturn?'var(--red)':'var(--blue)';
-  document.getElementById('total-bar-label-text').textContent=isReturn?'반품 합계':'선택 합계';
-  document.getElementById('total-bar-btn-text').textContent=isReturn?'반품 확인 →':'주문 확인 →';
-  // 수량 초기화
+  const setEl=(id,prop,val)=>{const e=document.getElementById(id);if(e)e[prop]=val;};
+  const setStyle=(id,prop,val)=>{const e=document.getElementById(id);if(e)e.style[prop]=val;};
+  setEl('btn-order','className','mode-btn'+(isReturn?'':' active-order'));
+  setEl('btn-return','className','mode-btn'+(isReturn?' active-return':''));
+  setStyle('prod-card-hdr','background',isReturn?'var(--red)':'var(--blue)');
+  setStyle('order-card-hdr','background',isReturn?'var(--red)':'var(--blue)');
+  setEl('prod-card-title','textContent',isReturn?'반품할 제품 선택':'제품 선택');
+  setEl('order-card-title','textContent',isReturn?'반품 확인 및 접수':'주문 확인 및 접수');
+  setStyle('return-reason-wrap','display',isReturn?'block':'none');
+  setStyle('submit-btn','background',isReturn?'var(--red)':'var(--blue)');
+  setEl('submit-btn','textContent',isReturn?'↩️ 반품 접수하기':'📦 주문 접수하기');
+  setEl('total-bar-label-text','textContent',isReturn?'반품 합계':'선택 합계');
+  setEl('total-bar-btn-text','textContent',isReturn?'반품 확인 →':'주문 확인 →');
   cart={};
-  renderLine(curLine);
-  document.getElementById('order-card').style.display='none';
+  if(document.getElementById('prod-content').innerHTML) renderLine(curLine);
+  setStyle('order-card','display','none');
   document.getElementById('total-bar').classList.remove('show');
 }
 
