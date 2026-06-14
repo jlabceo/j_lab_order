@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>J-Lab 강사 주문시스템</title>
+
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#1F4E79">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="제이랩 주문">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+
+<!-- OG (카카오 공유 시 미리보기) -->
+<meta property="og:title" content="J-Lab 강사 주문시스템">
+<meta property="og:description" content="J-Lab 교구 강사 전용 주문">
+<meta property="og:image" content="./icons/icon-512.png">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --blue:#1F4E79;--blue2:#2E75B6;--blue-lt:#DEEAF1;
+  --orange:#C55A11;--orange-lt:#FCE4D6;
+  --green:#375623;--green-lt:#E2EFDA;
+  --red:#C00000;--gray:#F5F5F5;--gray2:#E0E0E0;
+  --border:#BDD7EE;--text:#1a1a1a;--sub:#666;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bot: env(safe-area-inset-bottom);
+}
+body{font-family:'맑은 고딕','Apple SD Gothic Neo',sans-serif;background:#EEF2F7;color:var(--text);font-size:14px;min-height:100dvh;}
+
+/* ── NAV ── */
+nav{
+  background:var(--blue);color:#fff;
+  padding:calc(14px + var(--safe-top)) 20px 14px;
+  display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 10px rgba(0,0,0,.25);
+}
+.logo{font-size:18px;font-weight:800;letter-spacing:-0.5px;flex:1}
+.inst-badge{background:rgba(255,255,255,.2);border-radius:20px;padding:5px 14px;font-size:13px;white-space:nowrap}
+.install-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:5px 12px;font-size:12px;color:#fff;cursor:pointer;font-family:inherit;white-space:nowrap;display:none}
+.install-btn:hover{background:rgba(255,255,255,.25)}
+
+/* ── MAIN ── */
+main{max-width:760px;margin:0 auto;padding:18px 14px calc(40px + var(--safe-bot))}
+
+/* ── CARD ── */
+.card{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:18px;overflow:hidden}
+.card-header{background:var(--blue);color:#fff;padding:13px 18px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.step-num{background:rgba(255,255,255,.25);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0}
+.card-body{padding:18px}
+
+/* ── SCHOOL GRID ── */
+.school-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.school-btn{
+  border:2px solid var(--border);border-radius:12px;padding:13px 10px;
+  cursor:pointer;background:#fff;text-align:center;transition:all .18s;
+  font-size:13px;color:var(--text);font-family:inherit;line-height:1.4;
+  -webkit-user-select:none;user-select:none;
+}
+.school-btn:active{transform:scale(.96)}
+.school-btn:hover{border-color:var(--blue2);background:var(--blue-lt)}
+.school-btn.active{border-color:var(--blue);background:var(--blue);color:#fff;font-weight:700}
+.school-type-label{font-size:10px;margin-top:5px;opacity:.7}
+
+/* ── PRODUCT TABLE ── */
+.prod-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:360px}
+th{background:var(--blue-lt);padding:10px 12px;text-align:left;font-size:13px;color:var(--blue);border-bottom:2px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #EEF;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#F8FBFF}
+.cat-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;margin-right:5px;font-weight:700}
+.cat-technic{background:#DEEAF1;color:#1F4E79}
+.cat-malang{background:#E2EFDA;color:#375623}
+.cat-aivinu{background:#F3E5F5;color:#7030A0}
+.cat-aero{background:#FCE4D6;color:#C55A11}
+.cat-nemo{background:#BDD7EE;color:#0070C0}
+.price-cell{font-weight:700;color:var(--blue);white-space:nowrap}
+.sub-cell{color:var(--orange);font-weight:700;white-space:nowrap;min-width:80px}
+
+/* QTY 컨트롤 */
+.qty-wrap{display:flex;align-items:center;gap:6px}
+.qty-btn{width:30px;height:30px;border:2px solid var(--border);border-radius:8px;background:#fff;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--blue);font-weight:700;flex-shrink:0;-webkit-user-select:none;user-select:none}
+.qty-btn:active{background:var(--blue-lt)}
+.qty-input{width:50px;text-align:center;border:2px solid var(--border);border-radius:8px;padding:5px 4px;font-size:14px;font-family:inherit;transition:border-color .2s}
+.qty-input:focus{outline:none;border-color:var(--blue2)}
+
+/* ── ORDER SUMMARY ── */
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #EEF}
+.sum-row:last-child{border-bottom:none}
+.sum-label{color:var(--sub);font-size:13px}
+.sum-val{font-weight:700}
+.total-box{background:var(--blue-lt);border-radius:10px;padding:14px 16px;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
+.total-label{font-size:15px;font-weight:700;color:var(--blue)}
+.total-amount{font-size:22px;font-weight:900;color:var(--red)}
+
+/* MEMO */
+textarea{width:100%;border:2px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;resize:none;min-height:70px;margin-top:14px}
+textarea:focus{outline:none;border-color:var(--blue2)}
+
+/* SUBMIT */
+.submit-btn{width:100%;padding:16px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:12px;letter-spacing:-.3px;transition:background .2s}
+.submit-btn:hover{background:var(--blue2)}
+.submit-btn:active{transform:scale(.98)}
+.submit-btn:disabled{background:var(--gray2);color:#999;cursor:not-allowed;transform:none}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--sub)}
+.empty .icon{font-size:40px;margin-bottom:10px}
+
+/* TOAST */
+#toast{position:fixed;bottom:calc(24px + var(--safe-bot));left:50%;transform:translateX(-50%) translateY(120px);background:#222;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;opacity:0;transition:all .3s;z-index:9000;white-space:nowrap;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* LOADING */
+#loading{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;align-items:center;justify-content:center}
+#loading.show{display:flex}
+.spinner{width:52px;height:52px;border:5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* MODAL */
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9100;align-items:center;justify-content:center;padding:20px}
+#modal.show{display:flex}
+.modal-box{background:#fff;border-radius:18px;padding:30px 24px;max-width:400px;width:100%;text-align:center}
+.modal-icon{font-size:52px;margin-bottom:12px}
+.modal-box h2{font-size:20px;margin-bottom:10px;color:var(--blue)}
+.modal-box p{color:var(--sub);font-size:13px;line-height:1.7}
+.modal-close{margin-top:22px;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:13px 36px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+
+/* INSTALL GUIDE */
+#install-guide{display:none;background:var(--blue-lt);border:2px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--blue)}
+#install-guide.show{display:block}
+#install-guide strong{display:block;margin-bottom:6px;font-size:14px}
+
+@media(max-width:480px){
+  .school-grid{grid-template-columns:repeat(2,1fr)}
+  .logo{font-size:16px}
+  th,td{padding:8px 10px;font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div></div>
+<div id="toast"></div>
+
+<div id="modal">
+  <div class="modal-box">
+    <div class="modal-icon">✅</div>
+    <h2>주문 접수 완료!</h2>
+    <p id="modal-detail"></p>
+    <button class="modal-close" onclick="closeModal()">확인</button>
+  </div>
+</div>
+
+<nav>
+  <div class="logo">🏫 J-Lab</div>
+  <div class="inst-badge" id="nav-name">주문시스템</div>
+  <button class="install-btn" id="install-btn" onclick="installPWA()">📲 앱 설치</button>
+</nav>
+
+<main>
+  <!-- 앱 설치 안내 (첫 방문 시) -->
+  <div id="install-guide">
+    <strong>📲 홈 화면에 추가하면 앱처럼 사용할 수 있어요!</strong>
+    <span id="install-guide-text"></span>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="step-num">1</div>
+      학교 선택
+    </div>
+    <div class="card-body">
+      <div class="school-grid" id="school-grid">
+        <div class="empty"><div class="icon">⏳</div><p>불러오는 중...</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card" id="prod-card" style="display:none">
+    <div class="card-header">
+      <div class="step-num">2</div>
+      제품 및 수량 선택
+      <span style="margin-left:auto;font-size:12px;opacity:.8;font-weight:400" id="sel-school"></span>
+    </div>
+    <div class="card-body">
+      <div class="prod-wrap">
+        <table>
+          <thead>
+            <tr><th>제품명</th><th>단가</th><th>수량</th><th>소계</th></tr>
+          </thead>
+          <tbody id="prod-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card" id="order-card" style="display:none">
+    <div class="card-header">
+      <div class="step-num">3</div>
+      주문 확인 및 접수
+    </div>
+    <div class="card-body">
+      <div id="sum-items"></div>
+      <div class="total-box">
+        <span class="total-label">합계</span>
+        <span class="total-amount" id="total-amt">₩0</span>
+      </div>
+      <textarea id="memo" placeholder="메모 (선택사항)" rows="3"></textarea>
+      <button class="submit-btn" id="submit-btn" onclick="submitOrder()">📦 주문 접수하기</button>
+    </div>
+  </div>
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════
+// ▼ 배포 전 수정 필요 ▼
+// ═══════════════════════════════════════════════════
+const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+// ═══════════════════════════════════════════════════
+
+// ── 제품 데이터 (소비자가만) ───────────────────────────
+const P = {
+  technic:[
+    {id:"T1",name:"테크닉 LEVEL 1 KIT",price:132000,cat:"technic"},
+    {id:"T2",name:"테크닉 LEVEL 2 KIT",price:132000,cat:"technic"},
+    {id:"T3",name:"테크닉 LEVEL 3 KIT",price:132000,cat:"technic"},
+    {id:"T4",name:"테크닉 LEVEL 4 KIT",price:154000,cat:"technic"},
+    {id:"T5",name:"테크닉 LEVEL 5 KIT",price:176000,cat:"technic"},
+    {id:"T6",name:"테크닉 LEVEL 6 KIT (무선)",price:220000,cat:"technic"},
+    {id:"T7",name:"테크닉 LEVEL 7 KIT",price:220000,cat:"technic"},
+    {id:"TOOL",name:"프로보 공구세트",price:35000,cat:"technic"},
+  ],
+  malang:[
+    {id:"M1",name:"말랑말랑 코딩여행 LEVEL 1 KIT",price:110000,cat:"malang"},
+    {id:"M2",name:"말랑말랑 코딩여행 LEVEL 2 KIT",price:110000,cat:"malang"},
+    {id:"M3",name:"말랑말랑 코딩여행 LEVEL 3 KIT",price:110000,cat:"malang"},
+    {id:"M4",name:"말랑말랑 코딩여행 LEVEL 4 KIT",price:132000,cat:"malang"},
+    {id:"M5",name:"말랑말랑 코딩여행 LEVEL 5 KIT",price:132000,cat:"malang"},
+    {id:"M6",name:"말랑말랑 코딩여행 LEVEL 6 KIT",price:154000,cat:"malang"},
+  ],
+  aivinu:[
+    {id:"AI1",name:"AI VINU LEVEL 1 KIT",price:154000,cat:"aivinu"},
+    {id:"AI2",name:"AI VINU LEVEL 2 KIT",price:176000,cat:"aivinu"},
+    {id:"AI3",name:"AI VINU LEVEL 3 KIT",price:176000,cat:"aivinu"},
+    {id:"AI4",name:"AI VINU LEVEL 4 KIT",price:198000,cat:"aivinu"},
+  ],
+  aero:[
+    {id:"AE1",name:"프로에어 드론 LEVEL 1 KIT",price:187000,cat:"aero"},
+    {id:"AE2",name:"프로에어 드론 LEVEL 2 KIT",price:209000,cat:"aero"},
+    {id:"AE3",name:"프로에어 드론 LEVEL 3 KIT",price:231000,cat:"aero"},
+    {id:"AE4",name:"항공과학 종이비행기 KIT",price:66000,cat:"aero"},
+  ],
+  nemo:[
+    {id:"NE1",name:"NEMO 상판 KIT",price:88000,cat:"nemo"},
+    {id:"NE2",name:"NEMO 하판 KIT",price:99000,cat:"nemo"},
+    {id:"NE3",name:"NEMO 공구세트",price:33000,cat:"nemo"},
+  ],
+};
+
+// ── 강사 데이터 ────────────────────────────────────
+const INST = {
+  "kim-hee-yeon":{name:"김희연",schools:[
+    {name:"갈산초 (에듀베스트)",type:"업체",p:["technic"]},
+    {name:"진관초 (크로마)",type:"업체",p:["technic","malang"]},
+    {name:"추계초 ★학기제",type:"직영",sem:true,p:["technic"]},
+    {name:"풍무청소년문화",type:"직영",p:["technic"]},
+    {name:"오마초",type:"직영",p:["technic"]},
+    {name:"원당초",type:"직영",p:["technic"]},
+    {name:"구름산초",type:"직영",p:["technic"]},
+  ]},
+  "kim-ji-yeon":{name:"김지연",schools:[
+    {name:"덕의초 (덱스트솔루션)",type:"직영(예외)",p:["technic"]},
+  ]},
+  "han-jin-gyu":{name:"한진규",schools:[
+    {name:"김포유현초 (참다솜)",type:"업체",p:["technic"]},
+  ]},
+  "no-jeong-ha":{name:"노정하",schools:[
+    {name:"하안북초 (덱스트솔루션)",type:"업체/직영",p:["technic"]},
+    {name:"도덕초",type:"직영",p:["technic"]},
+  ]},
+  "seo-eun-jeong":{name:"서은정",schools:[
+    {name:"등대글로벌스쿨 ★학기제",type:"강사입금",sem:true,p:["aero"]},
+    {name:"경기글로벌스쿨",type:"직영",p:["aero"]},
+  ]},
+  "han-hyun-suk":{name:"한현숙",schools:[
+    {name:"도래울초 (아라)",type:"업체",p:["malang"]},
+    {name:"도덕초",type:"직영",p:["technic"]},
+  ]},
+  "kim-hee-ok":{name:"김희옥",schools:[
+    {name:"파주 검산초",type:"직영",p:["malang"]},
+  ]},
+  "jeong-hye-in":{name:"정혜인",schools:[
+    {name:"담당 직영학교",type:"직영",p:["technic"]},
+  ]},
+  "lee-mi-hyeon":{name:"이미현",schools:[
+    {name:"담당 직영학교",type:"직영",p:["technic"]},
+  ]},
+  // 테스트 접속
+  "admin":{name:"관리자(테스트)",schools:[
+    {name:"테스트 학교",type:"직영",p:["technic","malang","aivinu","aero","nemo"]},
+  ]},
+};
+
+// ── 상태 ──────────────────────────────────────────
+let inst=null, selSchool=null, qty={};
+let deferredInstall=null;
+
+// ── PWA 설치 ──────────────────────────────────────
+window.addEventListener("beforeinstallprompt",(e)=>{
+  e.preventDefault();
+  deferredInstall=e;
+  document.getElementById("install-btn").style.display="block";
+});
+function installPWA(){
+  if(!deferredInstall)return;
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(()=>{
+    deferredInstall=null;
+    document.getElementById("install-btn").style.display="none";
+  });
+}
+
+// ── 초기화 ────────────────────────────────────────
+function init(){
+  // Service Worker 등록
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  }
+
+  const uid=new URLSearchParams(location.search).get("uid")||"";
+  inst=INST[uid]||null;
+
+  if(!inst){
+    document.getElementById("nav-name").textContent="잘못된 링크";
+    document.getElementById("school-grid").innerHTML=
+      '<div class="empty"><div class="icon">❌</div><p>유효하지 않은 링크입니다.<br>관리자에게 문의해 주세요.</p></div>';
+    return;
+  }
+
+  document.title=`${inst.name} 강사 주문 | J-Lab`;
+  document.getElementById("nav-name").textContent=`${inst.name} 강사`;
+
+  // 홈 화면 추가 안내 (iOS)
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  const isStandalone=window.matchMedia("(display-mode: standalone)").matches;
+  if(isIOS&&!isStandalone){
+    document.getElementById("install-guide").classList.add("show");
+    document.getElementById("install-guide-text").textContent=
+      " Safari에서 하단 공유 버튼 → '홈 화면에 추가'를 선택하세요.";
+  }
+
+  renderSchools();
+}
+
+// ── 학교 렌더링 ───────────────────────────────────
+function renderSchools(){
+  const grid=document.getElementById("school-grid");
+  grid.innerHTML="";
+  inst.schools.forEach((s,i)=>{
+    const btn=document.createElement("button");
+    btn.className="school-btn";
+    btn.innerHTML=`<div>${s.name}</div><div class="school-type-label">${s.type}${s.sem?" · 학기제":""}</div>`;
+    btn.onclick=()=>selectSchool(i,btn);
+    grid.appendChild(btn);
+  });
+}
+
+// ── 학교 선택 ─────────────────────────────────────
+function selectSchool(i,btn){
+  document.querySelectorAll(".school-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  selSchool=inst.schools[i];
+  qty={};
+  renderProducts();
+  document.getElementById("prod-card").style.display="";
+  document.getElementById("order-card").style.display="none";
+  document.getElementById("sel-school").textContent=selSchool.name;
+  setTimeout(()=>document.getElementById("prod-card").scrollIntoView({behavior:"smooth",block:"start"}),120);
+}
+
+// ── 제품 렌더링 ───────────────────────────────────
+const catLabel={technic:"테크닉",malang:"말랑코딩",aivinu:"AI VINU",aero:"항공과학",nemo:"네모"};
+
+function renderProducts(){
+  const tbody=document.getElementById("prod-tbody");
+  tbody.innerHTML="";
+  (selSchool.p||["technic"]).forEach(type=>{
+    (P[type]||[]).forEach(p=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+        <td><span class="cat-badge cat-${p.cat}">${catLabel[p.cat]||p.cat}</span>${p.name}</td>
+        <td class="price-cell">${fmt(p.price)}</td>
+        <td>
+          <div class="qty-wrap">
+            <button class="qty-btn" ontouchstart="" onclick="changeQty('${p.id}',${p.price},-1)">−</button>
+            <input class="qty-input" type="number" min="0" value="0" id="q-${p.id}"
+              oninput="setQty('${p.id}',${p.price},this.value)" inputmode="numeric">
+            <button class="qty-btn" ontouchstart="" onclick="changeQty('${p.id}',${p.price},1)">+</button>
+          </div>
+        </td>
+        <td class="sub-cell" id="s-${p.id}">-</td>`;
+      tbody.appendChild(tr);
+    });
+  });
+  updateSummary();
+}
+
+// ── 수량 조작 ─────────────────────────────────────
+function changeQty(id,price,delta){
+  const el=document.getElementById("q-"+id);
+  const v=Math.max(0,(parseInt(el.value)||0)+delta);
+  el.value=v;
+  setQty(id,price,v);
+}
+function setQty(id,price,v){
+  const q=Math.max(0,parseInt(v)||0);
+  qty[id]=q;
+  document.getElementById("s-"+id).textContent=q>0?fmt(q*price):"-";
+  updateSummary();
+}
+
+// ── 주문 요약 ─────────────────────────────────────
+function getItems(){
+  const items=[];
+  (selSchool.p||["technic"]).forEach(type=>{
+    (P[type]||[]).forEach(p=>{
+      const q=qty[p.id]||0;
+      if(q>0) items.push({name:p.name,qty:q,price:p.price,subtotal:q*p.price});
+    });
+  });
+  return items;
+}
+
+function updateSummary(){
+  const items=getItems();
+  const total=items.reduce((s,it)=>s+it.subtotal,0);
+  document.getElementById("total-amt").textContent=fmt(total);
+  const div=document.getElementById("sum-items");
+  if(!items.length){document.getElementById("order-card").style.display="none";return;}
+  div.innerHTML=items.map(it=>
+    `<div class="sum-row"><span class="sum-label">${it.name} × ${it.qty}개</span><span class="sum-val">${fmt(it.subtotal)}</span></div>`
+  ).join("");
+  document.getElementById("order-card").style.display="";
+  setTimeout(()=>document.getElementById("order-card").scrollIntoView({behavior:"smooth",block:"nearest"}),120);
+}
+
+// ── 주문 제출 ─────────────────────────────────────
+async function submitOrder(){
+  const items=getItems();
+  if(!items.length){toast("수량을 입력해 주세요.");return;}
+
+  const payload={
+    timestamp:new Date().toISOString(),
+    instructor:inst.name,
+    school:selSchool.name,
+    schoolType:selSchool.type||"",
+    items,
+    total:items.reduce((s,it)=>s+it.subtotal,0),
+    memo:document.getElementById("memo").value,
+  };
+
+  showLoading(true);
+  document.getElementById("submit-btn").disabled=true;
+
+  try{
+    await fetch(APPS_SCRIPT_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload),
+      mode:"no-cors",
+    });
+    showLoading(false);
+    showModal(payload);
+    qty={};
+    document.querySelectorAll(".qty-input").forEach(el=>el.value=0);
+    document.querySelectorAll(".sub-cell").forEach(el=>el.textContent="-");
+    document.getElementById("memo").value="";
+    document.getElementById("order-card").style.display="none";
+  }catch(e){
+    showLoading(false);
+    toast("⚠️ 전송 오류. 잠시 후 다시 시도해 주세요.");
+  }
+  document.getElementById("submit-btn").disabled=false;
+}
+
+// ── 유틸 ──────────────────────────────────────────
+function fmt(n){return"₩"+Number(n).toLocaleString("ko-KR")}
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),3000);
+}
+function showLoading(on){document.getElementById("loading").classList.toggle("show",on)}
+function showModal(d){
+  document.getElementById("modal-detail").innerHTML=
+    `<strong>${d.instructor}</strong> 강사 · <strong>${d.school}</strong><br><br>`+
+    d.items.map(it=>`${it.name} × ${it.qty}개`).join("<br>")+
+    `<br><br>합계 <strong>${fmt(d.total)}</strong><br><small style="color:#aaa">관리자에게 카카오 알림이 발송됩니다.</small>`;
+  document.getElementById("modal").classList.add("show");
+}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+
+init();
+</script>
+</body>
+</html>

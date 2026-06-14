@@ -1,0 +1,25 @@
+{
+  "name": "J-Lab 강사 주문시스템",
+  "short_name": "J-Lab 주문",
+  "description": "J-Lab 교구 강사 전용 주문 앱",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1F4E79",
+  "theme_color": "#1F4E79",
+  "orientation": "portrait-primary",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
