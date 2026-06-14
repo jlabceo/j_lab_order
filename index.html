@@ -981,11 +981,22 @@ let selQ=0, selYear=new Date().getFullYear(), returnFromOrder=null;
 // ─── Init ───
 window.addEventListener('DOMContentLoaded', ()=>{
   const p=new URLSearchParams(location.search);
-  instId=p.get('uid')||'';
+  const uidFromUrl=p.get('uid')||'';
+  // URL에 uid 있으면 저장, 없으면 저장된 것 사용
+  if(uidFromUrl){
+    localStorage.setItem('j_lab_uid', uidFromUrl);
+    instId=uidFromUrl;
+  } else {
+    instId=localStorage.getItem('j_lab_uid')||'';
+  }
   instData=INST[instId]||null;
   if(!instData){
     document.getElementById('nav-name').textContent='❌ 잘못된 접근';
-    document.querySelector('main').innerHTML='<div class="card"><div class="card-body" style="text-align:center;padding:40px"><h2 style="color:#C00;margin-bottom:12px">접근 권한 없음</h2><p style="color:#666">강사 링크로 접속해 주세요.</p></div></div>';
+    document.querySelector('main').innerHTML=`<div class="card"><div class="card-body" style="text-align:center;padding:40px">
+      <h2 style="color:#C00;margin-bottom:12px">접근 권한 없음</h2>
+      <p style="color:#666;line-height:1.7">카카오톡으로 받은 <b>강사 전용 링크</b>로<br>접속해 주세요.<br><br>
+      <small style="color:#999">링크로 한 번 접속하면<br>이후 앱 아이콘으로 바로 사용할 수 있습니다</small></p>
+    </div></div>`;
     return;
   }
   document.getElementById('nav-name').textContent=instData.name+' 강사';
