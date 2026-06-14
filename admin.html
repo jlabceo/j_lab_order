@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a73e8">
+<title>J-Lab 관리자</title>
+<style>
+:root{--primary:#1a73e8;--danger:#d32f2f;--success:#388e3c;--warn:#f57c00;--bg:#f5f7fa;--card:#fff;--border:#e0e4ea;--text:#202124;--sub:#5f6368;--r:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh}
+#pin-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;gap:20px;padding:32px}
+.pin-logo{font-size:48px}.pin-title{font-size:22px;font-weight:700}.pin-sub{color:var(--sub);font-size:14px}
+.pin-dots{display:flex;gap:16px;margin:8px 0}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--primary);background:transparent;transition:background .15s}
+.pin-dot.filled{background:var(--primary)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,72px);gap:12px}
+.pin-btn{width:72px;height:72px;border-radius:50%;border:none;background:var(--card);box-shadow:0 2px 8px #0002;font-size:24px;font-weight:600;cursor:pointer}
+.pin-btn:active{background:#e8f0fe}.pin-btn.del{font-size:20px;background:transparent;box-shadow:none}
+.pin-err{color:var(--danger);font-size:14px;min-height:20px}
+#main-screen{display:none;flex-direction:column;min-height:100dvh}
+.app-bar{position:sticky;top:0;z-index:100;background:var(--primary);color:#fff;display:flex;align-items:center;gap:12px;padding:0 16px;height:56px;box-shadow:0 2px 8px #0003}
+.app-bar h1{font-size:18px;font-weight:700;flex:1}
+.app-bar button{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px}
+.tab-bar{display:flex;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:56px;z-index:90}
+.tab-item{flex:1;padding:12px 0;text-align:center;font-size:14px;font-weight:600;border-bottom:3px solid transparent;cursor:pointer;color:var(--sub)}
+.tab-item.active{color:var(--primary);border-color:var(--primary)}
+.filter-bar{background:#fff;padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.filter-bar select,.filter-bar input{flex:1;min-width:90px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:var(--bg);color:var(--text)}
+.btn-refresh{padding:8px 14px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.order-list{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.order-card{background:var(--card);border-radius:var(--r);box-shadow:0 1px 6px #0001;overflow:hidden}
+.order-card-head{padding:10px 14px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:700}
+.badge-정상{background:#e8f5e9;color:var(--success)}.badge-취소{background:#ffebee;color:var(--danger)}
+.badge-반품{background:#fff3e0;color:var(--warn)}.badge-주문{background:#e3f2fd;color:var(--primary)}
+.order-card-body{padding:6px 14px 10px}
+.order-meta{font-size:11px;color:var(--sub);margin-bottom:3px}
+.order-name{font-size:16px;font-weight:700;margin-bottom:2px}
+.order-items{font-size:13px;color:var(--sub)}.order-total{font-size:14px;font-weight:700;color:var(--primary);margin-top:3px}
+.order-memo{font-size:12px;color:var(--warn);margin-top:3px}
+.order-card-foot{padding:8px 14px;background:var(--bg);display:flex;gap:8px;justify-content:flex-end}
+.btn-sm{padding:6px 12px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer}
+.btn-edit{background:var(--primary);color:#fff}
+.empty-msg,.loading-msg{text-align:center;color:var(--sub);padding:40px;font-size:15px}
+.modal-bg{display:none;position:fixed;inset:0;background:#0006;z-index:200;align-items:flex-end;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:92dvh;overflow-y:auto;padding:20px 16px 32px;animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:var(--sub)}
+.sec-lbl{font-size:12px;font-weight:700;color:var(--sub);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.status-btns{display:flex;gap:8px}
+.status-btn{flex:1;padding:10px;border-radius:8px;border:2px solid var(--border);font-size:14px;font-weight:600;cursor:pointer;background:#fff;color:var(--text)}
+.status-btn.sel-정상{border-color:var(--success);background:#e8f5e9;color:var(--success)}
+.status-btn.sel-취소{border-color:var(--danger);background:#ffebee;color:var(--danger)}
+.item-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.item-name{flex:1;font-size:14px}.item-price{font-size:12px;color:var(--sub);white-space:nowrap}
+.qty-ctrl{display:flex;align-items:center;gap:6px}
+.qty-ctrl button{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:18px;cursor:pointer}
+.qty-ctrl input{width:44px;text-align:center;border:1px solid var(--border);border-radius:6px;padding:4px;font-size:14px;font-weight:700}
+.btn-del-item{background:none;border:none;color:var(--danger);font-size:18px;cursor:pointer;padding:0 4px}
+.add-item-row{display:flex;gap:8px;margin-top:8px}
+.add-item-row input{flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:var(--bg)}
+.btn-add-item{padding:8px 14px;background:var(--success);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+.memo-input{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px;min-height:72px;resize:vertical;font-family:inherit;background:var(--bg)}
+.modal-actions{display:flex;gap:10px;margin-top:18px}
+.btn-save{flex:1;padding:14px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer}
+.btn-save:disabled{background:#aaa}
+.btn-cancel-modal{padding:14px 20px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:16px;cursor:pointer}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
+.stat-card{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:0 1px 6px #0001;text-align:center}
+.stat-num{font-size:28px;font-weight:700;color:var(--primary)}.stat-label{font-size:13px;color:var(--sub);margin-top:4px}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;z-index:500;opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div id="pin-screen">
+  <div class="pin-logo">🔐</div>
+  <div class="pin-title">J-Lab 관리자</div>
+  <div class="pin-sub">PIN 번호를 입력하세요</div>
+  <div class="pin-dots">
+    <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+  </div>
+  <div class="pin-err" id="pin-err"></div>
+  <div class="pin-pad">
+    <button class="pin-btn" onclick="pinPress('1')">1</button>
+    <button class="pin-btn" onclick="pinPress('2')">2</button>
+    <button class="pin-btn" onclick="pinPress('3')">3</button>
+    <button class="pin-btn" onclick="pinPress('4')">4</button>
+    <button class="pin-btn" onclick="pinPress('5')">5</button>
+    <button class="pin-btn" onclick="pinPress('6')">6</button>
+    <button class="pin-btn" onclick="pinPress('7')">7</button>
+    <button class="pin-btn" onclick="pinPress('8')">8</button>
+    <button class="pin-btn" onclick="pinPress('9')">9</button>
+    <button class="pin-btn del" onclick="pinClear()">✕</button>
+    <button class="pin-btn" onclick="pinPress('0')">0</button>
+    <button class="pin-btn del" onclick="pinBack()">⌫</button>
+  </div>
+</div>
+
+<div id="main-screen">
+  <div class="app-bar">
+    <h1>📦 J-Lab 관리자</h1>
+    <button onclick="doLogout()" title="로그아웃">⏻</button>
+  </div>
+  <div class="tab-bar">
+    <div class="tab-item active" id="tab-orders" onclick="switchTab('orders')">주문/반품</div>
+    <div class="tab-item" id="tab-stats" onclick="switchTab('stats')">통계</div>
+  </div>
+
+  <div id="pane-orders">
+    <div class="filter-bar">
+      <select id="f-type" onchange="renderList()">
+        <option value="all">전체</option>
+        <option value="order">주문</option>
+        <option value="return">반품</option>
+      </select>
+      <select id="f-status" onchange="loadOrders()">
+        <option value="all">전체 상태</option>
+        <option value="정상">정상</option>
+        <option value="취소">취소</option>
+      </select>
+      <select id="f-quarter" onchange="loadOrders()">
+        <option value="">전체 분기</option>
+        <option value="1분기">1분기</option>
+        <option value="2분기">2분기</option>
+        <option value="3분기">3분기</option>
+        <option value="4분기">4분기</option>
+      </select>
+      <input id="f-search" type="text" placeholder="강사/학교 검색" oninput="renderList()">
+      <button class="btn-refresh" onclick="loadOrders()">↻</button>
+    </div>
+    <div class="order-list" id="order-list"><div class="loading-msg">⏳ 불러오는 중...</div></div>
+  </div>
+
+  <div id="pane-stats" style="display:none">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num" id="s-total">-</div><div class="stat-label">전체 건수</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-active">-</div><div class="stat-label">정상 주문</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-cancel">-</div><div class="stat-label">취소</div></div>
+      <div class="stat-card"><div class="stat-num" id="s-return">-</div><div class="stat-label">반품</div></div>
+      <div class="stat-card" style="grid-column:1/-1">
+        <div class="stat-num" id="s-amount" style="font-size:20px">-</div>
+        <div class="stat-label">정상 주문 합계 (소비자가)</div>
+      </div>
+    </div>
+    <div id="inst-stat-list" style="padding:0 16px 32px"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="edit-modal">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modal-ttl">주문 수정</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="sec-lbl">주문 정보</div>
+    <div id="modal-info" style="font-size:14px;color:var(--sub)"></div>
+    <div class="sec-lbl">상태</div>
+    <div class="status-btns">
+      <button class="status-btn" id="sb-정상" onclick="setStatus('정상')">✅ 정상</button>
+      <button class="status-btn" id="sb-취소" onclick="setStatus('취소')">❌ 취소</button>
+    </div>
+    <div class="sec-lbl">제품 수량 수정</div>
+    <div id="item-rows"></div>
+    <div class="add-item-row">
+      <input id="new-item-name" type="text" placeholder="제품명">
+      <input id="new-item-price" type="number" placeholder="단가" style="max-width:80px">
+      <input id="new-item-qty" type="number" placeholder="수량" value="1" min="1" style="max-width:60px">
+      <button class="btn-add-item" onclick="addItem()">+추가</button>
+    </div>
+    <div class="sec-lbl">관리자 메모</div>
+    <textarea class="memo-input" id="admin-memo" placeholder="내부 메모 (강사에게 미표시)"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel-modal" onclick="closeModal()">취소</button>
+      <button class="btn-save" id="btn-save" onclick="saveOrder()">저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GAS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+let adminToken='', allOrders=[], editTarget=null, editItems=[], editStatus='', pinVal='';
+
+// ── PIN ──
+function pinPress(d){if(pinVal.length>=4)return;pinVal+=d;updDots();if(pinVal.length===4)submitPin();}
+function pinBack(){pinVal=pinVal.slice(0,-1);updDots();}
+function pinClear(){pinVal='';updDots();}
+function updDots(){for(let i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinVal.length);}
+async function submitPin(){
+  document.getElementById('pin-err').textContent='';
+  try{
+    const r=await gas({action:'verify_pin',pin:pinVal});
+    if(r.ok){adminToken=r.token;sessionStorage.setItem('admin_token',adminToken);showMain();}
+    else{document.getElementById('pin-err').textContent='❌ PIN 번호가 틀렸습니다.';pinVal='';updDots();}
+  }catch(e){document.getElementById('pin-err').textContent='⚠️ 서버 연결 오류';pinVal='';updDots();}
+}
+function showMain(){
+  document.getElementById('pin-screen').style.display='none';
+  document.getElementById('main-screen').style.display='flex';
+  loadOrders();
+}
+
+// ── GAS ──
+async function gas(p){
+  const res=await fetch(GAS_URL+'?'+new URLSearchParams(p));
+  return JSON.parse(await res.text());
+}
+async function gasPost(body){
+  const res=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),redirect:'follow'});
+  return JSON.parse(await res.text());
+}
+
+// ── 탭 ──
+function switchTab(t){
+  document.querySelectorAll('.tab-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('pane-orders').style.display=t==='orders'?'':'none';
+  document.getElementById('pane-stats').style.display=t==='stats'?'':'none';
+  if(t==='stats')renderStats();
+}
+
+// ── 주문 로드 ──
+async function loadOrders(){
+  document.getElementById('order-list').innerHTML='<div class="loading-msg">⏳ 불러오는 중...</div>';
+  try{
+    const r=await gas({action:'admin_orders',token:adminToken,
+      quarter:document.getElementById('f-quarter').value,
+      status:document.getElementById('f-status').value});
+    if(r.error==='unauthorized'){doLogout();return;}
+    if(r.error){showToast('오류: '+r.error);return;}
+    allOrders=r; renderList();
+  }catch(e){document.getElementById('order-list').innerHTML='<div class="empty-msg">⚠️ 불러오기 실패</div>';}
+}
+
+function renderList(){
+  const type=document.getElementById('f-type').value;
+  const srch=document.getElementById('f-search').value.trim();
+  const list=allOrders.filter(o=>{
+    if(type!=='all'&&o.mode!==type)return false;
+    if(srch&&!o.instName.includes(srch)&&!o.school.includes(srch))return false;
+    return true;
+  });
+  if(!list.length){document.getElementById('order-list').innerHTML='<div class="empty-msg">주문 내역이 없습니다.</div>';return;}
+  document.getElementById('order-list').innerHTML=list.map(o=>{
+    const dt=o.orderAt?String(o.orderAt).replace('T',' ').slice(0,16):'';
+    const mb=o.mode==='return'?`<span class="badge badge-반품">반품</span>`:`<span class="badge badge-주문">주문</span>`;
+    const sb=`<span class="badge badge-${o.status||'정상'}">${o.status||'정상'}</span>`;
+    const memo=o.adminMemo?`<div class="order-memo">📝 ${o.adminMemo}</div>`:'';
+    const total=parseInt(o.total)||0;
+    const enc=encodeURIComponent(JSON.stringify(o));
+    return `<div class="order-card">
+      <div class="order-card-head">${mb}${sb}<span style="font-size:11px;color:var(--sub);margin-left:auto">${dt}</span></div>
+      <div class="order-card-body">
+        <div class="order-name">${o.instName} <span style="font-size:13px;font-weight:400;color:var(--sub)">| ${o.school}</span></div>
+        <div class="order-meta">${o.quarter} · ${o.orderId}</div>
+        <div class="order-items">${o.itemsStr||''}</div>
+        <div class="order-total">${total.toLocaleString()}원</div>${memo}
+      </div>
+      <div class="order-card-foot"><button class="btn-sm btn-edit" onclick='openEdit(${JSON.stringify(JSON.stringify(o))})'>✏️ 수정</button></div>
+    </div>`;
+  }).join('');
+}
+
+// ── 편집 모달 ──
+function openEdit(str){
+  const o=JSON.parse(str);
+  editTarget=o; editItems=[]; editStatus=o.status||'정상';
+  try{editItems=JSON.parse(o.itemsJson||'[]');}catch(e){}
+  if(!editItems.length&&o.itemsStr){
+    o.itemsStr.split('/').forEach(s=>{
+      const m=s.trim().match(/^(.+)×(\d+)$/);
+      if(m)editItems.push({name:m[1].trim(),qty:parseInt(m[2]),price:0,sub:0});
+    });
+  }
+  document.getElementById('modal-ttl').textContent=o.mode==='return'?'반품 수정':'주문 수정';
+  document.getElementById('modal-info').innerHTML=`<b>${o.instName}</b> · ${o.school} · ${o.quarter}<br><small>${o.orderId}</small>`;
+  document.getElementById('admin-memo').value=o.adminMemo||'';
+  renderSBtns(); renderItemRows();
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeModal(){document.getElementById('edit-modal').classList.remove('open');}
+function setStatus(s){editStatus=s;renderSBtns();}
+function renderSBtns(){
+  ['정상','취소'].forEach(s=>{
+    document.getElementById('sb-'+s).className='status-btn'+(editStatus===s?' sel-'+s:'');
+  });
+}
+function renderItemRows(){
+  document.getElementById('item-rows').innerHTML=editItems.map((it,i)=>`
+    <div class="item-row">
+      <div><div class="item-name">${it.name}</div>${it.price?`<div class="item-price">${it.price.toLocaleString()}원/개</div>`:''}</div>
+      <div class="qty-ctrl">
+        <button onclick="adjQty(${i},-1)">−</button>
+        <input type="number" min="0" value="${it.qty}" onchange="setQty(${i},+this.value)">
+        <button onclick="adjQty(${i},+1)">+</button>
+      </div>
+      <button class="btn-del-item" onclick="delItem(${i})">🗑</button>
+    </div>`).join('');
+}
+function adjQty(i,d){setQty(i,editItems[i].qty+d);}
+function setQty(i,v){v=Math.max(0,parseInt(v)||0);editItems[i].qty=v;if(editItems[i].price)editItems[i].sub=editItems[i].price*v;renderItemRows();}
+function delItem(i){editItems.splice(i,1);renderItemRows();}
+function addItem(){
+  const name=document.getElementById('new-item-name').value.trim();
+  const price=parseInt(document.getElementById('new-item-price').value)||0;
+  const qty=parseInt(document.getElementById('new-item-qty').value)||1;
+  if(!name){showToast('제품명을 입력하세요');return;}
+  editItems.push({name,price,qty,sub:price*qty});
+  document.getElementById('new-item-name').value='';
+  document.getElementById('new-item-price').value='';
+  document.getElementById('new-item-qty').value='1';
+  renderItemRows();
+}
+async function saveOrder(){
+  const btn=document.getElementById('btn-save');
+  btn.disabled=true;btn.textContent='저장 중...';
+  try{
+    const valid=editItems.filter(i=>i.qty>0);
+    const memo=document.getElementById('admin-memo').value.trim();
+    const res=await gasPost({action:'update_order',token:adminToken,
+      orderId:editTarget.orderId,sheetName:editTarget.sheetName,rowIndex:editTarget.rowIndex,
+      status:editStatus,items:valid,adminMemo:memo});
+    if(res.error==='unauthorized'){doLogout();return;}
+    if(res.ok){
+      showToast('✅ 저장 완료');closeModal();
+      const idx=allOrders.findIndex(o=>o.orderId===editTarget.orderId);
+      if(idx!==-1){
+        Object.assign(allOrders[idx],{status:editStatus,adminMemo:memo,
+          itemsJson:JSON.stringify(valid),
+          itemsStr:valid.map(i=>`${i.name}×${i.qty}`).join(' / '),
+          qty:valid.reduce((s,i)=>s+i.qty,0),
+          total:valid.reduce((s,i)=>s+i.sub,0)});
+      }
+      renderList();
+    }else showToast('❌ '+(res.error||'저장 실패'));
+  }catch(e){showToast('❌ 네트워크 오류');}
+  finally{btn.disabled=false;btn.textContent='저장';}
+}
+
+// ── 통계 ──
+function renderStats(){
+  const orders=allOrders.filter(o=>o.mode==='order');
+  const active=orders.filter(o=>o.status==='정상');
+  const amount=active.reduce((s,o)=>s+(parseInt(o.total)||0),0);
+  document.getElementById('s-total').textContent=allOrders.length;
+  document.getElementById('s-active').textContent=active.length;
+  document.getElementById('s-cancel').textContent=orders.filter(o=>o.status==='취소').length;
+  document.getElementById('s-return').textContent=allOrders.filter(o=>o.mode==='return').length;
+  document.getElementById('s-amount').textContent=amount.toLocaleString()+'원';
+  const map={};
+  active.forEach(o=>{if(!map[o.instName])map[o.instName]={name:o.instName,school:o.school,cnt:0,total:0};map[o.instName].cnt++;map[o.instName].total+=parseInt(o.total)||0;});
+  const rows=Object.values(map).sort((a,b)=>b.total-a.total);
+  document.getElementById('inst-stat-list').innerHTML=
+    `<div style="font-size:13px;font-weight:700;color:var(--sub);margin-bottom:8px">강사별 현황 (정상 주문)</div>`+
+    rows.map(r=>`<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px #0001">
+      <div><div style="font-weight:700">${r.name}</div><div style="font-size:12px;color:var(--sub)">${r.school}·${r.cnt}건</div></div>
+      <div style="font-weight:700;color:var(--primary)">${r.total.toLocaleString()}원</div></div>`).join('');
+}
+
+// ── 로그아웃 ──
+function doLogout(){
+  adminToken='';sessionStorage.removeItem('admin_token');
+  document.getElementById('main-screen').style.display='none';
+  document.getElementById('pin-screen').style.display='flex';
+  pinVal='';updDots();document.getElementById('pin-err').textContent='';
+}
+
+// ── 토스트 ──
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// ── 초기화 ──
+(function(){
+  const t=sessionStorage.getItem('admin_token');
+  if(t){adminToken=t;showMain();}
+})();
+</script>
+</body>
+</html>
