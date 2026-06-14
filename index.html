@@ -187,6 +187,25 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 .hist-filter::-webkit-scrollbar{display:none}
 .hist-filter-btn{flex-shrink:0;padding:6px 14px;border:2px solid var(--border);border-radius:20px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--sub);-webkit-user-select:none;user-select:none;transition:all .15s}
 .hist-filter-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* ── 앱 설치 안내 모달 ── */
+#install-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9200;align-items:flex-end;justify-content:center;padding:0}
+#install-modal.show{display:flex}
+.install-box{background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto}
+.install-box h3{font-size:17px;font-weight:800;margin-bottom:4px;color:var(--blue)}
+.install-box .inst-sub{font-size:13px;color:var(--sub);margin-bottom:20px}
+.install-tab-wrap{display:flex;border:2px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:18px}
+.install-tab{flex:1;padding:9px;border:none;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--sub);transition:all .15s}
+.install-tab.active{background:var(--blue);color:#fff}
+.install-steps{display:none}
+.install-steps.show{display:block}
+.install-step{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+.install-step-num{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.install-step-txt strong{display:block;font-size:14px;margin-bottom:3px}
+.install-step-txt span{font-size:12px;color:var(--sub);line-height:1.5}
+.install-step-icon{font-size:20px;margin-top:2px}
+.install-note{background:var(--blue-lt);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);line-height:1.6;margin-top:4px}
+.install-close{width:100%;margin-top:16px;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
 @media(max-width:480px){
   .school-grid{grid-template-columns:repeat(2,1fr)}
   .logo{font-size:15px}
@@ -197,6 +216,66 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 <body>
 <div id="loading"><div class="spinner"></div></div>
 <div id="toast"></div>
+<div id="install-modal">
+  <div class="install-box">
+    <h3>📲 앱 설치 방법</h3>
+    <p class="inst-sub">홈 화면에 추가하면 앱처럼 바로 실행할 수 있어요</p>
+    <div class="install-tab-wrap">
+      <button class="install-tab active" onclick="switchInstallTab('android',this)">🤖 안드로이드</button>
+      <button class="install-tab" onclick="switchInstallTab('ios',this)">🍎 아이폰 (iOS)</button>
+    </div>
+    <div class="install-steps show" id="install-android">
+      <div class="install-step">
+        <div class="install-step-num">1</div>
+        <div class="install-step-txt">
+          <strong>Chrome 브라우저로 접속</strong>
+          <span>반드시 Chrome 앱으로 주문 링크를 열어주세요</span>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">2</div>
+        <div class="install-step-txt">
+          <strong>하단 배너 또는 메뉴에서 설치</strong>
+          <span>화면 하단에 "앱 설치" 배너가 뜨면 탭하거나,<br>
+          우측 상단 ⋮ (점 세 개) → <b>"앱 설치"</b> 또는 <b>"홈 화면에 추가"</b></span>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">3</div>
+        <div class="install-step-txt">
+          <strong>"설치" 버튼 탭</strong>
+          <span>팝업에서 설치를 확인하면 홈 화면에 아이콘이 추가됩니다</span>
+        </div>
+      </div>
+      <div class="install-note">💡 이후에는 홈 화면의 <b>J-Lab 주문</b> 아이콘을 탭하면 바로 실행됩니다</div>
+    </div>
+    <div class="install-steps" id="install-ios">
+      <div class="install-step">
+        <div class="install-step-num">1</div>
+        <div class="install-step-txt">
+          <strong>Safari 브라우저로 접속</strong>
+          <span>⚠️ 아이폰은 반드시 <b>Safari</b>를 사용해야 합니다<br>Chrome, 카카오 인앱 브라우저에서는 설치 불가</span>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">2</div>
+        <div class="install-step-txt">
+          <strong>하단 공유 버튼 탭</strong>
+          <span>화면 하단 가운데 <b>□↑ (공유)</b> 버튼을 탭하세요</span>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">3</div>
+        <div class="install-step-txt">
+          <strong>"홈 화면에 추가" 선택</strong>
+          <span>스크롤을 내려 <b>"홈 화면에 추가"</b>를 탭한 후 우측 상단 <b>"추가"</b> 탭</span>
+        </div>
+      </div>
+      <div class="install-note">💡 카카오톡에서 링크를 받았다면: 링크 탭 → 우측 하단 <b>Safari로 열기</b> 탭 → 위 절차 진행</div>
+    </div>
+    <button class="install-close" onclick="closeInstallModal()">확인</button>
+  </div>
+</div>
 <div id="history-overlay">
   <div class="hist-nav">
     <button class="hist-nav-back" onclick="closeHistory()">← 뒤로</button>
@@ -223,12 +302,12 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 <nav>
   <div class="logo">🏫 J-Lab</div>
   <div class="inst-badge" id="nav-name">주문시스템</div>
-  <button class="install-btn" id="install-btn" onclick="installPWA()">📲 앱 설치</button>
+  <button class="install-btn" id="install-btn" onclick="openInstallModal()">📲 앱 설치</button>
   <button class="install-btn" id="history-btn" onclick="openHistory()" style="display:none">📋 내역</button>
 </nav>
 <main>
   <div id="install-guide">
-    <strong>📲 홈 화면에 추가하면 앱처럼 사용할 수 있어요!</strong>
+    <strong style="cursor:pointer" onclick="openInstallModal()">📲 홈 화면에 추가하면 앱처럼 사용할 수 있어요! →</strong>
     <span id="install-guide-text"></span>
   </div>
   <div class="card">
@@ -302,8 +381,8 @@ const INST = {
   ]},
   "no-jeong-ha":{name:"노정하",schools:[
     {name:"은진초",type:"직영"},
-    {name:"모당초",type:"직영"},
-    {name:"나진초",type:"직영"},
+    {name:"모당초",type:"업체",vendor:"움터"},
+    {name:"나진초",type:"업체",vendor:"움터"},
   ]},
   "seo-eun-jeong":{name:"서은정",schools:[
     {name:"오마초",type:"직영"},
@@ -317,7 +396,7 @@ const INST = {
   ]},
   "kim-yun-seon":{name:"김윤선",schools:[
     {name:"하늘초",type:"직영"},
-    {name:"신원초",type:"직영"},
+    {name:"신원초",type:"업체",vendor:"움터"},
   ]},
   "kim-jun-hee":{name:"김준희",schools:[
     {name:"경기글로벌스쿨",type:"직영"},
@@ -966,7 +1045,7 @@ function renderSchools(){
     const btn=document.createElement('button');
     btn.className='school-btn';
     let typeLabel='';
-    if(s.type==='업체') typeLabel='<div class="school-type-label">📦 업체납품</div>';
+    if(s.type==='업체') typeLabel=`<div class="school-type-label">📦 ${s.vendor||'업체납품'}</div>`;
     else if(s.type==='강사입금') typeLabel='<div class="school-type-label">💳 강사입금</div>';
     else if(s.sem) typeLabel='<div class="school-type-label">📅 학기제</div>';
     btn.innerHTML=s.name.replace(' ★학기제','')+(typeLabel||'');
@@ -1200,6 +1279,24 @@ function scrollToSummary(){
 }
 
 
+
+// ─── 앱 설치 안내 ───
+function openInstallModal(){
+  // iOS / Android 자동 감지
+  const isIos=/iPhone|iPad|iPod/.test(navigator.userAgent);
+  switchInstallTab(isIos?'ios':'android',
+    document.querySelector(isIos?'.install-tab:last-child':'.install-tab:first-child'));
+  document.getElementById('install-modal').classList.add('show');
+}
+function closeInstallModal(){
+  document.getElementById('install-modal').classList.remove('show');
+}
+function switchInstallTab(type,btn){
+  document.querySelectorAll('.install-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('install-android').classList.toggle('show',type==='android');
+  document.getElementById('install-ios').classList.toggle('show',type==='ios');
+}
 // ─── Quarter ───
 function getCurrentQuarter(){
   const m=new Date().getMonth()+1;
