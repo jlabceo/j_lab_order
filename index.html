@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+h<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -366,7 +366,7 @@ textarea:focus{outline:none;border-color:var(--blue2)}
   </div>
 </main>
 <script>
-const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec";
 const INST = {
   "kim-ji-yeon":{name:"김지연",schools:[
     {name:"덕의초",type:"직영"},
@@ -1502,7 +1502,7 @@ async function submitOrder(){
       quarter:selQ,year:selYear,quarterLabel:`${selYear}년 ${selQ}분기`,
       orderAt:new Date().toLocaleString('ko-KR')
     };
-    if(APPS_SCRIPT_URL&&APPS_SCRIPT_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
+    if(APPS_SCRIPT_URL&&APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec'){
       await fetch(APPS_SCRIPT_URL,{
         method:'POST',
         mode:'no-cors',
@@ -1559,7 +1559,7 @@ async function openHistory(){
 
   let orders=[];
   // GAS 우선
-  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
+  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec'){
     try{
       const url=APPS_SCRIPT_URL+'?action=history&uid='+encodeURIComponent(instId);
       const res=await fetch(url,{redirect:'follow'});
@@ -1650,7 +1650,7 @@ async function requestCancel(orderId, idx, btn){
   btn.disabled=true;
   btn.textContent='⏳ 처리 중...';
 
-  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
+  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec'){
     try{
       const url=APPS_SCRIPT_URL+'?action=cancel&uid='+encodeURIComponent(instId)+'&orderId='+encodeURIComponent(orderId);
       const res=await fetch(url,{redirect:'follow'});
