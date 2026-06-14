@@ -107,6 +107,27 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 .modal-close{margin-top:20px;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:12px 32px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
 #install-guide{display:none;background:var(--blue-lt);border:2px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--blue)}
 #install-guide.show{display:block}
+
+/* MODE TOGGLE */
+.mode-toggle{display:flex;gap:0;border:2px solid var(--border);border-radius:10px;overflow:hidden;margin:12px 16px 0}
+.mode-btn{flex:1;padding:9px;border:none;background:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--sub);transition:all .15s;-webkit-user-select:none;user-select:none}
+.mode-btn:first-child{border-right:1px solid var(--border)}
+.mode-btn.active-order{background:var(--blue);color:#fff}
+.mode-btn.active-return{background:var(--red);color:#fff}
+
+/* RETURN MODE */
+:root.return-mode .qty-input.has-val{border-color:var(--red);background:#FFF0F0}
+:root.return-mode #total-bar{background:var(--red);box-shadow:0 4px 16px rgba(192,0,0,.4)}
+:root.return-mode .total-bar-btn{color:var(--red)}
+:root.return-mode .total-box{background:#FFF0F0}
+:root.return-mode .total-label{color:var(--red)}
+:root.return-mode .prod-card-hdr{background:var(--red)}
+:root.return-mode .order-card-hdr{background:var(--red)}
+.return-reason{width:100%;border:2px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;margin-top:12px;background:#fff;appearance:none;-webkit-appearance:none;outline:none;cursor:pointer}
+.return-reason:focus{border-color:var(--red)}
+.return-reason-wrap{position:relative;margin-top:12px}
+.return-reason-wrap::after{content:'▼';position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--sub);font-size:11px}
+
 @media(max-width:480px){
   .school-grid{grid-template-columns:repeat(2,1fr)}
   .logo{font-size:15px}
@@ -153,10 +174,10 @@ textarea:focus{outline:none;border-color:var(--blue2)}
   </div>
   <div id="total-bar">
     <div>
-      <div class="total-bar-label">선택 합계</div>
+      <div class="total-bar-label" id="total-bar-label-text">선택 합계</div>
       <div class="total-bar-amt" id="bar-amt">₩0</div>
     </div>
-    <button class="total-bar-btn" onclick="scrollToSummary()">주문 확인 →</button>
+    <button class="total-bar-btn" id="total-bar-btn-text" onclick="scrollToSummary()">주문 확인 →</button>
   </div>
   <div class="card" id="order-card" style="display:none">
     <div class="card-header"><div class="step-num">3</div>주문 확인 및 접수</div>
@@ -165,6 +186,16 @@ textarea:focus{outline:none;border-color:var(--blue2)}
       <div class="total-box">
         <span class="total-label">합계</span>
         <span class="total-amount" id="total-amt">₩0</span>
+      </div>
+      <div class="return-reason-wrap" id="return-reason-wrap" style="display:none">
+        <select class="return-reason" id="return-reason">
+          <option value="">📋 반품 사유 선택 (필수)</option>
+          <option value="미사용 반품">미사용 반품 — 수업 미진행</option>
+          <option value="불량품">불량품 — 제품 결함</option>
+          <option value="오배송">오배송 — 잘못 배송된 제품</option>
+          <option value="수량 초과">수량 초과 — 더 많이 받은 경우</option>
+          <option value="기타">기타</option>
+        </select>
       </div>
       <textarea id="memo" placeholder="메모 (선택사항)" rows="2"></textarea>
       <button class="submit-btn" id="submit-btn" onclick="submitOrder()">📦 주문 접수하기</button>
@@ -639,7 +670,7 @@ const LINES = [
 
 // ─── App State ───
 let instId='', instData=null, selSchool=null, cart={};
-let curLine=0, searchMode=false;
+let curLine=0, searchMode=false, mode='order';
 
 // ─── Init ───
 window.addEventListener('DOMContentLoaded', ()=>{
@@ -655,6 +686,29 @@ window.addEventListener('DOMContentLoaded', ()=>{
   renderSchools();
   setupInstall();
 });
+
+// ─── Mode ───
+function setMode(m){
+  mode=m;
+  const isReturn=(m==='return');
+  document.documentElement.classList.toggle('return-mode', isReturn);
+  document.getElementById('btn-order').className='mode-btn'+(isReturn?'':' active-order');
+  document.getElementById('btn-return').className='mode-btn'+(isReturn?' active-return':'');
+  document.getElementById('prod-card-hdr').style.background=isReturn?'var(--red)':'var(--blue)';
+  document.getElementById('order-card-hdr').style.background=isReturn?'var(--red)':'var(--blue)';
+  document.getElementById('prod-card-title').textContent=isReturn?'반품할 제품 선택':'제품 선택';
+  document.getElementById('order-card-title').textContent=isReturn?'반품 확인 및 접수':'주문 확인 및 접수';
+  document.getElementById('return-reason-wrap').style.display=isReturn?'block':'none';
+  document.getElementById('submit-btn').textContent=isReturn?'↩️ 반품 접수하기':'📦 주문 접수하기';
+  document.getElementById('submit-btn').style.background=isReturn?'var(--red)':'var(--blue)';
+  document.getElementById('total-bar-label-text').textContent=isReturn?'반품 합계':'선택 합계';
+  document.getElementById('total-bar-btn-text').textContent=isReturn?'반품 확인 →':'주문 확인 →';
+  // 수량 초기화
+  cart={};
+  renderLine(curLine);
+  document.getElementById('order-card').style.display='none';
+  document.getElementById('total-bar').classList.remove('show');
+}
 
 // ─── Schools ───
 function renderSchools(){
@@ -686,6 +740,7 @@ function selectSchool(idx, btn, isPersonal){
   selSchool=isPersonal?{name:"개인 주문",type:"개인"}:instData.schools[idx];
   document.getElementById('sel-school-label').textContent='📍 '+selSchool.name;
   cart={};
+  setMode('order');
   document.getElementById('prod-card').style.display='block';
   document.getElementById('order-card').style.display='none';
   document.getElementById('total-bar').classList.remove('show');
@@ -903,9 +958,14 @@ async function submitOrder(){
     const p=findProd(id);
     if(p) items.push({id,name:p.name,price:p.price,qty:q,sub:p.price*q});
   }
-  if(!items.length){showToast('⚠️ 제품을 선택해주세요');return;}
+  if(!items.length){showToast(mode==='return'?'⚠️ 반품할 제품을 선택해주세요':'⚠️ 제품을 선택해주세요');return;}
+  if(mode==='return'){
+    const reason=document.getElementById('return-reason').value;
+    if(!reason){showToast('⚠️ 반품 사유를 선택해주세요');return;}
+  }
   const total=items.reduce((s,i)=>s+i.sub,0);
   const memo=document.getElementById('memo').value.trim();
+  const returnReason=mode==='return'?document.getElementById('return-reason').value:'';
   const btn=document.getElementById('submit-btn');
   btn.disabled=true;
   btn.textContent='⏳ 접수 중...';
@@ -914,6 +974,7 @@ async function submitOrder(){
     const payload={
       instId,instName:instData.name,
       school:selSchool.name,schoolType:selSchool.type,
+      mode,returnReason,
       items,total,memo,
       orderAt:new Date().toLocaleString('ko-KR')
     };
@@ -922,9 +983,14 @@ async function submitOrder(){
     }
     document.getElementById('loading').classList.remove('show');
     document.getElementById('modal-detail').innerHTML=
-      `<strong>${instData.name}</strong> 강사 / <strong>${selSchool.name}</strong><br>총 ${items.length}개 품목 / <strong>${fmt(total)}</strong><br><br>주문 내역이 접수되었습니다.`;
+      mode==='return'
+        ? `<strong>${instData.name}</strong> 강사 / <strong>${selSchool.name}</strong><br>반품 사유: ${returnReason}<br>총 ${items.length}개 품목<br><br>반품 신청이 접수되었습니다.`
+        : `<strong>${instData.name}</strong> 강사 / <strong>${selSchool.name}</strong><br>총 ${items.length}개 품목 / <strong>${fmt(total)}</strong><br><br>주문 내역이 접수되었습니다.`;
+    document.querySelector('.modal-box h2').textContent=mode==='return'?'반품 신청 완료!':'주문 접수 완료!';
+    document.querySelector('.modal-icon').textContent=mode==='return'?'↩️':'✅';
     document.getElementById('modal').classList.add('show');
     cart={};
+    document.getElementById('return-reason').value='';
     document.getElementById('bar-amt').textContent='₩0';
     document.getElementById('total-bar').classList.remove('show');
     document.getElementById('order-card').style.display='none';
