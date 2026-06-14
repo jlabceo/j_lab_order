@@ -1,10 +1,12 @@
 /**
  * 제이랩 주문시스템 Service Worker v3
  */
-const CACHE_NAME = "j-lab-order-v7";
+const CACHE_NAME = "j-lab-order-v8";
 const ASSETS = [
   "./index.html",
   "./manifest.json",
+  "./admin.html",
+  "./admin-manifest.json",
 ];
 
 // 설치 — 핵심 파일 캐시

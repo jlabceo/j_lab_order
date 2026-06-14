@@ -903,7 +903,7 @@ function getAdminOrders(token, params) {
         // 필터
         if (params.instId && r[2] !== params.instId) return;
         if (params.quarter && !String(r[6]).includes(params.quarter)) return;
-        if (params.status && params.status !== 'all' && r[12] !== params.status) return;
+        if (params.status && params.status !== 'all' && (isRet ? r[12] : r[11]) !== params.status) return;
         results.push({
           rowIndex  : i+2,
           sheetName,
@@ -921,7 +921,7 @@ function getAdminOrders(token, params) {
           qty       : isRet ? r[9]  : r[8],
           total     : isRet ? r[10] : r[9],
           memo      : String(isRet ? (r[11]||'') : (r[10]||'')),
-          status    : String(r[12]||'정상'),
+          status    : String((isRet ? r[12] : r[11])||'정상'),
           adminMemo : String(isRet ? (r[14]||'') : (r[13]||'')),
         });
       });
@@ -941,7 +941,7 @@ function updateOrderAdmin(token, data) {
     const row = parseInt(data.rowIndex);
 
     // 컬럼 인덱스 (1-based for GAS setValues)
-    const colStatus    = 13; // 상태
+    const colStatus    = isRet ? 13 : 12; // 상태 (주문:col12, 반품:col13)
     const colItemsStr  = isRet ? 9 : 8;
     const colQty       = isRet ? 10 : 9;
     const colTotal     = isRet ? 11 : 10;
@@ -985,14 +985,12 @@ function syncAdminSheet(orderId, sheetName, itemStr, qty, total, itemsJson, stat
     rows.slice(1).forEach((r,i) => {
       if (String(r[1]) !== String(orderId)) return;
       const rowN = i+2;
-      if (status)    sheet.getRange(rowN, isRet?14:13).setValue(status);
-      if (adminMemo !== undefined && adminMemo !== null)
-        sheet.getRange(rowN, isRet?17:16).setValue(adminMemo);
+      if (status)    sheet.getRange(rowN, isRet?15:14).setValue(status);
       if (itemStr !== null) {
         sheet.getRange(rowN, isRet?9:8).setValue(itemStr);
         sheet.getRange(rowN, isRet?10:9).setValue(qty);
         sheet.getRange(rowN, isRet?11:10).setValue(total);
-        sheet.getRange(rowN, isRet?10:9).setNumberFormat('₩#,##0');
+        sheet.getRange(rowN, isRet?11:10).setNumberFormat('₩#,##0');
       }
     });
   } catch(e) { console.error('admin sync error:', e); }
