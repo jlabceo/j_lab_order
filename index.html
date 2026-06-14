@@ -165,6 +165,10 @@ textarea:focus{outline:none;border-color:var(--blue2)}
       <div class="step-num">2</div><span id="prod-card-title">제품 선택</span>
       <span style="margin-left:auto;font-size:12px;opacity:.8;font-weight:400" id="sel-school-label"></span>
     </div>
+    <div class="mode-toggle">
+      <button class="mode-btn active-order" id="btn-order" onclick="setMode('order')">📦 주문하기</button>
+      <button class="mode-btn" id="btn-return" onclick="setMode('return')">↩️ 반품 신청</button>
+    </div>
     <div class="search-wrap">
       <input class="search-input" id="search-input" type="text" placeholder="🔍 제품명 검색..." oninput="onSearch(this.value)">
       <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
