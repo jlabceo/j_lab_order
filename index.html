@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#1F4E79">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="제이랩 주문">
+<meta name="apple-mobile-web-app-title" content="제이랩 주문">h
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -1353,6 +1353,59 @@ function saveOrderToHistory(payload){
   }catch(e){}
 }
 
+// ─── History Overlay (GAS 서버에서 과거 주문 조회) ───
+let _histData=[],_histMode='all';
+function openHistory(){
+  document.getElementById('history-overlay').classList.add('show');
+  document.body.style.overflow='hidden';
+  _loadHistFromServer();
+}
+function closeHistory(){
+  document.getElementById('history-overlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+function _loadHistFromServer(){
+  const c=document.getElementById('history-content');
+  c.innerHTML='<div class="hist-loading">⏳ 불러오는 중…</div>';
+  fetch(APPS_SCRIPT_URL+'?action=history&uid='+encodeURIComponent(instId))
+    .then(r=>r.json()).then(d=>{
+      if(d.error) throw new Error(d.error);
+      _histData=d; _histMode='all';
+      document.querySelectorAll('.hist-filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+      _renderHist();
+    }).catch(e=>{ c.innerHTML='<div class="hist-loading">❌ 조회 오류: '+e.message+'</div>'; });
+}
+function histFilter(mode,btn){
+  _histMode=mode;
+  document.querySelectorAll('.hist-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  _renderHist();
+}
+function _renderHist(){
+  const c=document.getElementById('history-content');
+  const isCanc=o=>o.status==='취소';
+  const list=_histMode==='all'?_histData
+    :_histMode==='cancel'?_histData.filter(isCanc)
+    :_histData.filter(o=>o.mode===_histMode&&!isCanc(o));
+  if(!list.length){c.innerHTML='<div class="hist-empty">💭 해당 내역이 없습니다.</div>';return;}
+  c.innerHTML=list.map((o,i)=>{
+    const isRet=o.mode==='return',canc=isCanc(o);
+    let items=[];try{items=JSON.parse(o.itemsJson||'[]');}catch(e){}
+    const modeCls=canc?'cancel':isRet?'return':'order';
+    const modeTxt=canc?'취소됨':isRet?'↩ 반품':'📦 주문';
+    const rows=items.map(it=>'<div class="hist-item-row"><span class="hist-item-name">'+it.name+'</span><span class="hist-item-qty">x'+it.qty+'</span></div>').join('');
+    return '<div class="hist-card"><div class="hist-card-hdr" onclick="toggleHistCard('+i+')">'
+      +'<div class="hist-card-meta"><div class="hist-card-top">'
+      +'<span class="hist-mode-badge '+modeCls+'">'+modeTxt+'</span>'
+      +'<span class="hist-school">'+o.school+'</span>'
+      +'</div><div class="hist-sub">'+o.quarterLabel+' · '+o.orderAt+'</div></div></div>'
+      +'<div class="hist-card-body" id="hist-body-'+i+'">'+rows+'</div></div>';
+  }).join('');
+}
+function toggleHistCard(i){
+  const el=document.getElementById('hist-body-'+i);
+  if(el) el.classList.toggle('open');
+}
 // ─── Return History ───
 function renderReturnHistory(){
   const area=document.getElementById('return-history-area');
