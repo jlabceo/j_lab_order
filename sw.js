@@ -1,7 +1,7 @@
 /**
  * 제이랩 주문시스템 Service Worker v3
  */
-const CACHE_NAME = "j-lab-order-v10"
+const CACHE_NAME = "j-lab-order-v11"
 const ASSETS = [
   "./index.html",
   "./manifest.json",
