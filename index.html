@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
+:root{h
   --blue:#1F4E79;--blue2:#2E75B6;--blue-lt:#DEEAF1;
   --orange:#C55A11;--orange-lt:#FCE4D6;
   --green:#375623;--green-lt:#E2EFDA;
@@ -1500,7 +1500,7 @@ async function submitOrder(){
       mode,returnReason,
       items,total,memo,
       quarter:selQ,year:selYear,quarterLabel:`${selYear}년 ${selQ}분기`,
-      orderAt:new Date().toLocaleString('ko-KR')
+      orderAt:new Date().toLocaleString('ko-KR'),vendor:selSchool.vendor||''
     };
     const result = await gas({action:'submit_order', data: JSON.stringify(payload)});
     if (!result || result.status !== 'ok') throw new Error((result && result.message) || '주문 전송 오류');
