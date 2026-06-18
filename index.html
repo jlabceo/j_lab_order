@@ -1,4 +1,4 @@
-h<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -1502,15 +1502,9 @@ async function submitOrder(){
       quarter:selQ,year:selYear,quarterLabel:`${selYear}년 ${selQ}분기`,
       orderAt:new Date().toLocaleString('ko-KR')
     };
-    if(APPS_SCRIPT_URL&&APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec'){
-      await fetch(APPS_SCRIPT_URL,{
-        method:'POST',
-        mode:'no-cors',
-        headers:{'Content-Type':'text/plain'},
-        body:JSON.stringify(payload)
-      });
-    }
-    document.getElementById('loading').classList.remove('show');
+    const result = await gas({action:'submit_order', data: JSON.stringify(payload)});
+    if (!result || result.status !== 'ok') throw new Error((result && result.message) || '주문 전송 오류');
+        document.getElementById('loading').classList.remove('show');
     document.getElementById('modal-detail').innerHTML=
       mode==='return'
         ? `<strong>${instData.name}</strong> 강사 / <strong>${selSchool.name}</strong><br>반품 사유: ${returnReason}<br>총 ${items.length}개 품목<br><br>반품 신청이 접수되었습니다.`
