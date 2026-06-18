@@ -1606,7 +1606,7 @@ async function openHistory(){
 
   let orders=[];
   // GAS ì°ì 
-  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec'){
+  if(APPS_SCRIPT_URL && instId){
     try{
       const url=APPS_SCRIPT_URL+'?action=history&uid='+encodeURIComponent(instId);
       const res=await fetch(url,{redirect:'follow'});
