@@ -1698,11 +1698,11 @@ async function requestCancel(orderId, idx, btn){
   btn.disabled=true;
   btn.textContent='⏳ \uCC98\uB9AC \uC911...';
 
-  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec'){
+  if(APPS_SCRIPT_URL){
     try{
       const url=APPS_SCRIPT_URL+'?action=cancel&uid='+encodeURIComponent(instId)+'&orderId='+encodeURIComponent(orderId);
       const res=await fetch(url,{redirect:'follow'});
-      const data=await res.json();
+      const data=JSON.parse(await res.text());
       if(data.ok){
         showToast('✅ \uCDE8\uC18C \uC694\uCCAD\uC774 \uC811\uC218\uB418\uC5C8\uC2B5\uB2C8\uB2E4');
         histAllOrders[idx].status='\uCDE8\uC18C';
