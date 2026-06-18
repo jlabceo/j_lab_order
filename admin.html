@@ -214,7 +214,7 @@ async function gas(p){
   return JSON.parse(await res.text());
 }
 async function gasPost(body){
-  const res=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),redirect:'follow'});
+  const res=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body),redirect:'follow'});
   return JSON.parse(await res.text());
 }
 
