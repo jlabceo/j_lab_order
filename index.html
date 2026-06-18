@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>J-Lab 강사 주문시스템</title>
+<title>J-Lab ê°ì¬ ì£¼ë¬¸ìì¤í</title>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#1F4E79">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="제이랩 주문">hh
+<meta name="apple-mobile-web-app-title" content="ì ì´ë© ì£¼ë¬¸">
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{h
+:root{
   --blue:#1F4E79;--blue2:#2E75B6;--blue-lt:#DEEAF1;
   --orange:#C55A11;--orange-lt:#FCE4D6;
   --green:#375623;--green-lt:#E2EFDA;
@@ -20,7 +20,7 @@
   --border:#BDD7EE;--text:#1a1a1a;--sub:#666;
   --safe-top:env(safe-area-inset-top);--safe-bot:env(safe-area-inset-bottom);
 }
-body{font-family:'맑은 고딕','Apple SD Gothic Neo',sans-serif;background:#EEF2F7;color:var(--text);font-size:14px;min-height:100dvh;}
+body{font-family:'ë§ì ê³ ë','Apple SD Gothic Neo',sans-serif;background:#EEF2F7;color:var(--text);font-size:14px;min-height:100dvh;}
 nav{background:var(--blue);color:#fff;padding:calc(12px + var(--safe-top)) 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 .logo{font-size:17px;font-weight:800;flex:1}
 .inst-badge{background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:12px;white-space:nowrap}
@@ -126,7 +126,7 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 .return-reason{width:100%;border:2px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;margin-top:12px;background:#fff;appearance:none;-webkit-appearance:none;outline:none;cursor:pointer}
 .return-reason:focus{border-color:var(--red)}
 .return-reason-wrap{position:relative;margin-top:12px}
-.return-reason-wrap::after{content:'▼';position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--sub);font-size:11px}
+.return-reason-wrap::after{content:'â¼';position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--sub);font-size:11px}
 
 
 /* QUARTER PICKER */
@@ -153,7 +153,7 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 .rh-items{margin-top:8px;font-size:11px;color:var(--sub);border-top:1px solid #EEF;padding-top:7px;line-height:1.6}
 .rh-back{display:flex;align-items:center;gap:5px;color:var(--red);background:none;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:0 16px 12px;-webkit-user-select:none;user-select:none}
 
-/* ── 주문내역 오버레이 ── */
+/* ââ ì£¼ë¬¸ë´ì­ ì¤ë²ë ì´ ââ */
 #history-overlay{display:none;position:fixed;inset:0;background:#EEF2F7;z-index:8000;overflow-y:auto;-webkit-overflow-scrolling:touch}
 #history-overlay.show{display:block}
 .hist-nav{background:var(--blue);color:#fff;padding:calc(12px + var(--safe-top)) 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:1}
@@ -188,7 +188,7 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 .hist-filter-btn{flex-shrink:0;padding:6px 14px;border:2px solid var(--border);border-radius:20px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--sub);-webkit-user-select:none;user-select:none;transition:all .15s}
 .hist-filter-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
 
-/* ── 앱 설치 안내 모달 ── */
+/* ââ ì± ì¤ì¹ ìë´ ëª¨ë¬ ââ */
 #install-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9200;align-items:flex-end;justify-content:center;padding:0}
 #install-modal.show{display:flex}
 .install-box{background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto}
@@ -218,118 +218,118 @@ textarea:focus{outline:none;border-color:var(--blue2)}
 <div id="toast"></div>
 <div id="install-modal">
   <div class="install-box">
-    <h3>📲 앱 설치 방법</h3>
-    <p class="inst-sub">홈 화면에 추가하면 앱처럼 바로 실행할 수 있어요</p>
+    <h3>ð² ì± ì¤ì¹ ë°©ë²</h3>
+    <p class="inst-sub">í íë©´ì ì¶ê°íë©´ ì±ì²ë¼ ë°ë¡ ì¤íí  ì ìì´ì</p>
     <div class="install-tab-wrap">
-      <button class="install-tab active" onclick="switchInstallTab('android',this)">🤖 안드로이드</button>
-      <button class="install-tab" onclick="switchInstallTab('ios',this)">🍎 아이폰 (iOS)</button>
+      <button class="install-tab active" onclick="switchInstallTab('android',this)">ð¤ ìëë¡ì´ë</button>
+      <button class="install-tab" onclick="switchInstallTab('ios',this)">ð ìì´í° (iOS)</button>
     </div>
     <div class="install-steps show" id="install-android">
       <div class="install-step">
         <div class="install-step-num">1</div>
         <div class="install-step-txt">
-          <strong>Chrome 브라우저로 접속</strong>
-          <span>반드시 Chrome 앱으로 주문 링크를 열어주세요</span>
+          <strong>Chrome ë¸ë¼ì°ì ë¡ ì ì</strong>
+          <span>ë°ëì Chrome ì±ì¼ë¡ ì£¼ë¬¸ ë§í¬ë¥¼ ì´ì´ì£¼ì¸ì</span>
         </div>
       </div>
       <div class="install-step">
         <div class="install-step-num">2</div>
         <div class="install-step-txt">
-          <strong>하단 배너 또는 메뉴에서 설치</strong>
-          <span>화면 하단에 "앱 설치" 배너가 뜨면 탭하거나,<br>
-          우측 상단 ⋮ (점 세 개) → <b>"앱 설치"</b> 또는 <b>"홈 화면에 추가"</b></span>
+          <strong>íë¨ ë°°ë ëë ë©ë´ìì ì¤ì¹</strong>
+          <span>íë©´ íë¨ì "ì± ì¤ì¹" ë°°ëê° ë¨ë©´ í­íê±°ë,<br>
+          ì°ì¸¡ ìë¨ â® (ì  ì¸ ê°) â <b>"ì± ì¤ì¹"</b> ëë <b>"í íë©´ì ì¶ê°"</b></span>
         </div>
       </div>
       <div class="install-step">
         <div class="install-step-num">3</div>
         <div class="install-step-txt">
-          <strong>"설치" 버튼 탭</strong>
-          <span>팝업에서 설치를 확인하면 홈 화면에 아이콘이 추가됩니다</span>
+          <strong>"ì¤ì¹" ë²í¼ í­</strong>
+          <span>íììì ì¤ì¹ë¥¼ íì¸íë©´ í íë©´ì ìì´ì½ì´ ì¶ê°ë©ëë¤</span>
         </div>
       </div>
-      <div class="install-note">💡 이후에는 홈 화면의 <b>J-Lab 주문</b> 아이콘을 탭하면 바로 실행됩니다</div>
+      <div class="install-note">ð¡ ì´íìë í íë©´ì <b>J-Lab ì£¼ë¬¸</b> ìì´ì½ì í­íë©´ ë°ë¡ ì¤íë©ëë¤</div>
     </div>
     <div class="install-steps" id="install-ios">
       <div class="install-step">
         <div class="install-step-num">1</div>
         <div class="install-step-txt">
-          <strong>Safari 브라우저로 접속</strong>
-          <span>⚠️ 아이폰은 반드시 <b>Safari</b>를 사용해야 합니다<br>Chrome, 카카오 인앱 브라우저에서는 설치 불가</span>
+          <strong>Safari ë¸ë¼ì°ì ë¡ ì ì</strong>
+          <span>â ï¸ ìì´í°ì ë°ëì <b>Safari</b>ë¥¼ ì¬ì©í´ì¼ í©ëë¤<br>Chrome, ì¹´ì¹´ì¤ ì¸ì± ë¸ë¼ì°ì ììë ì¤ì¹ ë¶ê°</span>
         </div>
       </div>
       <div class="install-step">
         <div class="install-step-num">2</div>
         <div class="install-step-txt">
-          <strong>하단 공유 버튼 탭</strong>
-          <span>화면 하단 가운데 <b>□↑ (공유)</b> 버튼을 탭하세요</span>
+          <strong>íë¨ ê³µì  ë²í¼ í­</strong>
+          <span>íë©´ íë¨ ê°ì´ë° <b>â¡â (ê³µì )</b> ë²í¼ì í­íì¸ì</span>
         </div>
       </div>
       <div class="install-step">
         <div class="install-step-num">3</div>
         <div class="install-step-txt">
-          <strong>"홈 화면에 추가" 선택</strong>
-          <span>스크롤을 내려 <b>"홈 화면에 추가"</b>를 탭한 후 우측 상단 <b>"추가"</b> 탭</span>
+          <strong>"í íë©´ì ì¶ê°" ì í</strong>
+          <span>ì¤í¬ë¡¤ì ë´ë ¤ <b>"í íë©´ì ì¶ê°"</b>ë¥¼ í­í í ì°ì¸¡ ìë¨ <b>"ì¶ê°"</b> í­</span>
         </div>
       </div>
-      <div class="install-note">💡 카카오톡에서 링크를 받았다면: 링크 탭 → 우측 하단 <b>Safari로 열기</b> 탭 → 위 절차 진행</div>
+      <div class="install-note">ð¡ ì¹´ì¹´ì¤í¡ìì ë§í¬ë¥¼ ë°ìë¤ë©´: ë§í¬ í­ â ì°ì¸¡ íë¨ <b>Safarië¡ ì´ê¸°</b> í­ â ì ì ì°¨ ì§í</div>
     </div>
-    <button class="install-close" onclick="closeInstallModal()">확인</button>
+    <button class="install-close" onclick="closeInstallModal()">íì¸</button>
   </div>
 </div>
 <div id="history-overlay">
   <div class="hist-nav">
-    <button class="hist-nav-back" onclick="closeHistory()">← 뒤로</button>
-    <div class="hist-nav-title">📋 내 주문 내역</div>
+    <button class="hist-nav-back" onclick="closeHistory()">â ë¤ë¡</button>
+    <div class="hist-nav-title">ð ë´ ì£¼ë¬¸ ë´ì­</div>
   </div>
   <div class="hist-wrap">
     <div class="hist-filter" id="hist-filter">
-      <button class="hist-filter-btn active" onclick="histFilter('all',this)">전체</button>
-      <button class="hist-filter-btn" onclick="histFilter('order',this)">주문</button>
-      <button class="hist-filter-btn" onclick="histFilter('return',this)">반품</button>
-      <button class="hist-filter-btn" onclick="histFilter('cancel',this)">취소</button>
+      <button class="hist-filter-btn active" onclick="histFilter('all',this)">ì ì²´</button>
+      <button class="hist-filter-btn" onclick="histFilter('order',this)">ì£¼ë¬¸</button>
+      <button class="hist-filter-btn" onclick="histFilter('return',this)">ë°í</button>
+      <button class="hist-filter-btn" onclick="histFilter('cancel',this)">ì·¨ì</button>
     </div>
-    <div id="history-content"><div class="hist-loading">⏳ 불러오는 중...</div></div>
+    <div id="history-content"><div class="hist-loading">â³ ë¶ë¬ì¤ë ì¤...</div></div>
   </div>
 </div>
 <div id="modal">
   <div class="modal-box">
-    <div class="modal-icon">✅</div>
-    <h2>주문 접수 완료!</h2>
+    <div class="modal-icon">â</div>
+    <h2>ì£¼ë¬¸ ì ì ìë£!</h2>
     <p id="modal-detail"></p>
-    <button class="modal-close" onclick="closeModal()">확인</button>
+    <button class="modal-close" onclick="closeModal()">íì¸</button>
   </div>
 </div>
 <nav>
-  <div class="logo">🏫 J-Lab</div>
-  <div class="inst-badge" id="nav-name">주문시스템</div>
-  <button class="install-btn" id="install-btn" onclick="openInstallModal()">📲 앱 설치</button>
-  <button class="install-btn" id="history-btn" onclick="openHistory()" style="display:none">📋 내역</button>
+  <div class="logo">ð« J-Lab</div>
+  <div class="inst-badge" id="nav-name">ì£¼ë¬¸ìì¤í</div>
+  <button class="install-btn" id="install-btn" onclick="openInstallModal()">ð² ì± ì¤ì¹</button>
+  <button class="install-btn" id="history-btn" onclick="openHistory()" style="display:none">ð ë´ì­</button>
 </nav>
 <main>
   <div id="install-guide">
-    <strong style="cursor:pointer" onclick="openInstallModal()">📲 홈 화면에 추가하면 앱처럼 사용할 수 있어요! →</strong>
+    <strong style="cursor:pointer" onclick="openInstallModal()">ð² í íë©´ì ì¶ê°íë©´ ì±ì²ë¼ ì¬ì©í  ì ìì´ì! â</strong>
     <span id="install-guide-text"></span>
   </div>
   <div class="card">
-    <div class="card-header"><div class="step-num">1</div>학교 / 주문 유형 선택</div>
+    <div class="card-header"><div class="step-num">1</div>íêµ / ì£¼ë¬¸ ì í ì í</div>
     <div class="quarter-wrap" id="quarter-wrap">
-      <div class="quarter-label">📅 분기 선택 <span id="sel-year-label" style="color:var(--blue);font-weight:800"></span></div>
+      <div class="quarter-label">ð ë¶ê¸° ì í <span id="sel-year-label" style="color:var(--blue);font-weight:800"></span></div>
       <div class="quarter-btns" id="quarter-btns"></div>
     </div>
-    <div class="card-body"><div class="school-grid" id="school-grid"><div class="empty">⏳ 불러오는 중...</div></div></div>
+    <div class="card-body"><div class="school-grid" id="school-grid"><div class="empty">â³ ë¶ë¬ì¤ë ì¤...</div></div></div>
   </div>
   <div class="card" id="prod-card" style="display:none">
     <div class="card-header" id="prod-card-hdr">
-      <div class="step-num">2</div><span id="prod-card-title">제품 선택</span>
+      <div class="step-num">2</div><span id="prod-card-title">ì í ì í</span>
       <span style="margin-left:auto;font-size:12px;opacity:.8;font-weight:400" id="sel-school-label"></span>
     </div>
     <div class="mode-toggle">
-      <button class="mode-btn active-order" id="btn-order" onclick="setMode('order')">📦 주문하기</button>
-      <button class="mode-btn" id="btn-return" onclick="setMode('return')">↩️ 반품 신청</button>
+      <button class="mode-btn active-order" id="btn-order" onclick="setMode('order')">ð¦ ì£¼ë¬¸íê¸°</button>
+      <button class="mode-btn" id="btn-return" onclick="setMode('return')">â©ï¸ ë°í ì ì²­</button>
     </div>
     <div class="search-wrap" id="search-wrap">
-      <input class="search-input" id="search-input" type="text" placeholder="🔍 제품명 검색..." oninput="onSearch(this.value)">
-      <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+      <input class="search-input" id="search-input" type="text" placeholder="ð ì íëª ê²ì..." oninput="onSearch(this.value)">
+      <button class="search-clear" id="search-clear" onclick="clearSearch()">â</button>
     </div>
     <div class="line-tabs" id="line-tabs"></div>
     <div id="return-history-area" style="display:none"></div>
@@ -337,280 +337,280 @@ textarea:focus{outline:none;border-color:var(--blue2)}
   </div>
   <div id="total-bar">
     <div>
-      <div class="total-bar-label" id="total-bar-label-text">선택 합계</div>
-      <div class="total-bar-amt" id="bar-amt">₩0</div>
+      <div class="total-bar-label" id="total-bar-label-text">ì í í©ê³</div>
+      <div class="total-bar-amt" id="bar-amt">â©0</div>
     </div>
-    <button class="total-bar-btn" id="total-bar-btn-text" onclick="scrollToSummary()">주문 확인 →</button>
+    <button class="total-bar-btn" id="total-bar-btn-text" onclick="scrollToSummary()">ì£¼ë¬¸ íì¸ â</button>
   </div>
   <div class="card" id="order-card" style="display:none">
-    <div class="card-header" id="order-card-hdr"><div class="step-num">3</div><span id="order-card-title">주문 확인 및 접수</span></div>
+    <div class="card-header" id="order-card-hdr"><div class="step-num">3</div><span id="order-card-title">ì£¼ë¬¸ íì¸ ë° ì ì</span></div>
     <div class="card-body">
       <div id="sum-items"></div>
       <div class="total-box">
-        <span class="total-label">합계</span>
-        <span class="total-amount" id="total-amt">₩0</span>
+        <span class="total-label">í©ê³</span>
+        <span class="total-amount" id="total-amt">â©0</span>
       </div>
       <div class="return-reason-wrap" id="return-reason-wrap" style="display:none">
         <select class="return-reason" id="return-reason">
-          <option value="">📋 반품 사유 선택 (필수)</option>
-          <option value="미사용 반품">미사용 반품 — 수업 미진행</option>
-          <option value="불량품">불량품 — 제품 결함</option>
-          <option value="오배송">오배송 — 잘못 배송된 제품</option>
-          <option value="수량 초과">수량 초과 — 더 많이 받은 경우</option>
-          <option value="기타">기타</option>
+          <option value="">ð ë°í ì¬ì  ì í (íì)</option>
+          <option value="ë¯¸ì¬ì© ë°í">ë¯¸ì¬ì© ë°í â ìì ë¯¸ì§í</option>
+          <option value="ë¶ëí">ë¶ëí â ì í ê²°í¨</option>
+          <option value="ì¤ë°°ì¡">ì¤ë°°ì¡ â ìëª» ë°°ì¡ë ì í</option>
+          <option value="ìë ì´ê³¼">ìë ì´ê³¼ â ë ë§ì´ ë°ì ê²½ì°</option>
+          <option value="ê¸°í">ê¸°í</option>
         </select>
       </div>
-      <textarea id="memo" placeholder="메모 (선택사항)" rows="2"></textarea>
-      <button class="submit-btn" id="submit-btn" onclick="submitOrder()">📦 주문 접수하기</button>
+      <textarea id="memo" placeholder="ë©ëª¨ (ì íì¬í­)" rows="2"></textarea>
+      <button class="submit-btn" id="submit-btn" onclick="submitOrder()">ð¦ ì£¼ë¬¸ ì ìíê¸°</button>
     </div>
   </div>
 </main>
 <script>
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec";
 const INST = {
-  "kim-ji-yeon":{name:"김지연",schools:[
-    {name:"덕의초",type:"직영"},
-    {name:"하안북초",type:"직영"},
-    {name:"도덕초",type:"직영"},
-    {name:"구름산초",type:"직영"},
+  "kim-ji-yeon":{name:"ê¹ì§ì°",schools:[
+    {name:"ëìì´",type:"ì§ì"},
+    {name:"íìë¶ì´",type:"ì§ì"},
+    {name:"ëëì´",type:"ì§ì"},
+    {name:"êµ¬ë¦ì°ì´",type:"ì§ì"},
   ]},
-  "kim-hee-yeon":{name:"김희연",schools:[
-    {name:"갈산초 (에듀베스트)",type:"업체"},
-    {name:"진관초 (크로마)",type:"업체"},
-    {name:"추계초 ★학기제",type:"직영",sem:true},
+  "kim-hee-yeon":{name:"ê¹í¬ì°",schools:[
+    {name:"ê°ì°ì´ (ìëë² ì¤í¸)",type:"ìì²´"},
+    {name:"ì§ê´ì´ (í¬ë¡ë§)",type:"ìì²´"},
+    {name:"ì¶ê³ì´ âíê¸°ì ",type:"ì§ì",sem:true},
   ]},
-  "no-jeong-ha":{name:"노정하",schools:[
-    {name:"은진초",type:"직영"},
-    {name:"모당초",type:"업체",vendor:"움터"},
-    {name:"나진초",type:"업체",vendor:"움터"},
+  "no-jeong-ha":{name:"ë¸ì í",schools:[
+    {name:"ìì§ì´",type:"ì§ì"},
+    {name:"ëª¨ë¹ì´",type:"ìì²´",vendor:"ìí°"},
+    {name:"ëì§ì´",type:"ìì²´",vendor:"ìí°"},
   ]},
-  "seo-eun-jeong":{name:"서은정",schools:[
-    {name:"오마초",type:"직영"},
-    {name:"원당초",type:"직영"},
-    {name:"등대글로벌스쿨 ★학기제",type:"강사입금",sem:true},
-    {name:"경기글로벌스쿨",type:"직영"},
+  "seo-eun-jeong":{name:"ììì ",schools:[
+    {name:"ì¤ë§ì´",type:"ì§ì"},
+    {name:"ìë¹ì´",type:"ì§ì"},
+    {name:"ë±ëê¸ë¡ë²ì¤ì¿¨ âíê¸°ì ",type:"ê°ì¬ìê¸",sem:true},
+    {name:"ê²½ê¸°ê¸ë¡ë²ì¤ì¿¨",type:"ì§ì"},
   ]},
-  "jang-eun-hwa":{name:"장은화",schools:[
-    {name:"김포유현초 (참다솜)",type:"업체"},
-    {name:"풍무청소년문화",type:"직영"},
+  "jang-eun-hwa":{name:"ì¥ìí",schools:[
+    {name:"ê¹í¬ì íì´ (ì°¸ë¤ì)",type:"ìì²´"},
+    {name:"íë¬´ì²­ìëë¬¸í",type:"ì§ì"},
   ]},
-  "kim-yun-seon":{name:"김윤선",schools:[
-    {name:"하늘초",type:"직영"},
-    {name:"신원초",type:"업체",vendor:"움터"},
+  "kim-yun-seon":{name:"ê¹ì¤ì ",schools:[
+    {name:"íëì´",type:"ì§ì"},
+    {name:"ì ìì´",type:"ìì²´",vendor:"ìí°"},
   ]},
-  "kim-jun-hee":{name:"김준희",schools:[
-    {name:"경기글로벌스쿨",type:"직영"},
+  "kim-jun-hee":{name:"ê¹ì¤í¬",schools:[
+    {name:"ê²½ê¸°ê¸ë¡ë²ì¤ì¿¨",type:"ì§ì"},
   ]},
-  "han-hyun-suk":{name:"한현숙",schools:[
-    {name:"삼송초",type:"직영"},
-    {name:"오금초",type:"직영"},
-    {name:"원중초",type:"직영"},
-    {name:"도래울초 (아라)",type:"업체"},
+  "han-hyun-suk":{name:"ííì",schools:[
+    {name:"ì¼ì¡ì´",type:"ì§ì"},
+    {name:"ì¤ê¸ì´",type:"ì§ì"},
+    {name:"ìì¤ì´",type:"ì§ì"},
+    {name:"ëëì¸ì´ (ìë¼)",type:"ìì²´"},
   ]},
-  "kim-hee-ok":{name:"김희옥",schools:[
-    {name:"파주 검산초",type:"직영"},
+  "kim-hee-ok":{name:"ê¹í¬ì¥",schools:[
+    {name:"íì£¼ ê²ì°ì´",type:"ì§ì"},
   ]},
-  "choi-jin-hee":{name:"최진희",schools:[
-    {name:"파주 금릉초",type:"직영"},
+  "choi-jin-hee":{name:"ìµì§í¬",schools:[
+    {name:"íì£¼ ê¸ë¦ì´",type:"ì§ì"},
   ]},
-  "jeong-eun-suk":{name:"정은숙",schools:[
-    {name:"오동초",type:"직영"},
+  "jeong-eun-suk":{name:"ì ìì",schools:[
+    {name:"ì¤ëì´",type:"ì§ì"},
   ]},
-  "gyeong-sang-hyeon":{name:"경상현",schools:[
-    {name:"화성 서신초",type:"직영"},
+  "gyeong-sang-hyeon":{name:"ê²½ìí",schools:[
+    {name:"íì± ìì ì´",type:"ì§ì"},
   ]},
-  "admin":{name:"관리자(테스트)",schools:[
-    {name:"테스트 학교",type:"직영"},
+  "admin":{name:"ê´ë¦¬ì(íì¤í¸)",schools:[
+    {name:"íì¤í¸ íêµ",type:"ì§ì"},
   ]},
 };
 const LINES = [
-  {line:"프로보 테크닉", cats:[
-    {cat:"키트", prods:[
-      {id:"P0",name:"테크닉 LEVEL 1 KIT",price:132000},
-      {id:"P1",name:"테크닉 LEVEL 1 KIT (+공구 set 포함)",price:137000},
-      {id:"P2",name:"테크닉 LEVEL 2 KIT",price:132000},
-      {id:"P3",name:"테크닉 LEVEL 3 KIT",price:132000},
-      {id:"P4",name:"테크닉 LEVEL 4 KIT",price:132000},
-      {id:"P5",name:"테크닉 LEVEL 5 KIT",price:132000},
-      {id:"P6",name:"테크닉 LEVEL 6 KIT",price:132000},
-      {id:"P7",name:"테크닉 LEVEL 7 KIT",price:150000},
-      {id:"P8",name:"테크닉 JUMP KIT",price:250000},
-      {id:"P9",name:"테크닉 4단계 추가팩",price:65000},
-      {id:"P10",name:"테크닉 2단계 추가팩",price:45000},
-      {id:"P11",name:"테크닉 3단계 업그레이드 KIT",price:38500},
+  {line:"íë¡ë³´ íí¬ë", cats:[
+    {cat:"í¤í¸", prods:[
+      {id:"P0",name:"íí¬ë LEVEL 1 KIT",price:132000},
+      {id:"P1",name:"íí¬ë LEVEL 1 KIT (+ê³µêµ¬ set í¬í¨)",price:137000},
+      {id:"P2",name:"íí¬ë LEVEL 2 KIT",price:132000},
+      {id:"P3",name:"íí¬ë LEVEL 3 KIT",price:132000},
+      {id:"P4",name:"íí¬ë LEVEL 4 KIT",price:132000},
+      {id:"P5",name:"íí¬ë LEVEL 5 KIT",price:132000},
+      {id:"P6",name:"íí¬ë LEVEL 6 KIT",price:132000},
+      {id:"P7",name:"íí¬ë LEVEL 7 KIT",price:150000},
+      {id:"P8",name:"íí¬ë JUMP KIT",price:250000},
+      {id:"P9",name:"íí¬ë 4ë¨ê³ ì¶ê°í©",price:65000},
+      {id:"P10",name:"íí¬ë 2ë¨ê³ ì¶ê°í©",price:45000},
+      {id:"P11",name:"íí¬ë 3ë¨ê³ ìê·¸ë ì´ë KIT",price:38500},
     ]},
-    {cat:"회로보드", prods:[
-      {id:"P12",name:"USB 다운로더",price:15000},
-      {id:"P13",name:"RF 리모컨",price:35000},
-      {id:"P14",name:"RF 수신 보드",price:16500},
-      {id:"P15",name:"파워 CPU 보드",price:46200},
-      {id:"P16",name:"스위치 보드",price:2800},
-      {id:"P17",name:"파랑 LED 보드",price:1650},
-      {id:"P18",name:"빨강 LED 보드",price:1650},
-      {id:"P19",name:"사운드 보드",price:26000},
-      {id:"P20",name:"CPU 보드",price:35000},
-      {id:"P21",name:"확장 모듈 + 그립 SET",price:19800},
-      {id:"P22",name:"적외선 센서 보드",price:3850},
-      {id:"P23",name:"터보 드라이버",price:46200},
-      {id:"P24",name:"RGB LED 보드",price:9900},
-      {id:"P25",name:"RF 조종기 + 확장 모듈 SET",price:52000},
-      {id:"P26",name:"블루투스 (모드3)",price:15950},
+    {cat:"íë¡ë³´ë", prods:[
+      {id:"P12",name:"USB ë¤ì´ë¡ë",price:15000},
+      {id:"P13",name:"RF ë¦¬ëª¨ì»¨",price:35000},
+      {id:"P14",name:"RF ìì  ë³´ë",price:16500},
+      {id:"P15",name:"íì CPU ë³´ë",price:46200},
+      {id:"P16",name:"ì¤ìì¹ ë³´ë",price:2800},
+      {id:"P17",name:"íë LED ë³´ë",price:1650},
+      {id:"P18",name:"ë¹¨ê° LED ë³´ë",price:1650},
+      {id:"P19",name:"ì¬ì´ë ë³´ë",price:26000},
+      {id:"P20",name:"CPU ë³´ë",price:35000},
+      {id:"P21",name:"íì¥ ëª¨ë + ê·¸ë¦½ SET",price:19800},
+      {id:"P22",name:"ì ì¸ì  ì¼ì ë³´ë",price:3850},
+      {id:"P23",name:"í°ë³´ ëë¼ì´ë²",price:46200},
+      {id:"P24",name:"RGB LED ë³´ë",price:9900},
+      {id:"P25",name:"RF ì¡°ì¢ê¸° + íì¥ ëª¨ë SET",price:52000},
+      {id:"P26",name:"ë¸ë£¨í¬ì¤ (ëª¨ë3)",price:15950},
     ]},
-    {cat:"프레임", prods:[
-      {id:"P27",name:"3X23 프레임",price:2000},
-      {id:"P28",name:"3X15 프레임",price:1500},
-      {id:"P29",name:"L탭 2X3",price:800},
-      {id:"P30",name:"모터 프레임",price:1500},
-      {id:"P31",name:"10mm 서포트",price:200},
-      {id:"P32",name:"15 프레임",price:650},
-      {id:"P33",name:"30mm 서포트",price:300},
-      {id:"P34",name:"20mm 서포트",price:250},
-      {id:"P35",name:"L탭 2X4",price:1000},
-      {id:"P36",name:"앵글탭 2X2",price:770},
-      {id:"P37",name:"8X12 프레임",price:6600},
-      {id:"P38",name:"11 프레임",price:500},
-      {id:"P39",name:"40mm 서포트",price:350},
-      {id:"P40",name:"5 프레임",price:350},
+    {cat:"íë ì", prods:[
+      {id:"P27",name:"3X23 íë ì",price:2000},
+      {id:"P28",name:"3X15 íë ì",price:1500},
+      {id:"P29",name:"Lí­ 2X3",price:800},
+      {id:"P30",name:"ëª¨í° íë ì",price:1500},
+      {id:"P31",name:"10mm ìí¬í¸",price:200},
+      {id:"P32",name:"15 íë ì",price:650},
+      {id:"P33",name:"30mm ìí¬í¸",price:300},
+      {id:"P34",name:"20mm ìí¬í¸",price:250},
+      {id:"P35",name:"Lí­ 2X4",price:1000},
+      {id:"P36",name:"ìµê¸í­ 2X2",price:770},
+      {id:"P37",name:"8X12 íë ì",price:6600},
+      {id:"P38",name:"11 íë ì",price:500},
+      {id:"P39",name:"40mm ìí¬í¸",price:350},
+      {id:"P40",name:"5 íë ì",price:350},
       {id:"P41",name:"L2X2",price:300},
-      {id:"P42",name:"7 프레임",price:350},
+      {id:"P42",name:"7 íë ì",price:350},
       {id:"P43",name:"L2X6",price:450},
-      {id:"P44",name:"3X7 프레임",price:650},
-      {id:"P45",name:"9 프레임",price:400},
-      {id:"P46",name:"7X11 프레임",price:2200},
-      {id:"P47",name:"12X16 프레임",price:11000},
-      {id:"P48",name:"5mm 서포트",price:150},
-      {id:"P49",name:"15X23프레임(메인프레임)",price:6600},
+      {id:"P44",name:"3X7 íë ì",price:650},
+      {id:"P45",name:"9 íë ì",price:400},
+      {id:"P46",name:"7X11 íë ì",price:2200},
+      {id:"P47",name:"12X16 íë ì",price:11000},
+      {id:"P48",name:"5mm ìí¬í¸",price:150},
+      {id:"P49",name:"15X23íë ì(ë©ì¸íë ì)",price:6600},
       {id:"P50",name:"L3X3",price:300},
-      {id:"P51",name:"L3x4x3 프레임",price:1100},
-      {id:"P52",name:"L탭 1X11X1",price:2600},
-      {id:"P53",name:"L탭 2X11X2",price:2600},
-      {id:"P54",name:"슬라이드 프레임",price:660},
-      {id:"P55",name:"L탭 3X9",price:1000},
+      {id:"P51",name:"L3x4x3 íë ì",price:1100},
+      {id:"P52",name:"Lí­ 1X11X1",price:2600},
+      {id:"P53",name:"Lí­ 2X11X2",price:2600},
+      {id:"P54",name:"ì¬ë¼ì´ë íë ì",price:660},
+      {id:"P55",name:"Lí­ 3X9",price:1000},
     ]},
-    {cat:"기구물", prods:[
-      {id:"P56",name:"모터혼",price:250},
-      {id:"P57",name:"바퀴 (휠+타이어)",price:2200},
-      {id:"P58",name:"5mm 볼트",price:24},
-      {id:"P59",name:"풀메탈 DC모터(R-120)",price:15400},
-      {id:"P60",name:"8mm 볼트",price:28},
-      {id:"P61",name:"C링",price:330},
-      {id:"P62",name:"풀메탈 서보모터(MS-780)",price:24200},
-      {id:"P63",name:"바퀴혼 (4개)+볼트 (5개)",price:4500},
-      {id:"P64",name:"플랜지 너트",price:55},
-      {id:"P65",name:"경첩",price:1650},
-      {id:"P66",name:"풀메탈 DC모터(R-300)",price:15400},
-      {id:"P67",name:"링크 서포트",price:400},
-      {id:"P68",name:"링크 볼트",price:55},
-      {id:"P69",name:"바퀴 (타이어)",price:1600},
-      {id:"P70",name:"메탈혼",price:2200},
-      {id:"P71",name:"200mm 축",price:1650},
-      {id:"P72",name:"3핀 연장핀",price:180},
-      {id:"P73",name:"바퀴 (휠)",price:800},
-      {id:"P74",name:"메카넘 휠 (A/A/B/B)",price:33000},
-      {id:"P75",name:"탄력판",price:1200},
-      {id:"P76",name:"오프로드 바퀴",price:9680},
-      {id:"P77",name:"메카넘 휠 A",price:9600},
-      {id:"P78",name:"아이들링",price:950},
-      {id:"P79",name:"조정부싱",price:660},
-      {id:"P80",name:"2핀 연장핀",price:180},
-      {id:"P81",name:"캐터필러",price:145},
-      {id:"P82",name:"메카넘 휠 B",price:9600},
-      {id:"P83",name:"나일론 너트",price:45},
-      {id:"P84",name:"테크닉 스프링",price:550},
-      {id:"P85",name:"와서 (40개)",price:35},
-      {id:"P86",name:"풀메탈 서보모터(MS-1000)",price:26400},
-      {id:"P87",name:"캐터타이어",price:300},
-      {id:"P88",name:"큰 톱니",price:1000},
-      {id:"P89",name:"80mm 축",price:800},
-      {id:"P90",name:"옴니 휠",price:9600},
-      {id:"P91",name:"작은 톱니",price:880},
-      {id:"P92",name:"슬라이드 부싱",price:1650},
-      {id:"P93",name:"몬스터 바퀴",price:14800},
-      {id:"P94",name:"22mm 볼트",price:80},
-      {id:"P95",name:"스펀지",price:1100},
-      {id:"P96",name:"50파이 크롬 휠",price:1600},
-      {id:"P97",name:"크롬 휠+타이어",price:3190},
+    {cat:"ê¸°êµ¬ë¬¼", prods:[
+      {id:"P56",name:"ëª¨í°í¼",price:250},
+      {id:"P57",name:"ë°í´ (í +íì´ì´)",price:2200},
+      {id:"P58",name:"5mm ë³¼í¸",price:24},
+      {id:"P59",name:"íë©í DCëª¨í°(R-120)",price:15400},
+      {id:"P60",name:"8mm ë³¼í¸",price:28},
+      {id:"P61",name:"Cë§",price:330},
+      {id:"P62",name:"íë©í ìë³´ëª¨í°(MS-780)",price:24200},
+      {id:"P63",name:"ë°í´í¼ (4ê°)+ë³¼í¸ (5ê°)",price:4500},
+      {id:"P64",name:"íëì§ ëí¸",price:55},
+      {id:"P65",name:"ê²½ì²©",price:1650},
+      {id:"P66",name:"íë©í DCëª¨í°(R-300)",price:15400},
+      {id:"P67",name:"ë§í¬ ìí¬í¸",price:400},
+      {id:"P68",name:"ë§í¬ ë³¼í¸",price:55},
+      {id:"P69",name:"ë°í´ (íì´ì´)",price:1600},
+      {id:"P70",name:"ë©íí¼",price:2200},
+      {id:"P71",name:"200mm ì¶",price:1650},
+      {id:"P72",name:"3í ì°ì¥í",price:180},
+      {id:"P73",name:"ë°í´ (í )",price:800},
+      {id:"P74",name:"ë©ì¹´ë í  (A/A/B/B)",price:33000},
+      {id:"P75",name:"íë ¥í",price:1200},
+      {id:"P76",name:"ì¤íë¡ë ë°í´",price:9680},
+      {id:"P77",name:"ë©ì¹´ë í  A",price:9600},
+      {id:"P78",name:"ìì´ë¤ë§",price:950},
+      {id:"P79",name:"ì¡°ì ë¶ì±",price:660},
+      {id:"P80",name:"2í ì°ì¥í",price:180},
+      {id:"P81",name:"ìºí°íë¬",price:145},
+      {id:"P82",name:"ë©ì¹´ë í  B",price:9600},
+      {id:"P83",name:"ëì¼ë¡  ëí¸",price:45},
+      {id:"P84",name:"íí¬ë ì¤íë§",price:550},
+      {id:"P85",name:"ìì (40ê°)",price:35},
+      {id:"P86",name:"íë©í ìë³´ëª¨í°(MS-1000)",price:26400},
+      {id:"P87",name:"ìºí°íì´ì´",price:300},
+      {id:"P88",name:"í° í±ë",price:1000},
+      {id:"P89",name:"80mm ì¶",price:800},
+      {id:"P90",name:"ì´ë í ",price:9600},
+      {id:"P91",name:"ìì í±ë",price:880},
+      {id:"P92",name:"ì¬ë¼ì´ë ë¶ì±",price:1650},
+      {id:"P93",name:"ëª¬ì¤í° ë°í´",price:14800},
+      {id:"P94",name:"22mm ë³¼í¸",price:80},
+      {id:"P95",name:"ì¤íì§",price:1100},
+      {id:"P96",name:"50íì´ í¬ë¡¬ í ",price:1600},
+      {id:"P97",name:"í¬ë¡¬ í +íì´ì´",price:3190},
     ]},
-    {cat:"관련상품", prods:[
-      {id:"P98",name:"부품함",price:3500},
-      {id:"P99",name:"배터리 케이스 + 덮개",price:3300},
-      {id:"P100",name:"프로보 로봇 박스 19L",price:14000},
-      {id:"P101",name:"공구 SET (십자+너트)",price:6000},
-      {id:"P102",name:"테크닉 부직포 가방",price:2500},
-      {id:"P103",name:"AA배터리(알카라인 건전지)",price:350},
-      {id:"P104",name:"너트 드라이버",price:3300},
-      {id:"P105",name:"4핀 모듈라 케이블",price:3300},
-      {id:"P106",name:"잔량 체크",price:8500},
-      {id:"P107",name:"심자드라이버",price:3000},
-      {id:"P108",name:"프로보 로봇 박스 23L",price:26400},
-      {id:"P109",name:"자석봉",price:1500},
-      {id:"P110",name:"3핀 케이블",price:800},
-      {id:"P111",name:"AAA배터리(알카라인 건전지)",price:350},
-      {id:"P112",name:"모터연장 케이블",price:800},
-      {id:"P113",name:"프로보전용 충전 배터리 (전원 케이블 포함)",price:31900},
-      {id:"P114",name:"테크닉 교재 (LEVEL 1)",price:13500},
-      {id:"P115",name:"테크닉 교재 (LEVEL 2)",price:13500},
-      {id:"P116",name:"테크닉 종이박스",price:2750},
-      {id:"P117",name:"테크닉 교재 (LEVEL 3)",price:13500},
-      {id:"P118",name:"자화기",price:1100},
-      {id:"P119",name:"배틀 무기-SWORD (칼)",price:4950},
-      {id:"P120",name:"배틀 무기-GUARDIAN (용방패)",price:4900},
-      {id:"P121",name:"배틀 무기-BLAZE (블레이드)",price:4900},
-      {id:"P122",name:"테크닉 로봇 박스 23L(신형)",price:27400},
-      {id:"P123",name:"대형박스",price:19000},
-      {id:"P124",name:"배틀 무기-POSEIDON (삼지창)",price:4950},
-      {id:"P125",name:"배틀 무기-FLAME (반톱니)",price:3000},
-      {id:"P126",name:"테크닉 교재 (LEVEL 4)",price:13500},
-      {id:"P127",name:"배틀 무기-TOOTH (이빨)",price:200},
-      {id:"P128",name:"테크닉 RF 수신커버",price:1100},
-      {id:"P129",name:"배틀 무기-SPINNER (스피너)",price:2200},
-      {id:"P130",name:"테크닉 전원 연장 케이블",price:1000},
-      {id:"P131",name:"배틀 무기-HAMMER (망치)",price:6000},
-      {id:"P132",name:"자석판",price:2200},
-      {id:"P133",name:"테크닉 교재 (LEVEL 7)",price:13500},
-      {id:"P134",name:"배틀 무기-BATTLE GEAR (배틀기어)",price:4900},
-      {id:"P135",name:"테크닉 교재 (LEVEL 5)",price:13500},
-      {id:"P136",name:"배틀 무기-WING (날개)",price:3750},
-      {id:"P137",name:"테크닉 교재 (LEVEL 6)",price:13500},
-      {id:"P138",name:"배틀 무기-ROCK (주먹)",price:2750},
-      {id:"P139",name:"포스터",price:33000},
-      {id:"P140",name:"프로보 & 커넥트 전단지 (2,000매)",price:0},
-      {id:"P141",name:"배틀 무기-SKULL (해골)",price:3850},
-      {id:"P142",name:"배틀 무기-PAPER (보자기)",price:3300},
-      {id:"P143",name:"테크닉 전단지 (2,000매)",price:0},
-      {id:"P144",name:"배틀 무기-SCISSORS (가위)",price:2750},
+    {cat:"ê´ë ¨ìí", prods:[
+      {id:"P98",name:"ë¶íí¨",price:3500},
+      {id:"P99",name:"ë°°í°ë¦¬ ì¼ì´ì¤ + ë®ê°",price:3300},
+      {id:"P100",name:"íë¡ë³´ ë¡ë´ ë°ì¤ 19L",price:14000},
+      {id:"P101",name:"ê³µêµ¬ SET (ì­ì+ëí¸)",price:6000},
+      {id:"P102",name:"íí¬ë ë¶ì§í¬ ê°ë°©",price:2500},
+      {id:"P103",name:"AAë°°í°ë¦¬(ìì¹´ë¼ì¸ ê±´ì ì§)",price:350},
+      {id:"P104",name:"ëí¸ ëë¼ì´ë²",price:3300},
+      {id:"P105",name:"4í ëª¨ëë¼ ì¼ì´ë¸",price:3300},
+      {id:"P106",name:"ìë ì²´í¬",price:8500},
+      {id:"P107",name:"ì¬ìëë¼ì´ë²",price:3000},
+      {id:"P108",name:"íë¡ë³´ ë¡ë´ ë°ì¤ 23L",price:26400},
+      {id:"P109",name:"ììë´",price:1500},
+      {id:"P110",name:"3í ì¼ì´ë¸",price:800},
+      {id:"P111",name:"AAAë°°í°ë¦¬(ìì¹´ë¼ì¸ ê±´ì ì§)",price:350},
+      {id:"P112",name:"ëª¨í°ì°ì¥ ì¼ì´ë¸",price:800},
+      {id:"P113",name:"íë¡ë³´ì ì© ì¶©ì  ë°°í°ë¦¬ (ì ì ì¼ì´ë¸ í¬í¨)",price:31900},
+      {id:"P114",name:"íí¬ë êµì¬ (LEVEL 1)",price:13500},
+      {id:"P115",name:"íí¬ë êµì¬ (LEVEL 2)",price:13500},
+      {id:"P116",name:"íí¬ë ì¢ì´ë°ì¤",price:2750},
+      {id:"P117",name:"íí¬ë êµì¬ (LEVEL 3)",price:13500},
+      {id:"P118",name:"ìíê¸°",price:1100},
+      {id:"P119",name:"ë°°í ë¬´ê¸°-SWORD (ì¹¼)",price:4950},
+      {id:"P120",name:"ë°°í ë¬´ê¸°-GUARDIAN (ì©ë°©í¨)",price:4900},
+      {id:"P121",name:"ë°°í ë¬´ê¸°-BLAZE (ë¸ë ì´ë)",price:4900},
+      {id:"P122",name:"íí¬ë ë¡ë´ ë°ì¤ 23L(ì í)",price:27400},
+      {id:"P123",name:"ëíë°ì¤",price:19000},
+      {id:"P124",name:"ë°°í ë¬´ê¸°-POSEIDON (ì¼ì§ì°½)",price:4950},
+      {id:"P125",name:"ë°°í ë¬´ê¸°-FLAME (ë°í±ë)",price:3000},
+      {id:"P126",name:"íí¬ë êµì¬ (LEVEL 4)",price:13500},
+      {id:"P127",name:"ë°°í ë¬´ê¸°-TOOTH (ì´ë¹¨)",price:200},
+      {id:"P128",name:"íí¬ë RF ìì ì»¤ë²",price:1100},
+      {id:"P129",name:"ë°°í ë¬´ê¸°-SPINNER (ì¤í¼ë)",price:2200},
+      {id:"P130",name:"íí¬ë ì ì ì°ì¥ ì¼ì´ë¸",price:1000},
+      {id:"P131",name:"ë°°í ë¬´ê¸°-HAMMER (ë§ì¹)",price:6000},
+      {id:"P132",name:"ììí",price:2200},
+      {id:"P133",name:"íí¬ë êµì¬ (LEVEL 7)",price:13500},
+      {id:"P134",name:"ë°°í ë¬´ê¸°-BATTLE GEAR (ë°°íê¸°ì´)",price:4900},
+      {id:"P135",name:"íí¬ë êµì¬ (LEVEL 5)",price:13500},
+      {id:"P136",name:"ë°°í ë¬´ê¸°-WING (ë ê°)",price:3750},
+      {id:"P137",name:"íí¬ë êµì¬ (LEVEL 6)",price:13500},
+      {id:"P138",name:"ë°°í ë¬´ê¸°-ROCK (ì£¼ë¨¹)",price:2750},
+      {id:"P139",name:"í¬ì¤í°",price:33000},
+      {id:"P140",name:"íë¡ë³´ & ì»¤ë¥í¸ ì ë¨ì§ (2,000ë§¤)",price:0},
+      {id:"P141",name:"ë°°í ë¬´ê¸°-SKULL (í´ê³¨)",price:3850},
+      {id:"P142",name:"ë°°í ë¬´ê¸°-PAPER (ë³´ìê¸°)",price:3300},
+      {id:"P143",name:"íí¬ë ì ë¨ì§ (2,000ë§¤)",price:0},
+      {id:"P144",name:"ë°°í ë¬´ê¸°-SCISSORS (ê°ì)",price:2750},
     ]},
-    {cat:"AS용 부품", prods:[
-      {id:"P145",name:"DC 모터선",price:400},
-      {id:"P146",name:"MS 모터선",price:400},
-      {id:"P147",name:"모터블록 1번 기어",price:300},
-      {id:"P148",name:"R-120 1번 기어",price:200},
-      {id:"P149",name:"RF조종기 실리콘 키패드",price:600},
-      {id:"P150",name:"(블록)CPU-TOP",price:400},
-      {id:"P151",name:"MS-780 1번 기어",price:200},
-      {id:"P152",name:"MS-780 4번 기어",price:600},
-      {id:"P153",name:"R-300 2번 기어",price:400},
-      {id:"P154",name:"RF확장모듈 실리콘 키패드",price:600},
-      {id:"P155",name:"(블록)CPU-BOTTOM",price:300},
-      {id:"P156",name:"CPU 보드 사출 BOTTOM",price:300},
-      {id:"P157",name:"모터블록 3번 기어",price:200},
-      {id:"P158",name:"모터블록 2번 기어",price:200},
-      {id:"P159",name:"R-300 3번 기어",price:200},
-      {id:"P160",name:"R-120 3번 기어",price:200},
-      {id:"P161",name:"CPU 보드 사출 TOP",price:300},
-      {id:"P162",name:"파워 CPU 보드 사출 TOP",price:300},
-      {id:"P163",name:"R-120 2번 기어",price:300},
-      {id:"P164",name:"블록 알모터",price:1500},
-      {id:"P165",name:"테크닉 파워 CPU 바텀 케이스",price:300},
-      {id:"P166",name:"R-120 4번 기어",price:500},
-      {id:"P167",name:"파워 CPU 보드 사출 BOTTOM",price:300},
-      {id:"P168",name:"DC 알모터",price:2000},
-      {id:"P169",name:"MS-1000 알모터",price:2000},
-      {id:"P170",name:"기어 윤활제(10g)",price:0},
+    {cat:"ASì© ë¶í", prods:[
+      {id:"P145",name:"DC ëª¨í°ì ",price:400},
+      {id:"P146",name:"MS ëª¨í°ì ",price:400},
+      {id:"P147",name:"ëª¨í°ë¸ë¡ 1ë² ê¸°ì´",price:300},
+      {id:"P148",name:"R-120 1ë² ê¸°ì´",price:200},
+      {id:"P149",name:"RFì¡°ì¢ê¸° ì¤ë¦¬ì½ í¤í¨ë",price:600},
+      {id:"P150",name:"(ë¸ë¡)CPU-TOP",price:400},
+      {id:"P151",name:"MS-780 1ë² ê¸°ì´",price:200},
+      {id:"P152",name:"MS-780 4ë² ê¸°ì´",price:600},
+      {id:"P153",name:"R-300 2ë² ê¸°ì´",price:400},
+      {id:"P154",name:"RFíì¥ëª¨ë ì¤ë¦¬ì½ í¤í¨ë",price:600},
+      {id:"P155",name:"(ë¸ë¡)CPU-BOTTOM",price:300},
+      {id:"P156",name:"CPU ë³´ë ì¬ì¶ BOTTOM",price:300},
+      {id:"P157",name:"ëª¨í°ë¸ë¡ 3ë² ê¸°ì´",price:200},
+      {id:"P158",name:"ëª¨í°ë¸ë¡ 2ë² ê¸°ì´",price:200},
+      {id:"P159",name:"R-300 3ë² ê¸°ì´",price:200},
+      {id:"P160",name:"R-120 3ë² ê¸°ì´",price:200},
+      {id:"P161",name:"CPU ë³´ë ì¬ì¶ TOP",price:300},
+      {id:"P162",name:"íì CPU ë³´ë ì¬ì¶ TOP",price:300},
+      {id:"P163",name:"R-120 2ë² ê¸°ì´",price:300},
+      {id:"P164",name:"ë¸ë¡ ìëª¨í°",price:1500},
+      {id:"P165",name:"íí¬ë íì CPU ë°í ì¼ì´ì¤",price:300},
+      {id:"P166",name:"R-120 4ë² ê¸°ì´",price:500},
+      {id:"P167",name:"íì CPU ë³´ë ì¬ì¶ BOTTOM",price:300},
+      {id:"P168",name:"DC ìëª¨í°",price:2000},
+      {id:"P169",name:"MS-1000 ìëª¨í°",price:2000},
+      {id:"P170",name:"ê¸°ì´ ì¤íì (10g)",price:0},
     ]},
   ]},
-  {line:"커넥트", cats:[
-    {cat:"키트", prods:[
+  {line:"ì»¤ë¥í¸", cats:[
+    {cat:"í¤í¸", prods:[
       {id:"P352",name:"CONNECT LEVEL 1 KIT",price:132000},
       {id:"P353",name:"CONNECT LEVEL 2 KIT",price:132000},
       {id:"P354",name:"CONNECT LEVEL 3 KIT",price:132000},
@@ -618,371 +618,371 @@ const LINES = [
       {id:"P356",name:"CONNECT LEVEL 5 KIT",price:132000},
       {id:"P357",name:"CONNECT LEVEL 6 KIT",price:132000},
     ]},
-    {cat:"회로보드", prods:[
-      {id:"P358",name:"USB 다운로더",price:15000},
-      {id:"P359",name:"배터리 블록(건전지용)",price:4950},
-      {id:"P360",name:"스위치 블록",price:6000},
-      {id:"P361",name:"RF 리모컨",price:35000},
-      {id:"P362",name:"RF 수신 보드",price:16500},
-      {id:"P363",name:"CPU 블록",price:36000},
-      {id:"P364",name:"커넥트 RF 수신커버",price:1100},
-      {id:"P365",name:"FND 블록",price:10900},
-      {id:"P366",name:"적외선 블록",price:6050},
-      {id:"P367",name:"LED 블록 블루",price:6000},
-      {id:"P368",name:"LED 블록 레드",price:6000},
-      {id:"P369",name:"블록 전용 충전 배터리",price:27500},
-      {id:"P370",name:"C타입 충전배터리 블록",price:27500},
-      {id:"P371",name:"스프링 스위치 블록",price:6000},
+    {cat:"íë¡ë³´ë", prods:[
+      {id:"P358",name:"USB ë¤ì´ë¡ë",price:15000},
+      {id:"P359",name:"ë°°í°ë¦¬ ë¸ë¡(ê±´ì ì§ì©)",price:4950},
+      {id:"P360",name:"ì¤ìì¹ ë¸ë¡",price:6000},
+      {id:"P361",name:"RF ë¦¬ëª¨ì»¨",price:35000},
+      {id:"P362",name:"RF ìì  ë³´ë",price:16500},
+      {id:"P363",name:"CPU ë¸ë¡",price:36000},
+      {id:"P364",name:"ì»¤ë¥í¸ RF ìì ì»¤ë²",price:1100},
+      {id:"P365",name:"FND ë¸ë¡",price:10900},
+      {id:"P366",name:"ì ì¸ì  ë¸ë¡",price:6050},
+      {id:"P367",name:"LED ë¸ë¡ ë¸ë£¨",price:6000},
+      {id:"P368",name:"LED ë¸ë¡ ë ë",price:6000},
+      {id:"P369",name:"ë¸ë¡ ì ì© ì¶©ì  ë°°í°ë¦¬",price:27500},
+      {id:"P370",name:"Cíì ì¶©ì ë°°í°ë¦¬ ë¸ë¡",price:27500},
+      {id:"P371",name:"ì¤íë§ ì¤ìì¹ ë¸ë¡",price:6000},
     ]},
-    {cat:"기구물", prods:[
-      {id:"P372",name:"핀들",price:1600},
-      {id:"P373",name:"눈 블록",price:1100},
-      {id:"P374",name:"듀얼핀",price:120},
-      {id:"P375",name:"고무줄 흰색(초소형)",price:100},
-      {id:"P376",name:"스페이서 블록",price:200},
-      {id:"P377",name:"모터 블록",price:14850},
-      {id:"P378",name:"2단핀",price:100},
-      {id:"P379",name:"블록 타이어",price:1650},
-      {id:"P380",name:"고무줄 빨강색",price:100},
-      {id:"P381",name:"공 (스티로폼)",price:350},
-      {id:"P382",name:"휠 블록",price:1320},
-      {id:"P383",name:"스텝핀",price:120},
-      {id:"P384",name:"3단핀",price:130},
-      {id:"P385",name:"링크핀",price:100},
-      {id:"P386",name:"서보모터 블록",price:24200},
-      {id:"P387",name:"고속모터 블록",price:15000},
-      {id:"P388",name:"블록 캐터필러",price:220},
-      {id:"P389",name:"톱니 블록",price:1300},
-      {id:"P390",name:"블록 캐터타이어",price:330},
-      {id:"P391",name:"고무링 블랙",price:666},
-      {id:"P392",name:"옴니 휠",price:9600},
+    {cat:"ê¸°êµ¬ë¬¼", prods:[
+      {id:"P372",name:"íë¤",price:1600},
+      {id:"P373",name:"ë ë¸ë¡",price:1100},
+      {id:"P374",name:"ëì¼í",price:120},
+      {id:"P375",name:"ê³ ë¬´ì¤ í°ì(ì´ìí)",price:100},
+      {id:"P376",name:"ì¤íì´ì ë¸ë¡",price:200},
+      {id:"P377",name:"ëª¨í° ë¸ë¡",price:14850},
+      {id:"P378",name:"2ë¨í",price:100},
+      {id:"P379",name:"ë¸ë¡ íì´ì´",price:1650},
+      {id:"P380",name:"ê³ ë¬´ì¤ ë¹¨ê°ì",price:100},
+      {id:"P381",name:"ê³µ (ì¤í°ë¡í¼)",price:350},
+      {id:"P382",name:"í  ë¸ë¡",price:1320},
+      {id:"P383",name:"ì¤íí",price:120},
+      {id:"P384",name:"3ë¨í",price:130},
+      {id:"P385",name:"ë§í¬í",price:100},
+      {id:"P386",name:"ìë³´ëª¨í° ë¸ë¡",price:24200},
+      {id:"P387",name:"ê³ ìëª¨í° ë¸ë¡",price:15000},
+      {id:"P388",name:"ë¸ë¡ ìºí°íë¬",price:220},
+      {id:"P389",name:"í±ë ë¸ë¡",price:1300},
+      {id:"P390",name:"ë¸ë¡ ìºí°íì´ì´",price:330},
+      {id:"P391",name:"ê³ ë¬´ë§ ë¸ë",price:666},
+      {id:"P392",name:"ì´ë í ",price:9600},
     ]},
-    {cat:"프레임", prods:[
-      {id:"P393",name:"힌지 블록 A",price:550},
-      {id:"P394",name:"1X9 블록",price:550},
-      {id:"P395",name:"원형 블록",price:550},
-      {id:"P396",name:"힌지 블록 B",price:550},
-      {id:"P397",name:"1X7 블록",price:500},
-      {id:"P398",name:"2X5 블록",price:550},
-      {id:"P399",name:"L2X4 블록",price:400},
-      {id:"P400",name:"L2X2 블록",price:350},
-      {id:"P401",name:"1X3 블록",price:350},
-      {id:"P402",name:"3X3 블록",price:550},
-      {id:"P403",name:"2X7 블록",price:600},
-      {id:"P404",name:"1X5 블록",price:440},
-      {id:"P405",name:"3X5 블록",price:600},
-      {id:"P406",name:"5X7 블록",price:1300},
-      {id:"P407",name:"슬라이드 블록",price:490},
-      {id:"P408",name:"3X7 블록",price:660},
-      {id:"P409",name:"L6X9 블록",price:660},
-      {id:"P410",name:"3X9 블록",price:770},
-      {id:"P411",name:"아치 블록",price:770},
-      {id:"P412",name:"L1X3 블록",price:350},
-      {id:"P413",name:"2X9 블록",price:700},
-      {id:"P414",name:"2X11 블록",price:750},
-      {id:"P415",name:"7X11 블록",price:1650},
-      {id:"P416",name:"삼각 블록",price:400},
-      {id:"P417",name:"엣지 블록",price:550},
-      {id:"P418",name:"변환 블록",price:350},
-      {id:"P419",name:"45D블록 (큰 삼각블록_빨강)",price:1100},
+    {cat:"íë ì", prods:[
+      {id:"P393",name:"íì§ ë¸ë¡ A",price:550},
+      {id:"P394",name:"1X9 ë¸ë¡",price:550},
+      {id:"P395",name:"ìí ë¸ë¡",price:550},
+      {id:"P396",name:"íì§ ë¸ë¡ B",price:550},
+      {id:"P397",name:"1X7 ë¸ë¡",price:500},
+      {id:"P398",name:"2X5 ë¸ë¡",price:550},
+      {id:"P399",name:"L2X4 ë¸ë¡",price:400},
+      {id:"P400",name:"L2X2 ë¸ë¡",price:350},
+      {id:"P401",name:"1X3 ë¸ë¡",price:350},
+      {id:"P402",name:"3X3 ë¸ë¡",price:550},
+      {id:"P403",name:"2X7 ë¸ë¡",price:600},
+      {id:"P404",name:"1X5 ë¸ë¡",price:440},
+      {id:"P405",name:"3X5 ë¸ë¡",price:600},
+      {id:"P406",name:"5X7 ë¸ë¡",price:1300},
+      {id:"P407",name:"ì¬ë¼ì´ë ë¸ë¡",price:490},
+      {id:"P408",name:"3X7 ë¸ë¡",price:660},
+      {id:"P409",name:"L6X9 ë¸ë¡",price:660},
+      {id:"P410",name:"3X9 ë¸ë¡",price:770},
+      {id:"P411",name:"ìì¹ ë¸ë¡",price:770},
+      {id:"P412",name:"L1X3 ë¸ë¡",price:350},
+      {id:"P413",name:"2X9 ë¸ë¡",price:700},
+      {id:"P414",name:"2X11 ë¸ë¡",price:750},
+      {id:"P415",name:"7X11 ë¸ë¡",price:1650},
+      {id:"P416",name:"ì¼ê° ë¸ë¡",price:400},
+      {id:"P417",name:"ì£ì§ ë¸ë¡",price:550},
+      {id:"P418",name:"ë³í ë¸ë¡",price:350},
+      {id:"P419",name:"45Dë¸ë¡ (í° ì¼ê°ë¸ë¡_ë¹¨ê°)",price:1100},
     ]},
-    {cat:"관련상품", prods:[
-      {id:"P420",name:"블록 모터 케이블",price:900},
-      {id:"P421",name:"블록 전원 케이블",price:900},
-      {id:"P422",name:"AA배터리(알카라인 건전지)",price:350},
-      {id:"P423",name:"커넥트 부직포 가방",price:2750},
-      {id:"P424",name:"블록 3핀 롱케이블",price:1650},
-      {id:"P425",name:"블록 3핀 케이블",price:1100},
-      {id:"P426",name:"AAA배터리(알카라인 건전지)",price:350},
-      {id:"P427",name:"실",price:880},
-      {id:"P428",name:"커넥트 박스",price:2200},
-      {id:"P429",name:"점프선",price:300},
-      {id:"P430",name:"부품통",price:1200},
-      {id:"P431",name:"커넥트 교재 (LEVEL 1)",price:12000},
-      {id:"P432",name:"커넥트 교재 (LEVEL 2)",price:12000},
-      {id:"P433",name:"커넥트 교재 (LEVEL 3)",price:12000},
-      {id:"P434",name:"커넥트 교재 (LEVEL 4)",price:12000},
-      {id:"P435",name:"커넥트 교재 (LEVEL 5)",price:12000},
-      {id:"P436",name:"커넥트 교재 (LEVEL 6)",price:12000},
-      {id:"P437",name:"볼류로봇 팔레트",price:10000},
-      {id:"P438",name:"볼류로봇 경기장",price:100000},
-      {id:"P439",name:"배틀로봇 러쉬",price:121000},
-      {id:"P440",name:"게미로봇 앤보",price:99000},
-      {id:"P441",name:"아기새로봇 버디",price:44000},
-      {id:"P442",name:"강아지로봇 뭉이",price:48400},
-      {id:"P443",name:"복싱로봇 어택",price:132000},
-      {id:"P444",name:"펜싱로봇 스피어",price:115500},
-      {id:"P445",name:"외계인사격 레이저건",price:82500},
-      {id:"P446",name:"지게차로봇 포리",price:165000},
-      {id:"P447",name:"탱크로봇 CT-1",price:165000},
-      {id:"P448",name:"CPR실습로봇 피아르",price:88000},
-      {id:"P449",name:"보행로봇 워로우",price:48400},
-      {id:"P450",name:"개구리로봇 크록",price:44000},
-      {id:"P451",name:"토끼로봇 로빗",price:44000},
-      {id:"P452",name:"폐기물처리로봇 로이",price:165000},
-      {id:"P453",name:"바이크로봇 스톰",price:143000},
-      {id:"P454",name:"F1자동차 스피온",price:132000},
-      {id:"P455",name:"익룡로봇 까오기",price:93500},
-      {id:"P456",name:"투석기로봇 던저",price:121000},
-      {id:"P457",name:"테이블농구 슈터",price:88000},
-      {id:"P458",name:"스피드터치 해머샷",price:82500},
-      {id:"P459",name:"역도게임 라차차",price:88000},
-      {id:"P460",name:"공룡로봇 티라",price:48400},
-      {id:"P461",name:"땅굴로봇 터부",price:55000},
-      {id:"P462",name:"원숭이로봇 우키",price:44000},
-      {id:"P463",name:"굴착기로봇 카베이터",price:165000},
-      {id:"P464",name:"운반로봇 딜리",price:165000},
-      {id:"P465",name:"공룡로봇 알로",price:137500},
-      {id:"P466",name:"스마트모빌리티 몰리",price:143000},
-      {id:"P467",name:"버킷굴착기 블라스터",price:154000},
-      {id:"P468",name:"서스펜션카 락크",price:154000},
-      {id:"P469",name:"미사일발사 슈크",price:148500},
-      {id:"P470",name:"탐사로봇 탐머",price:132000},
-      {id:"P471",name:"청소로봇 워시",price:121000},
-      {id:"P472",name:"하마게임 하몽",price:82500},
-      {id:"P473",name:"팔씨름게임 쉐이크스틱",price:82500},
-      {id:"P474",name:"가위바위보 위너",price:88000},
-      {id:"P475",name:"비행게임 점핑에어",price:82500},
-      {id:"P476",name:"접시쌓기게임 웨이터리",price:82500},
-      {id:"P477",name:"기억력게임 탭탬",price:77000},
-      {id:"P478",name:"거미로봇 타란툴",price:55000},
-      {id:"P479",name:"배틀로봇 어퍼",price:55000},
-      {id:"P480",name:"물개로봇 토토",price:44000},
-    ]},
-  ]},
-  {line:"말랑말랑 코딩여행", cats:[
-    {cat:"키트", prods:[
-      {id:"P171",name:"말랑말랑 코딩여행 LEVEL 2 KIT",price:110000},
-      {id:"P172",name:"말랑말랑 코딩여행 LEVEL 1 KIT",price:110000},
-      {id:"P173",name:"말랑말랑 코딩여행 LEVEL 3 KIT",price:110000},
-      {id:"P174",name:"말랑말랑 코딩여행 LEVEL 4 KIT",price:110000},
-      {id:"P175",name:"말랑말랑 코딩 메이커 LEVEL 5 KIT",price:110000},
-      {id:"P176",name:"말랑말랑 코딩 메이커 LEVEL 6 KIT",price:120000},
-    ]},
-    {cat:"회로보드", prods:[
-      {id:"P177",name:"USB 다운로더",price:15000},
-      {id:"P178",name:"배터리 블록(건전지용)",price:4950},
-      {id:"P179",name:"스위치 블록",price:6000},
-      {id:"P180",name:"CPU 블록",price:36000},
-      {id:"P181",name:"커넥트 RF 수신커버",price:1100},
-      {id:"P182",name:"FND 블록",price:10900},
-      {id:"P183",name:"적외선 블록",price:6050},
-      {id:"P184",name:"회전센서 블록",price:7300},
-      {id:"P185",name:"LED 블록 블루",price:6000},
-      {id:"P186",name:"LED 블록 레드",price:6000},
-      {id:"P187",name:"무한회전센서 블록",price:16500},
-      {id:"P188",name:"자석센서 블록",price:8500},
-      {id:"P189",name:"LED 블록 화이트",price:6000},
-      {id:"P190",name:"블록 전용 충전 배터리",price:27500},
-      {id:"P191",name:"소리센서 블록",price:8500},
-      {id:"P192",name:"기울기 센서 블록",price:8500},
-      {id:"P193",name:"진동모터 블록",price:9700},
-      {id:"P194",name:"압력센서 블록",price:7300},
-      {id:"P195",name:"컬러센서 블록",price:16500},
-      {id:"P196",name:"조도 센서 블록",price:8500},
-      {id:"P197",name:"초음파센서 블록",price:19800},
-      {id:"P198",name:"가속도 센서 블록",price:19800},
-      {id:"P199",name:"터치센서 블록",price:8500},
-      {id:"P200",name:"심박센서 블록",price:8470},
-      {id:"P201",name:"나침반 센서 블록",price:13200},
-      {id:"P202",name:"멀티터치 센서",price:16500},
-      {id:"P203",name:"고무스위치센서 블록",price:6000},
-    ]},
-    {cat:"프레임", prods:[
-      {id:"P204",name:"변환 블록",price:350},
-      {id:"P205",name:"힌지 블록 A",price:550},
-      {id:"P206",name:"1X9 블록",price:550},
-      {id:"P207",name:"원형 블록",price:550},
-      {id:"P208",name:"힌지 블록 B",price:550},
-      {id:"P209",name:"1X7 블록",price:500},
-      {id:"P210",name:"2X5 블록",price:550},
-      {id:"P211",name:"L2X4 블록",price:400},
-      {id:"P212",name:"L2X2 블록",price:350},
-      {id:"P213",name:"1X3 블록",price:350},
-      {id:"P214",name:"3X3 블록",price:550},
-      {id:"P215",name:"2X7 블록",price:600},
-      {id:"P216",name:"1X5 블록",price:440},
-      {id:"P217",name:"3X5 블록",price:600},
-      {id:"P218",name:"5X7 블록",price:1300},
-      {id:"P219",name:"슬라이드 블록",price:490},
-      {id:"P220",name:"3X7 블록",price:660},
-      {id:"P221",name:"L6X9 블록",price:660},
-      {id:"P222",name:"3X9 블록",price:770},
-      {id:"P223",name:"아치 블록",price:770},
-      {id:"P224",name:"L1X3 블록",price:350},
-      {id:"P225",name:"2X9 블록",price:700},
-      {id:"P226",name:"2X11 블록",price:750},
-      {id:"P227",name:"7X11 블록",price:1650},
-      {id:"P228",name:"삼각 블록",price:400},
-      {id:"P229",name:"엣지 블록",price:550},
-    ]},
-    {cat:"기구물", prods:[
-      {id:"P230",name:"핀들",price:1600},
-      {id:"P231",name:"눈 블록",price:1100},
-      {id:"P232",name:"듀얼핀",price:120},
-      {id:"P233",name:"고무줄 흰색(초소형)",price:100},
-      {id:"P234",name:"스페이서 블록",price:200},
-      {id:"P235",name:"모터 블록",price:14850},
-      {id:"P236",name:"2단핀",price:100},
-      {id:"P237",name:"블록 타이어",price:1650},
-      {id:"P238",name:"고무줄 빨강색",price:100},
-      {id:"P239",name:"공 (스티로폼)",price:350},
-      {id:"P240",name:"휠 블록",price:1320},
-      {id:"P241",name:"스텝핀",price:120},
-      {id:"P242",name:"3단핀",price:130},
-      {id:"P243",name:"링크핀",price:100},
-      {id:"P244",name:"블록 캐터필러",price:220},
-      {id:"P245",name:"톱니 블록",price:1300},
-      {id:"P246",name:"블록 캐터타이어",price:330},
-      {id:"P247",name:"폼핀",price:150},
-      {id:"P248",name:"악어 클립",price:550},
-      {id:"P249",name:"코딩 스프링",price:550},
-    ]},
-    {cat:"관련상품", prods:[
-      {id:"P250",name:"블록 모터 케이블",price:900},
-      {id:"P251",name:"블록 전원 케이블",price:900},
-      {id:"P252",name:"AA배터리(알카라인 건전지)",price:350},
-      {id:"P253",name:"블록 3핀 롱케이블",price:1650},
-      {id:"P254",name:"블록 3핀 케이블",price:1100},
-      {id:"P255",name:"AAA배터리(알카라인 건전지)",price:350},
-      {id:"P256",name:"링 자석",price:1000},
-      {id:"P257",name:"점프선",price:300},
-      {id:"P258",name:"부품통",price:1200},
-      {id:"P259",name:"코딩 부직포 가방",price:2750},
-      {id:"P260",name:"말랑말랑 코딩여행 폼보드 LEVEL 1",price:3850},
-      {id:"P261",name:"말랑말랑 코딩여행 폼보드 LEVEL 2",price:3850},
-      {id:"P262",name:"코딩 박스",price:2200},
-      {id:"P263",name:"말랑말랑 코딩여행 폼보드 LEVEL 3",price:6600},
-      {id:"P264",name:"말랑말랑 코딩여행 교재 (LEVEL 1)",price:22000},
-      {id:"P265",name:"말랑말랑 코딩여행 교재 (LEVEL 3)",price:22000},
-      {id:"P266",name:"말랑말랑 코딩여행 교재 (LEVEL 2)",price:22000},
-      {id:"P267",name:"말랑말랑 코딩여행 폼보드 LEVEL 4",price:3850},
-      {id:"P268",name:"말랑말랑 코딩여행 교재 (LEVEL 4)",price:22000},
-      {id:"P269",name:"말랑말랑 코딩여행 교재 (LEVEL 5)",price:22000},
-      {id:"P270",name:"말랑말랑 코딩여행 폼보드 LEVEL 5",price:6600},
-      {id:"P271",name:"말랑말랑 코딩여행 교재 (LEVEL 6)",price:22000},
-      {id:"P272",name:"말랑말랑 코딩여행 전단지 (2,000매)",price:0},
+    {cat:"ê´ë ¨ìí", prods:[
+      {id:"P420",name:"ë¸ë¡ ëª¨í° ì¼ì´ë¸",price:900},
+      {id:"P421",name:"ë¸ë¡ ì ì ì¼ì´ë¸",price:900},
+      {id:"P422",name:"AAë°°í°ë¦¬(ìì¹´ë¼ì¸ ê±´ì ì§)",price:350},
+      {id:"P423",name:"ì»¤ë¥í¸ ë¶ì§í¬ ê°ë°©",price:2750},
+      {id:"P424",name:"ë¸ë¡ 3í ë¡±ì¼ì´ë¸",price:1650},
+      {id:"P425",name:"ë¸ë¡ 3í ì¼ì´ë¸",price:1100},
+      {id:"P426",name:"AAAë°°í°ë¦¬(ìì¹´ë¼ì¸ ê±´ì ì§)",price:350},
+      {id:"P427",name:"ì¤",price:880},
+      {id:"P428",name:"ì»¤ë¥í¸ ë°ì¤",price:2200},
+      {id:"P429",name:"ì íì ",price:300},
+      {id:"P430",name:"ë¶ííµ",price:1200},
+      {id:"P431",name:"ì»¤ë¥í¸ êµì¬ (LEVEL 1)",price:12000},
+      {id:"P432",name:"ì»¤ë¥í¸ êµì¬ (LEVEL 2)",price:12000},
+      {id:"P433",name:"ì»¤ë¥í¸ êµì¬ (LEVEL 3)",price:12000},
+      {id:"P434",name:"ì»¤ë¥í¸ êµì¬ (LEVEL 4)",price:12000},
+      {id:"P435",name:"ì»¤ë¥í¸ êµì¬ (LEVEL 5)",price:12000},
+      {id:"P436",name:"ì»¤ë¥í¸ êµì¬ (LEVEL 6)",price:12000},
+      {id:"P437",name:"ë³¼ë¥ë¡ë´ íë í¸",price:10000},
+      {id:"P438",name:"ë³¼ë¥ë¡ë´ ê²½ê¸°ì¥",price:100000},
+      {id:"P439",name:"ë°°íë¡ë´ ë¬ì¬",price:121000},
+      {id:"P440",name:"ê²ë¯¸ë¡ë´ ì¤ë³´",price:99000},
+      {id:"P441",name:"ìê¸°ìë¡ë´ ë²ë",price:44000},
+      {id:"P442",name:"ê°ìì§ë¡ë´ ë­ì´",price:48400},
+      {id:"P443",name:"ë³µì±ë¡ë´ ì´í",price:132000},
+      {id:"P444",name:"íì±ë¡ë´ ì¤í¼ì´",price:115500},
+      {id:"P445",name:"ì¸ê³ì¸ì¬ê²© ë ì´ì ê±´",price:82500},
+      {id:"P446",name:"ì§ê²ì°¨ë¡ë´ í¬ë¦¬",price:165000},
+      {id:"P447",name:"í±í¬ë¡ë´ CT-1",price:165000},
+      {id:"P448",name:"CPRì¤ìµë¡ë´ í¼ìë¥´",price:88000},
+      {id:"P449",name:"ë³´íë¡ë´ ìë¡ì°",price:48400},
+      {id:"P450",name:"ê°êµ¬ë¦¬ë¡ë´ í¬ë¡",price:44000},
+      {id:"P451",name:"í ë¼ë¡ë´ ë¡ë¹",price:44000},
+      {id:"P452",name:"íê¸°ë¬¼ì²ë¦¬ë¡ë´ ë¡ì´",price:165000},
+      {id:"P453",name:"ë°ì´í¬ë¡ë´ ì¤í°",price:143000},
+      {id:"P454",name:"F1ìëì°¨ ì¤í¼ì¨",price:132000},
+      {id:"P455",name:"ìµë£¡ë¡ë´ ê¹ì¤ê¸°",price:93500},
+      {id:"P456",name:"í¬ìê¸°ë¡ë´ ëì ",price:121000},
+      {id:"P457",name:"íì´ë¸ëêµ¬ ìí°",price:88000},
+      {id:"P458",name:"ì¤í¼ëí°ì¹ í´ë¨¸ì·",price:82500},
+      {id:"P459",name:"ì­ëê²ì ë¼ì°¨ì°¨",price:88000},
+      {id:"P460",name:"ê³µë£¡ë¡ë´ í°ë¼",price:48400},
+      {id:"P461",name:"ëêµ´ë¡ë´ í°ë¶",price:55000},
+      {id:"P462",name:"ìì­ì´ë¡ë´ ì°í¤",price:44000},
+      {id:"P463",name:"êµ´ì°©ê¸°ë¡ë´ ì¹´ë² ì´í°",price:165000},
+      {id:"P464",name:"ì´ë°ë¡ë´ ëë¦¬",price:165000},
+      {id:"P465",name:"ê³µë£¡ë¡ë´ ìë¡",price:137500},
+      {id:"P466",name:"ì¤ë§í¸ëª¨ë¹ë¦¬í° ëª°ë¦¬",price:143000},
+      {id:"P467",name:"ë²í·êµ´ì°©ê¸° ë¸ë¼ì¤í°",price:154000},
+      {id:"P468",name:"ìì¤íìì¹´ ë½í¬",price:154000},
+      {id:"P469",name:"ë¯¸ì¬ì¼ë°ì¬ ìí¬",price:148500},
+      {id:"P470",name:"íì¬ë¡ë´ íë¨¸",price:132000},
+      {id:"P471",name:"ì²­ìë¡ë´ ìì",price:121000},
+      {id:"P472",name:"íë§ê²ì íëª½",price:82500},
+      {id:"P473",name:"íì¨ë¦ê²ì ìì´í¬ì¤í±",price:82500},
+      {id:"P474",name:"ê°ìë°ìë³´ ìë",price:88000},
+      {id:"P475",name:"ë¹íê²ì ì íìì´",price:82500},
+      {id:"P476",name:"ì ììê¸°ê²ì ì¨ì´í°ë¦¬",price:82500},
+      {id:"P477",name:"ê¸°ìµë ¥ê²ì í­í¬",price:77000},
+      {id:"P478",name:"ê±°ë¯¸ë¡ë´ íëí´",price:55000},
+      {id:"P479",name:"ë°°íë¡ë´ ì´í¼",price:55000},
+      {id:"P480",name:"ë¬¼ê°ë¡ë´ í í ",price:44000},
     ]},
   ]},
-  {line:"네모", cats:[
-    {cat:"키트", prods:[
-      {id:"P304",name:"NEMO (네모) 상판 KIT",price:80000},
-      {id:"P305",name:"NEMO (네모) 하판 KIT",price:85000},
+  {line:"ë§ëë§ë ì½ë©ì¬í", cats:[
+    {cat:"í¤í¸", prods:[
+      {id:"P171",name:"ë§ëë§ë ì½ë©ì¬í LEVEL 2 KIT",price:110000},
+      {id:"P172",name:"ë§ëë§ë ì½ë©ì¬í LEVEL 1 KIT",price:110000},
+      {id:"P173",name:"ë§ëë§ë ì½ë©ì¬í LEVEL 3 KIT",price:110000},
+      {id:"P174",name:"ë§ëë§ë ì½ë©ì¬í LEVEL 4 KIT",price:110000},
+      {id:"P175",name:"ë§ëë§ë ì½ë© ë©ì´ì»¤ LEVEL 5 KIT",price:110000},
+      {id:"P176",name:"ë§ëë§ë ì½ë© ë©ì´ì»¤ LEVEL 6 KIT",price:120000},
     ]},
-    {cat:"부품", prods:[
-      {id:"P306",name:"눈 블록",price:1100},
-      {id:"P307",name:"듀얼핀",price:120},
-      {id:"P308",name:"1X9 블록",price:550},
-      {id:"P309",name:"원형 블록",price:550},
-      {id:"P310",name:"2단핀",price:100},
-      {id:"P311",name:"고무줄 빨강색",price:100},
-      {id:"P312",name:"1X5 블록",price:440},
-      {id:"P313",name:"스텝핀",price:120},
-      {id:"P314",name:"L6X9 블록",price:660},
-      {id:"P315",name:"3X9 블록",price:770},
-      {id:"P316",name:"아치 블록",price:770},
-      {id:"P317",name:"링크핀",price:100},
-      {id:"P318",name:"L1X3 블록",price:350},
-      {id:"P319",name:"7X11 블록",price:1650},
-      {id:"P320",name:"삼각 블록",price:400},
-      {id:"P321",name:"블록 캐터타이어",price:330},
+    {cat:"íë¡ë³´ë", prods:[
+      {id:"P177",name:"USB ë¤ì´ë¡ë",price:15000},
+      {id:"P178",name:"ë°°í°ë¦¬ ë¸ë¡(ê±´ì ì§ì©)",price:4950},
+      {id:"P179",name:"ì¤ìì¹ ë¸ë¡",price:6000},
+      {id:"P180",name:"CPU ë¸ë¡",price:36000},
+      {id:"P181",name:"ì»¤ë¥í¸ RF ìì ì»¤ë²",price:1100},
+      {id:"P182",name:"FND ë¸ë¡",price:10900},
+      {id:"P183",name:"ì ì¸ì  ë¸ë¡",price:6050},
+      {id:"P184",name:"íì ì¼ì ë¸ë¡",price:7300},
+      {id:"P185",name:"LED ë¸ë¡ ë¸ë£¨",price:6000},
+      {id:"P186",name:"LED ë¸ë¡ ë ë",price:6000},
+      {id:"P187",name:"ë¬´ííì ì¼ì ë¸ë¡",price:16500},
+      {id:"P188",name:"ììì¼ì ë¸ë¡",price:8500},
+      {id:"P189",name:"LED ë¸ë¡ íì´í¸",price:6000},
+      {id:"P190",name:"ë¸ë¡ ì ì© ì¶©ì  ë°°í°ë¦¬",price:27500},
+      {id:"P191",name:"ìë¦¬ì¼ì ë¸ë¡",price:8500},
+      {id:"P192",name:"ê¸°ì¸ê¸° ì¼ì ë¸ë¡",price:8500},
+      {id:"P193",name:"ì§ëëª¨í° ë¸ë¡",price:9700},
+      {id:"P194",name:"ìë ¥ì¼ì ë¸ë¡",price:7300},
+      {id:"P195",name:"ì»¬ë¬ì¼ì ë¸ë¡",price:16500},
+      {id:"P196",name:"ì¡°ë ì¼ì ë¸ë¡",price:8500},
+      {id:"P197",name:"ì´ìíì¼ì ë¸ë¡",price:19800},
+      {id:"P198",name:"ê°ìë ì¼ì ë¸ë¡",price:19800},
+      {id:"P199",name:"í°ì¹ì¼ì ë¸ë¡",price:8500},
+      {id:"P200",name:"ì¬ë°ì¼ì ë¸ë¡",price:8470},
+      {id:"P201",name:"ëì¹¨ë° ì¼ì ë¸ë¡",price:13200},
+      {id:"P202",name:"ë©í°í°ì¹ ì¼ì",price:16500},
+      {id:"P203",name:"ê³ ë¬´ì¤ìì¹ì¼ì ë¸ë¡",price:6000},
     ]},
-    {cat:"관련상품", prods:[
-      {id:"P322",name:"NEMO (네모) 하판 교재",price:13500},
-      {id:"P323",name:"NEMO (네모) 상판 교재",price:13500},
+    {cat:"íë ì", prods:[
+      {id:"P204",name:"ë³í ë¸ë¡",price:350},
+      {id:"P205",name:"íì§ ë¸ë¡ A",price:550},
+      {id:"P206",name:"1X9 ë¸ë¡",price:550},
+      {id:"P207",name:"ìí ë¸ë¡",price:550},
+      {id:"P208",name:"íì§ ë¸ë¡ B",price:550},
+      {id:"P209",name:"1X7 ë¸ë¡",price:500},
+      {id:"P210",name:"2X5 ë¸ë¡",price:550},
+      {id:"P211",name:"L2X4 ë¸ë¡",price:400},
+      {id:"P212",name:"L2X2 ë¸ë¡",price:350},
+      {id:"P213",name:"1X3 ë¸ë¡",price:350},
+      {id:"P214",name:"3X3 ë¸ë¡",price:550},
+      {id:"P215",name:"2X7 ë¸ë¡",price:600},
+      {id:"P216",name:"1X5 ë¸ë¡",price:440},
+      {id:"P217",name:"3X5 ë¸ë¡",price:600},
+      {id:"P218",name:"5X7 ë¸ë¡",price:1300},
+      {id:"P219",name:"ì¬ë¼ì´ë ë¸ë¡",price:490},
+      {id:"P220",name:"3X7 ë¸ë¡",price:660},
+      {id:"P221",name:"L6X9 ë¸ë¡",price:660},
+      {id:"P222",name:"3X9 ë¸ë¡",price:770},
+      {id:"P223",name:"ìì¹ ë¸ë¡",price:770},
+      {id:"P224",name:"L1X3 ë¸ë¡",price:350},
+      {id:"P225",name:"2X9 ë¸ë¡",price:700},
+      {id:"P226",name:"2X11 ë¸ë¡",price:750},
+      {id:"P227",name:"7X11 ë¸ë¡",price:1650},
+      {id:"P228",name:"ì¼ê° ë¸ë¡",price:400},
+      {id:"P229",name:"ì£ì§ ë¸ë¡",price:550},
+    ]},
+    {cat:"ê¸°êµ¬ë¬¼", prods:[
+      {id:"P230",name:"íë¤",price:1600},
+      {id:"P231",name:"ë ë¸ë¡",price:1100},
+      {id:"P232",name:"ëì¼í",price:120},
+      {id:"P233",name:"ê³ ë¬´ì¤ í°ì(ì´ìí)",price:100},
+      {id:"P234",name:"ì¤íì´ì ë¸ë¡",price:200},
+      {id:"P235",name:"ëª¨í° ë¸ë¡",price:14850},
+      {id:"P236",name:"2ë¨í",price:100},
+      {id:"P237",name:"ë¸ë¡ íì´ì´",price:1650},
+      {id:"P238",name:"ê³ ë¬´ì¤ ë¹¨ê°ì",price:100},
+      {id:"P239",name:"ê³µ (ì¤í°ë¡í¼)",price:350},
+      {id:"P240",name:"í  ë¸ë¡",price:1320},
+      {id:"P241",name:"ì¤íí",price:120},
+      {id:"P242",name:"3ë¨í",price:130},
+      {id:"P243",name:"ë§í¬í",price:100},
+      {id:"P244",name:"ë¸ë¡ ìºí°íë¬",price:220},
+      {id:"P245",name:"í±ë ë¸ë¡",price:1300},
+      {id:"P246",name:"ë¸ë¡ ìºí°íì´ì´",price:330},
+      {id:"P247",name:"í¼í",price:150},
+      {id:"P248",name:"ìì´ í´ë¦½",price:550},
+      {id:"P249",name:"ì½ë© ì¤íë§",price:550},
+    ]},
+    {cat:"ê´ë ¨ìí", prods:[
+      {id:"P250",name:"ë¸ë¡ ëª¨í° ì¼ì´ë¸",price:900},
+      {id:"P251",name:"ë¸ë¡ ì ì ì¼ì´ë¸",price:900},
+      {id:"P252",name:"AAë°°í°ë¦¬(ìì¹´ë¼ì¸ ê±´ì ì§)",price:350},
+      {id:"P253",name:"ë¸ë¡ 3í ë¡±ì¼ì´ë¸",price:1650},
+      {id:"P254",name:"ë¸ë¡ 3í ì¼ì´ë¸",price:1100},
+      {id:"P255",name:"AAAë°°í°ë¦¬(ìì¹´ë¼ì¸ ê±´ì ì§)",price:350},
+      {id:"P256",name:"ë§ ìì",price:1000},
+      {id:"P257",name:"ì íì ",price:300},
+      {id:"P258",name:"ë¶ííµ",price:1200},
+      {id:"P259",name:"ì½ë© ë¶ì§í¬ ê°ë°©",price:2750},
+      {id:"P260",name:"ë§ëë§ë ì½ë©ì¬í í¼ë³´ë LEVEL 1",price:3850},
+      {id:"P261",name:"ë§ëë§ë ì½ë©ì¬í í¼ë³´ë LEVEL 2",price:3850},
+      {id:"P262",name:"ì½ë© ë°ì¤",price:2200},
+      {id:"P263",name:"ë§ëë§ë ì½ë©ì¬í í¼ë³´ë LEVEL 3",price:6600},
+      {id:"P264",name:"ë§ëë§ë ì½ë©ì¬í êµì¬ (LEVEL 1)",price:22000},
+      {id:"P265",name:"ë§ëë§ë ì½ë©ì¬í êµì¬ (LEVEL 3)",price:22000},
+      {id:"P266",name:"ë§ëë§ë ì½ë©ì¬í êµì¬ (LEVEL 2)",price:22000},
+      {id:"P267",name:"ë§ëë§ë ì½ë©ì¬í í¼ë³´ë LEVEL 4",price:3850},
+      {id:"P268",name:"ë§ëë§ë ì½ë©ì¬í êµì¬ (LEVEL 4)",price:22000},
+      {id:"P269",name:"ë§ëë§ë ì½ë©ì¬í êµì¬ (LEVEL 5)",price:22000},
+      {id:"P270",name:"ë§ëë§ë ì½ë©ì¬í í¼ë³´ë LEVEL 5",price:6600},
+      {id:"P271",name:"ë§ëë§ë ì½ë©ì¬í êµì¬ (LEVEL 6)",price:22000},
+      {id:"P272",name:"ë§ëë§ë ì½ë©ì¬í ì ë¨ì§ (2,000ë§¤)",price:0},
     ]},
   ]},
-  {line:"항공과학", cats:[
-    {cat:"키트", prods:[
-      {id:"P294",name:"2023 프로에어 SERIES 4",price:75000},
-      {id:"P295",name:"2024 프로에어 SERIES 10",price:30000},
-      {id:"P296",name:"2024 프로에어 SERIES 9",price:30000},
-      {id:"P297",name:"2024 프로에어 SERIES 12",price:75000},
-      {id:"P298",name:"2024 프로에어 SERIES 12_강사용",price:75000},
-      {id:"P299",name:"2025 프로에어 SERIES 2",price:30000},
-      {id:"P300",name:"2024 프로에어 SERIES 12 배터리",price:7600},
-      {id:"P301",name:"전동비행기 + 배터리홀더 SET",price:11000},
+  {line:"ë¤ëª¨", cats:[
+    {cat:"í¤í¸", prods:[
+      {id:"P304",name:"NEMO (ë¤ëª¨) ìí KIT",price:80000},
+      {id:"P305",name:"NEMO (ë¤ëª¨) íí KIT",price:85000},
     ]},
-    {cat:"부품", prods:[
-      {id:"P302",name:"배터리 홀더",price:2200},
-      {id:"P303",name:"모터세트",price:4500},
+    {cat:"ë¶í", prods:[
+      {id:"P306",name:"ë ë¸ë¡",price:1100},
+      {id:"P307",name:"ëì¼í",price:120},
+      {id:"P308",name:"1X9 ë¸ë¡",price:550},
+      {id:"P309",name:"ìí ë¸ë¡",price:550},
+      {id:"P310",name:"2ë¨í",price:100},
+      {id:"P311",name:"ê³ ë¬´ì¤ ë¹¨ê°ì",price:100},
+      {id:"P312",name:"1X5 ë¸ë¡",price:440},
+      {id:"P313",name:"ì¤íí",price:120},
+      {id:"P314",name:"L6X9 ë¸ë¡",price:660},
+      {id:"P315",name:"3X9 ë¸ë¡",price:770},
+      {id:"P316",name:"ìì¹ ë¸ë¡",price:770},
+      {id:"P317",name:"ë§í¬í",price:100},
+      {id:"P318",name:"L1X3 ë¸ë¡",price:350},
+      {id:"P319",name:"7X11 ë¸ë¡",price:1650},
+      {id:"P320",name:"ì¼ê° ë¸ë¡",price:400},
+      {id:"P321",name:"ë¸ë¡ ìºí°íì´ì´",price:330},
+    ]},
+    {cat:"ê´ë ¨ìí", prods:[
+      {id:"P322",name:"NEMO (ë¤ëª¨) íí êµì¬",price:13500},
+      {id:"P323",name:"NEMO (ë¤ëª¨) ìí êµì¬",price:13500},
+    ]},
+  ]},
+  {line:"í­ê³µê³¼í", cats:[
+    {cat:"í¤í¸", prods:[
+      {id:"P294",name:"2023 íë¡ìì´ SERIES 4",price:75000},
+      {id:"P295",name:"2024 íë¡ìì´ SERIES 10",price:30000},
+      {id:"P296",name:"2024 íë¡ìì´ SERIES 9",price:30000},
+      {id:"P297",name:"2024 íë¡ìì´ SERIES 12",price:75000},
+      {id:"P298",name:"2024 íë¡ìì´ SERIES 12_ê°ì¬ì©",price:75000},
+      {id:"P299",name:"2025 íë¡ìì´ SERIES 2",price:30000},
+      {id:"P300",name:"2024 íë¡ìì´ SERIES 12 ë°°í°ë¦¬",price:7600},
+      {id:"P301",name:"ì ëë¹íê¸° + ë°°í°ë¦¬íë SET",price:11000},
+    ]},
+    {cat:"ë¶í", prods:[
+      {id:"P302",name:"ë°°í°ë¦¬ íë",price:2200},
+      {id:"P303",name:"ëª¨í°ì¸í¸",price:4500},
     ]},
   ]},
   {line:"AI VINU", cats:[
-    {cat:"키트", prods:[
-      {id:"P273",name:"비누 SET (패드+카) KIT",price:187000},
-      {id:"P274",name:"비누 푸쉬 앤 런",price:44000},
-      {id:"P275",name:"비누 패드 KIT",price:110000},
-      {id:"P276",name:"비누 카 KIT",price:77000},
-      {id:"P277",name:"비누 패드 (교재 포함)",price:122000},
+    {cat:"í¤í¸", prods:[
+      {id:"P273",name:"ë¹ë SET (í¨ë+ì¹´) KIT",price:187000},
+      {id:"P274",name:"ë¹ë í¸ì¬ ì¤ ë°",price:44000},
+      {id:"P275",name:"ë¹ë í¨ë KIT",price:110000},
+      {id:"P276",name:"ë¹ë ì¹´ KIT",price:77000},
+      {id:"P277",name:"ë¹ë í¨ë (êµì¬ í¬í¨)",price:122000},
     ]},
-    {cat:"부품", prods:[
-      {id:"P278",name:"비누 패드 팩",price:10000},
-      {id:"P279",name:"비누 펜",price:300},
-      {id:"P280",name:"비누 마스터 팩",price:10000},
-      {id:"P281",name:"비누 카 팩",price:10000},
+    {cat:"ë¶í", prods:[
+      {id:"P278",name:"ë¹ë í¨ë í©",price:10000},
+      {id:"P279",name:"ë¹ë í",price:300},
+      {id:"P280",name:"ë¹ë ë§ì¤í° í©",price:10000},
+      {id:"P281",name:"ë¹ë ì¹´ í©",price:10000},
     ]},
-    {cat:"관련상품", prods:[
-      {id:"P282",name:"비누 카 교재 LV1",price:30000},
-      {id:"P283",name:"비누 패드 교재",price:12000},
-      {id:"P284",name:"비누 카 교재 LV2",price:30000},
+    {cat:"ê´ë ¨ìí", prods:[
+      {id:"P282",name:"ë¹ë ì¹´ êµì¬ LV1",price:30000},
+      {id:"P283",name:"ë¹ë í¨ë êµì¬",price:12000},
+      {id:"P284",name:"ë¹ë ì¹´ êµì¬ LV2",price:30000},
       {id:"P285",name:"VINU SLIM BOOK",price:4400},
-      {id:"P286",name:"알루미늄 박스(1개)",price:38500},
-      {id:"P287",name:"비누 원형스티커(10장)",price:220},
-      {id:"P288",name:"비누 사각스티커(10장)",price:220},
-      {id:"P289",name:"[비누늘봄] 네모격자 이동 코딩교재",price:0},
-      {id:"P290",name:"[비누늘봄] 색과노래 코딩교재",price:0},
-      {id:"P291",name:"[비누늘봄] 사물인식 코딩교재",price:0},
-      {id:"P292",name:"[비누늘봄] 각도와 거리 코딩교재",price:0},
-      {id:"P293",name:"비누 전단지 (2,000매)",price:44000},
+      {id:"P286",name:"ìë£¨ë¯¸ë ë°ì¤(1ê°)",price:38500},
+      {id:"P287",name:"ë¹ë ìíì¤í°ì»¤(10ì¥)",price:220},
+      {id:"P288",name:"ë¹ë ì¬ê°ì¤í°ì»¤(10ì¥)",price:220},
+      {id:"P289",name:"[ë¹ëëë´] ë¤ëª¨ê²©ì ì´ë ì½ë©êµì¬",price:0},
+      {id:"P290",name:"[ë¹ëëë´] ìê³¼ë¸ë ì½ë©êµì¬",price:0},
+      {id:"P291",name:"[ë¹ëëë´] ì¬ë¬¼ì¸ì ì½ë©êµì¬",price:0},
+      {id:"P292",name:"[ë¹ëëë´] ê°ëì ê±°ë¦¬ ì½ë©êµì¬",price:0},
+      {id:"P293",name:"ë¹ë ì ë¨ì§ (2,000ë§¤)",price:44000},
     ]},
   ]},
-  {line:"기획상품", cats:[
-    {cat:"동물친구들", prods:[
-      {id:"P324",name:"동물 시리즈 강아지",price:6000},
-      {id:"P325",name:"동물 시리즈 토끼",price:6000},
-      {id:"P326",name:"동물 시리즈 뱀",price:6000},
-      {id:"P327",name:"동물 시리즈 원숭이",price:6000},
-      {id:"P328",name:"동물 시리즈 닭",price:6000},
-      {id:"P329",name:"동물 시리즈 양",price:6000},
-      {id:"P330",name:"동물 시리즈 거북이",price:6000},
-      {id:"P331",name:"동물 시리즈 코끼리",price:6000},
-      {id:"P332",name:"동물 시리즈 돼지",price:6000},
-      {id:"P333",name:"동물 시리즈 달팽이",price:6000},
-      {id:"P334",name:"동물 시리즈 쥐",price:6000},
-      {id:"P335",name:"동물 시리즈 소",price:6000},
-      {id:"P336",name:"동물 시리즈 사자",price:6000},
+  {line:"ê¸°íìí", cats:[
+    {cat:"ëë¬¼ì¹êµ¬ë¤", prods:[
+      {id:"P324",name:"ëë¬¼ ìë¦¬ì¦ ê°ìì§",price:6000},
+      {id:"P325",name:"ëë¬¼ ìë¦¬ì¦ í ë¼",price:6000},
+      {id:"P326",name:"ëë¬¼ ìë¦¬ì¦ ë±",price:6000},
+      {id:"P327",name:"ëë¬¼ ìë¦¬ì¦ ìì­ì´",price:6000},
+      {id:"P328",name:"ëë¬¼ ìë¦¬ì¦ ë­",price:6000},
+      {id:"P329",name:"ëë¬¼ ìë¦¬ì¦ ì",price:6000},
+      {id:"P330",name:"ëë¬¼ ìë¦¬ì¦ ê±°ë¶ì´",price:6000},
+      {id:"P331",name:"ëë¬¼ ìë¦¬ì¦ ì½ë¼ë¦¬",price:6000},
+      {id:"P332",name:"ëë¬¼ ìë¦¬ì¦ ë¼ì§",price:6000},
+      {id:"P333",name:"ëë¬¼ ìë¦¬ì¦ ë¬í½ì´",price:6000},
+      {id:"P334",name:"ëë¬¼ ìë¦¬ì¦ ì¥",price:6000},
+      {id:"P335",name:"ëë¬¼ ìë¦¬ì¦ ì",price:6000},
+      {id:"P336",name:"ëë¬¼ ìë¦¬ì¦ ì¬ì",price:6000},
     ]},
-    {cat:"배틀무기", prods:[
-      {id:"P337",name:"배틀 무기-SWORD (칼)",price:4950},
-      {id:"P338",name:"배틀 무기-GUARDIAN (용방패)",price:4900},
-      {id:"P339",name:"배틀 무기-BLAZE (블레이드)",price:4900},
-      {id:"P340",name:"배틀 무기-POSEIDON (삼지창)",price:4950},
-      {id:"P341",name:"배틀 무기-FLAME (반톱니)",price:3000},
-      {id:"P342",name:"배틀 무기-TOOTH (이빨)",price:200},
-      {id:"P343",name:"배틀 무기-SPINNER (스피너)",price:2200},
-      {id:"P344",name:"배틀 무기-HAMMER (망치)",price:6000},
-      {id:"P345",name:"배틀 무기-BATTLE GEAR (배틀기어)",price:4900},
-      {id:"P346",name:"배틀 무기-WING (날개)",price:3750},
-      {id:"P347",name:"배틀 무기-ROCK (주먹)",price:2750},
-      {id:"P348",name:"배틀 무기-SKULL (해골)",price:3850},
-      {id:"P349",name:"배틀 무기-PAPER (보자기)",price:3300},
-      {id:"P350",name:"배틀 무기-SCISSORS (가위)",price:2750},
+    {cat:"ë°°íë¬´ê¸°", prods:[
+      {id:"P337",name:"ë°°í ë¬´ê¸°-SWORD (ì¹¼)",price:4950},
+      {id:"P338",name:"ë°°í ë¬´ê¸°-GUARDIAN (ì©ë°©í¨)",price:4900},
+      {id:"P339",name:"ë°°í ë¬´ê¸°-BLAZE (ë¸ë ì´ë)",price:4900},
+      {id:"P340",name:"ë°°í ë¬´ê¸°-POSEIDON (ì¼ì§ì°½)",price:4950},
+      {id:"P341",name:"ë°°í ë¬´ê¸°-FLAME (ë°í±ë)",price:3000},
+      {id:"P342",name:"ë°°í ë¬´ê¸°-TOOTH (ì´ë¹¨)",price:200},
+      {id:"P343",name:"ë°°í ë¬´ê¸°-SPINNER (ì¤í¼ë)",price:2200},
+      {id:"P344",name:"ë°°í ë¬´ê¸°-HAMMER (ë§ì¹)",price:6000},
+      {id:"P345",name:"ë°°í ë¬´ê¸°-BATTLE GEAR (ë°°íê¸°ì´)",price:4900},
+      {id:"P346",name:"ë°°í ë¬´ê¸°-WING (ë ê°)",price:3750},
+      {id:"P347",name:"ë°°í ë¬´ê¸°-ROCK (ì£¼ë¨¹)",price:2750},
+      {id:"P348",name:"ë°°í ë¬´ê¸°-SKULL (í´ê³¨)",price:3850},
+      {id:"P349",name:"ë°°í ë¬´ê¸°-PAPER (ë³´ìê¸°)",price:3300},
+      {id:"P350",name:"ë°°í ë¬´ê¸°-SCISSORS (ê°ì)",price:2750},
     ]},
   ]},
 
 ];
 
-// ─── App State ───
+// âââ App State âââ
 let instId='', instData=null, selSchool=null, cart={};
 let curLine=0, searchMode=false, mode='order';
 let selQ=0, selYear=new Date().getFullYear(), returnFromOrder=null;
 
-// ─── Init ───
+// âââ Init âââ
 window.addEventListener('DOMContentLoaded', ()=>{
   const p=new URLSearchParams(location.search);
   const uidFromUrl=p.get('uid')||'';
-  // URL에 uid 있으면 저장, 없으면 저장된 것 사용
+  // URLì uid ìì¼ë©´ ì ì¥, ìì¼ë©´ ì ì¥ë ê² ì¬ì©
   if(uidFromUrl){
     localStorage.setItem('j_lab_uid', uidFromUrl);
     instId=uidFromUrl;
@@ -991,15 +991,15 @@ window.addEventListener('DOMContentLoaded', ()=>{
   }
   instData=INST[instId]||null;
   if(!instData){
-    document.getElementById('nav-name').textContent='❌ 잘못된 접근';
+    document.getElementById('nav-name').textContent='â ìëª»ë ì ê·¼';
     document.querySelector('main').innerHTML=`<div class="card"><div class="card-body" style="text-align:center;padding:40px">
-      <h2 style="color:#C00;margin-bottom:12px">접근 권한 없음</h2>
-      <p style="color:#666;line-height:1.7">카카오톡으로 받은 <b>강사 전용 링크</b>로<br>접속해 주세요.<br><br>
-      <small style="color:#999">링크로 한 번 접속하면<br>이후 앱 아이콘으로 바로 사용할 수 있습니다</small></p>
+      <h2 style="color:#C00;margin-bottom:12px">ì ê·¼ ê¶í ìì</h2>
+      <p style="color:#666;line-height:1.7">ì¹´ì¹´ì¤í¡ì¼ë¡ ë°ì <b>ê°ì¬ ì ì© ë§í¬</b>ë¡<br>ì ìí´ ì£¼ì¸ì.<br><br>
+      <small style="color:#999">ë§í¬ë¡ í ë² ì ìíë©´<br>ì´í ì± ìì´ì½ì¼ë¡ ë°ë¡ ì¬ì©í  ì ììµëë¤</small></p>
     </div></div>`;
     return;
   }
-  document.getElementById('nav-name').textContent=instData.name+' 강사';
+  document.getElementById('nav-name').textContent=instData.name+' ê°ì¬';
   selQ=getCurrentQuarter();
   selYear=new Date().getFullYear();
   renderQuarterPicker();
@@ -1008,7 +1008,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('history-btn').style.display='';
 });
 
-// ─── Mode ───
+// âââ Mode âââ
 function setMode(m){
   mode=m;
   const isReturn=(m==='return');
@@ -1019,13 +1019,13 @@ function setMode(m){
   setEl('btn-return','className','mode-btn'+(isReturn?' active-return':''));
   setStyle('prod-card-hdr','background',isReturn?'var(--red)':'var(--blue)');
   setStyle('order-card-hdr','background',isReturn?'var(--red)':'var(--blue)');
-  setEl('prod-card-title','textContent',isReturn?'반품할 제품 선택':'제품 선택');
-  setEl('order-card-title','textContent',isReturn?'반품 확인 및 접수':'주문 확인 및 접수');
+  setEl('prod-card-title','textContent',isReturn?'ë°íí  ì í ì í':'ì í ì í');
+  setEl('order-card-title','textContent',isReturn?'ë°í íì¸ ë° ì ì':'ì£¼ë¬¸ íì¸ ë° ì ì');
   setStyle('return-reason-wrap','display',isReturn?'block':'none');
   setStyle('submit-btn','background',isReturn?'var(--red)':'var(--blue)');
-  setEl('submit-btn','textContent',isReturn?'↩️ 반품 접수하기':'📦 주문 접수하기');
-  setEl('total-bar-label-text','textContent',isReturn?'반품 합계':'선택 합계');
-  setEl('total-bar-btn-text','textContent',isReturn?'반품 확인 →':'주문 확인 →');
+  setEl('submit-btn','textContent',isReturn?'â©ï¸ ë°í ì ìíê¸°':'ð¦ ì£¼ë¬¸ ì ìíê¸°');
+  setEl('total-bar-label-text','textContent',isReturn?'ë°í í©ê³':'ì í í©ê³');
+  setEl('total-bar-btn-text','textContent',isReturn?'ë°í íì¸ â':'ì£¼ë¬¸ íì¸ â');
   cart={};
   returnFromOrder=null;
   const searchWrap=document.getElementById('search-wrap')||document.querySelector('.search-wrap');
@@ -1048,7 +1048,7 @@ function setMode(m){
   document.getElementById('total-bar').classList.remove('show');
 }
 
-// ─── Schools ───
+// âââ Schools âââ
 function renderSchools(){
   const grid=document.getElementById('school-grid');
   grid.innerHTML='';
@@ -1056,17 +1056,17 @@ function renderSchools(){
     const btn=document.createElement('button');
     btn.className='school-btn';
     let typeLabel='';
-    if(s.type==='업체') typeLabel=`<div class="school-type-label">📦 ${s.vendor||'업체납품'}</div>`;
-    else if(s.type==='강사입금') typeLabel='<div class="school-type-label">💳 강사입금</div>';
-    else if(s.sem) typeLabel='<div class="school-type-label">📅 학기제</div>';
-    btn.innerHTML=s.name.replace(' ★학기제','')+(typeLabel||'');
+    if(s.type==='ìì²´') typeLabel=`<div class="school-type-label">ð¦ ${s.vendor||'ìì²´ë©í'}</div>`;
+    else if(s.type==='ê°ì¬ìê¸') typeLabel='<div class="school-type-label">ð³ ê°ì¬ìê¸</div>';
+    else if(s.sem) typeLabel='<div class="school-type-label">ð íê¸°ì </div>';
+    btn.innerHTML=s.name.replace(' âíê¸°ì ','')+(typeLabel||'');
     btn.onclick=()=>selectSchool(i, btn, false);
     grid.appendChild(btn);
   });
-  // 개인 주문 버튼
+  // ê°ì¸ ì£¼ë¬¸ ë²í¼
   const pb=document.createElement('button');
   pb.className='personal-btn';
-  pb.innerHTML='🛍️ 개인 주문<div class="school-type-label">학교 외 개인 구매</div>';
+  pb.innerHTML='ðï¸ ê°ì¸ ì£¼ë¬¸<div class="school-type-label">íêµ ì¸ ê°ì¸ êµ¬ë§¤</div>';
   pb.onclick=()=>selectPersonal(pb);
   grid.appendChild(pb);
 }
@@ -1075,8 +1075,8 @@ function selectSchool(idx, btn, isPersonal){
   document.querySelectorAll('.school-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.personal-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  selSchool=isPersonal?{name:"개인 주문",type:"개인"}:instData.schools[idx];
-  document.getElementById('sel-school-label').textContent='📍 '+selSchool.name;
+  selSchool=isPersonal?{name:"ê°ì¸ ì£¼ë¬¸",type:"ê°ì¸"}:instData.schools[idx];
+  document.getElementById('sel-school-label').textContent='ð '+selSchool.name;
   cart={};
   setMode('order');
   document.getElementById('prod-card').style.display='block';
@@ -1091,7 +1091,7 @@ function selectPersonal(btn){
   selectSchool(-1, btn, true);
 }
 
-// ─── Line Tabs ───
+// âââ Line Tabs âââ
 function renderLineTabs(){
   const tabs=document.getElementById('line-tabs');
   tabs.innerHTML='';
@@ -1122,7 +1122,7 @@ function renderLine(idx){
     const badge=inCart?`<span class="cat-badge-count">${inCart}</span>`:'';
     sec.innerHTML=`<button class="cat-toggle open" data-ci="${ci}" onclick="toggleCat(this)">
       <span>${c.cat} <span style="color:var(--sub);font-weight:400;font-size:12px">(${c.prods.length})</span></span>
-      <span style="display:flex;align-items:center;gap:6px">${badge}<span class="chevron">▲</span></span>
+      <span style="display:flex;align-items:center;gap:6px">${badge}<span class="chevron">â²</span></span>
     </button>
     <div class="cat-body open" id="cat-body-${idx}-${ci}">
       <div class="prod-wrap">${buildTable(c.prods)}</div>
@@ -1138,8 +1138,8 @@ function toggleCat(btn){
 }
 
 function buildTable(prods){
-  if(!prods.length) return '<div class="no-result">제품이 없습니다</div>';
-  let h=`<table><thead><tr><th style="width:44%">제품명</th><th>소비자가</th><th>수량</th><th>소계</th></tr></thead><tbody>`;
+  if(!prods.length) return '<div class="no-result">ì íì´ ììµëë¤</div>';
+  let h=`<table><thead><tr><th style="width:44%">ì íëª</th><th>ìë¹ìê°</th><th>ìë</th><th>ìê³</th></tr></thead><tbody>`;
   prods.forEach(p=>{
     const q=cart[p.id]||0;
     const sub=q>0?`<span class="sub-cell">${fmt(p.price*q)}</span>`:'<span style="color:#ccc">-</span>';
@@ -1147,7 +1147,7 @@ function buildTable(prods){
       <td class="prod-name">${p.name}</td>
       <td class="price-cell">${fmt(p.price)}</td>
       <td><div class="qty-wrap">
-        <button class="qty-btn" onclick="addQty('${p.id}',-1,${p.price})">−</button>
+        <button class="qty-btn" onclick="addQty('${p.id}',-1,${p.price})">â</button>
         <input class="qty-input${q>0?' has-val':''}" type="number" min="0" value="${q||''}" placeholder="0" id="qi-${p.id}" onchange="setQty('${p.id}',this.value,${p.price})" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
         <button class="qty-btn" onclick="addQty('${p.id}',1,${p.price})">+</button>
       </div></td>
@@ -1157,7 +1157,7 @@ function buildTable(prods){
   return h+'</tbody></table>';
 }
 
-// ─── Qty / Cart ───
+// âââ Qty / Cart âââ
 function addQty(id, delta, price){
   const inp=document.getElementById('qi-'+id);
   let v=(cart[id]||0)+delta;
@@ -1203,7 +1203,7 @@ function findProd(id){
   return null;
 }
 
-// ─── Search ───
+// âââ Search âââ
 function onSearch(val){
   const cl=document.getElementById('search-clear');
   cl.classList.toggle('show',val.length>0);
@@ -1223,15 +1223,15 @@ function onSearch(val){
     }
   }
   if(!found.length){
-    content.innerHTML='<div class="no-result">🔍 검색 결과가 없습니다</div>';
+    content.innerHTML='<div class="no-result">ð ê²ì ê²°ê³¼ê° ììµëë¤</div>';
     return;
   }
-  const fake=[{cat:`검색 결과 (${found.length}건)`, prods:found}];
+  const fake=[{cat:`ê²ì ê²°ê³¼ (${found.length}ê±´)`, prods:found}];
   fake.forEach((c,ci)=>{
     const sec=document.createElement('div');
     sec.className='cat-section';
     sec.innerHTML=`<button class="cat-toggle open" onclick="toggleCat(this)">
-      <span>${c.cat}</span><span class="chevron">▲</span>
+      <span>${c.cat}</span><span class="chevron">â²</span>
     </button>
     <div class="cat-body open"><div class="prod-wrap">${buildTableSearch(c.prods)}</div></div>`;
     content.appendChild(sec);
@@ -1239,7 +1239,7 @@ function onSearch(val){
 }
 
 function buildTableSearch(prods){
-  let h=`<table><thead><tr><th style="width:36%">제품명</th><th>라인/카테고리</th><th>소비자가</th><th>수량</th><th>소계</th></tr></thead><tbody>`;
+  let h=`<table><thead><tr><th style="width:36%">ì íëª</th><th>ë¼ì¸/ì¹´íê³ ë¦¬</th><th>ìë¹ìê°</th><th>ìë</th><th>ìê³</th></tr></thead><tbody>`;
   prods.forEach(p=>{
     const q=cart[p.id]||0;
     const sub=q>0?`<span class="sub-cell">${fmt(p.price*q)}</span>`:'<span style="color:#ccc">-</span>';
@@ -1248,7 +1248,7 @@ function buildTableSearch(prods){
       <td style="color:var(--sub);font-size:12px">${p.lineLabel}<br>${p.catLabel}</td>
       <td class="price-cell">${fmt(p.price)}</td>
       <td><div class="qty-wrap">
-        <button class="qty-btn" onclick="addQty('${p.id}',-1,${p.price})">−</button>
+        <button class="qty-btn" onclick="addQty('${p.id}',-1,${p.price})">â</button>
         <input class="qty-input${q>0?' has-val':''}" type="number" min="0" value="${q||''}" placeholder="0" id="qi-${p.id}" onchange="setQty('${p.id}',this.value,${p.price})" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
         <button class="qty-btn" onclick="addQty('${p.id}',1,${p.price})">+</button>
       </div></td>
@@ -1265,7 +1265,7 @@ function clearSearch(){
   renderLine(curLine);
 }
 
-// ─── Summary ───
+// âââ Summary âââ
 function renderSummary(total){
   const items=[];
   for(const [id,q] of Object.entries(cart)) if(q>0){
@@ -1279,7 +1279,7 @@ function renderSummary(total){
   document.getElementById('order-card').style.display='block';
   let html='';
   items.forEach(p=>{
-    html+=`<div class="sum-row"><div class="sum-label">${p.name}<br><span style="color:var(--sub);font-size:12px">${fmt(p.price)} × ${p.qty}개</span></div><div class="sum-val">${fmt(p.price*p.qty)}</div></div>`;
+    html+=`<div class="sum-row"><div class="sum-label">${p.name}<br><span style="color:var(--sub);font-size:12px">${fmt(p.price)} Ã ${p.qty}ê°</span></div><div class="sum-val">${fmt(p.price*p.qty)}</div></div>`;
   });
   document.getElementById('sum-items').innerHTML=html;
   document.getElementById('total-amt').textContent=fmt(total);
@@ -1291,9 +1291,9 @@ function scrollToSummary(){
 
 
 
-// ─── 앱 설치 안내 ───
+// âââ ì± ì¤ì¹ ìë´ âââ
 function openInstallModal(){
-  // iOS / Android 자동 감지
+  // iOS / Android ìë ê°ì§
   const isIos=/iPhone|iPad|iPod/.test(navigator.userAgent);
   switchInstallTab(isIos?'ios':'android',
     document.querySelector(isIos?'.install-tab:last-child':'.install-tab:first-child'));
@@ -1308,7 +1308,7 @@ function switchInstallTab(type,btn){
   document.getElementById('install-android').classList.toggle('show',type==='android');
   document.getElementById('install-ios').classList.toggle('show',type==='ios');
 }
-// ─── Quarter ───
+// âââ Quarter âââ
 function getCurrentQuarter(){
   const m=new Date().getMonth()+1;
   if(m>=3&&m<=5) return 1;
@@ -1316,24 +1316,24 @@ function getCurrentQuarter(){
   if(m>=9&&m<=11) return 3;
   return 4;
 }
-function quarterRange(q){return['','3-5월','6-8월','9-11월','12-2월'][q];}
+function quarterRange(q){return['','3-5ì','6-8ì','9-11ì','12-2ì'][q];}
 function renderQuarterPicker(){
   const cur=getCurrentQuarter();
   const el=document.getElementById('sel-year-label');
-  if(el) el.textContent=selYear+'년';
+  if(el) el.textContent=selYear+'ë';
   const wrap=document.getElementById('quarter-btns');
   if(!wrap) return;
   wrap.innerHTML='';
   [1,2,3,4].forEach(q=>{
     const btn=document.createElement('button');
     btn.className='quarter-btn'+(selQ===q?' active':'');
-    btn.innerHTML=`<span>${q}분기</span><small>${quarterRange(q)}</small>${q===cur?'<span class="q-cur">현재</span>':''}`;
+    btn.innerHTML=`<span>${q}ë¶ê¸°</span><small>${quarterRange(q)}</small>${q===cur?'<span class="q-cur">íì¬</span>':''}`;
     btn.onclick=()=>{selQ=q;renderQuarterPicker();};
     wrap.appendChild(btn);
   });
 }
 
-// ─── Order History (localStorage) ───
+// âââ Order History (localStorage) âââ
 function getOrderHistory(){
   try{
     return JSON.parse(localStorage.getItem('orders_'+instId)||'[]');
@@ -1353,7 +1353,7 @@ function saveOrderToHistory(payload){
   }catch(e){}
 }
 
-// ─── History Overlay (GAS 서버에서 과거 주문 조회) ───
+// âââ History Overlay (GAS ìë²ìì ê³¼ê±° ì£¼ë¬¸ ì¡°í) âââ
 let _histData=[],_histMode='all';
 function openHistory(){
   document.getElementById('history-overlay').classList.add('show');
@@ -1366,14 +1366,14 @@ function closeHistory(){
 }
 function _loadHistFromServer(){
   const c=document.getElementById('history-content');
-  c.innerHTML='<div class="hist-loading">⏳ 불러오는 중…</div>';
+  c.innerHTML='<div class="hist-loading">â³ ë¶ë¬ì¤ë ì¤â¦</div>';
   fetch(APPS_SCRIPT_URL+'?action=history&uid='+encodeURIComponent(instId))
     .then(r=>r.json()).then(d=>{
       if(d.error) throw new Error(d.error);
       _histData=d; _histMode='all';
       document.querySelectorAll('.hist-filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
       _renderHist();
-    }).catch(e=>{ c.innerHTML='<div class="hist-loading">❌ 조회 오류: '+e.message+'</div>'; });
+    }).catch(e=>{ c.innerHTML='<div class="hist-loading">â ì¡°í ì¤ë¥: '+e.message+'</div>'; });
 }
 function histFilter(mode,btn){
   _histMode=mode;
@@ -1383,22 +1383,22 @@ function histFilter(mode,btn){
 }
 function _renderHist(){
   const c=document.getElementById('history-content');
-  const isCanc=o=>o.status==='취소';
+  const isCanc=o=>o.status==='ì·¨ì';
   const list=_histMode==='all'?_histData
     :_histMode==='cancel'?_histData.filter(isCanc)
     :_histData.filter(o=>o.mode===_histMode&&!isCanc(o));
-  if(!list.length){c.innerHTML='<div class="hist-empty">💭 해당 내역이 없습니다.</div>';return;}
+  if(!list.length){c.innerHTML='<div class="hist-empty">ð­ í´ë¹ ë´ì­ì´ ììµëë¤.</div>';return;}
   c.innerHTML=list.map((o,i)=>{
     const isRet=o.mode==='return',canc=isCanc(o);
     let items=[];try{items=JSON.parse(o.itemsJson||'[]');}catch(e){}
     const modeCls=canc?'cancel':isRet?'return':'order';
-    const modeTxt=canc?'취소됨':isRet?'↩ 반품':'📦 주문';
+    const modeTxt=canc?'ì·¨ìë¨':isRet?'â© ë°í':'ð¦ ì£¼ë¬¸';
     const rows=items.map(it=>'<div class="hist-item-row"><span class="hist-item-name">'+it.name+'</span><span class="hist-item-qty">x'+it.qty+'</span></div>').join('');
     return '<div class="hist-card"><div class="hist-card-hdr" onclick="toggleHistCard('+i+')">'
       +'<div class="hist-card-meta"><div class="hist-card-top">'
       +'<span class="hist-mode-badge '+modeCls+'">'+modeTxt+'</span>'
       +'<span class="hist-school">'+o.school+'</span>'
-      +'</div><div class="hist-sub">'+o.quarterLabel+' · '+o.orderAt+'</div></div></div>'
+      +'</div><div class="hist-sub">'+o.quarterLabel+' Â· '+o.orderAt+'</div></div></div>'
       +'<div class="hist-card-body" id="hist-body-'+i+'">'+rows+'</div></div>';
   }).join('');
 }
@@ -1406,24 +1406,24 @@ function toggleHistCard(i){
   const el=document.getElementById('hist-body-'+i);
   if(el) el.classList.toggle('open');
 }
-// ─── Return History ───
+// âââ Return History âââ
 function renderReturnHistory(){
   const area=document.getElementById('return-history-area');
   if(!area) return;
   const history=getOrderHistory();
   if(!history.length){
-    area.innerHTML='<div class="rh-wrap"><div class="rh-empty">📭 반품할 주문 내역이 없습니다.<br><small>주문 내역이 이 기기에 저장되어 있어야 반품 신청이 가능합니다.</small></div></div>';
+    area.innerHTML='<div class="rh-wrap"><div class="rh-empty">ð­ ë°íí  ì£¼ë¬¸ ë´ì­ì´ ììµëë¤.<br><small>ì£¼ë¬¸ ë´ì­ì´ ì´ ê¸°ê¸°ì ì ì¥ëì´ ìì´ì¼ ë°í ì ì²­ì´ ê°ë¥í©ëë¤.</small></div></div>';
     return;
   }
   let html='<div class="rh-wrap">';
-  html+=`<div style="font-size:12px;color:var(--sub);margin-bottom:10px">반품할 주문을 선택해 주세요 (${history.length}건)</div>`;
+  html+=`<div style="font-size:12px;color:var(--sub);margin-bottom:10px">ë°íí  ì£¼ë¬¸ì ì íí´ ì£¼ì¸ì (${history.length}ê±´)</div>`;
   history.forEach((o,i)=>{
-    const itemSummary=o.items.map(it=>`${it.name} ×${it.qty}`).join(', ');
-    const short=itemSummary.length>60?itemSummary.slice(0,60)+'…':itemSummary;
+    const itemSummary=o.items.map(it=>`${it.name} Ã${it.qty}`).join(', ');
+    const short=itemSummary.length>60?itemSummary.slice(0,60)+'â¦':itemSummary;
     html+=`<div class="rh-card" onclick="selectReturnOrder(${i})">
       <div class="rh-top">
         <div class="rh-info">
-          <strong>${o.school} — ${o.year}년 ${o.quarter}분기</strong>
+          <strong>${o.school} â ${o.year}ë ${o.quarter}ë¶ê¸°</strong>
           <small>${o.orderAt}</small>
         </div>
         <div class="rh-amt">${fmt(o.total)}</div>
@@ -1446,40 +1446,40 @@ function renderReturnFromOrder(){
   const o=returnFromOrder;
   cart={};
   let html=`<div>
-    <button class="rh-back" onclick="backToReturnHistory()">← 주문 목록으로</button>
+    <button class="rh-back" onclick="backToReturnHistory()">â ì£¼ë¬¸ ëª©ë¡ì¼ë¡</button>
     <div style="padding:0 16px 10px">
-      <div style="font-size:13px;font-weight:700;color:var(--text)">${o.school} — ${o.year}년 ${o.quarter}분기</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text)">${o.school} â ${o.year}ë ${o.quarter}ë¶ê¸°</div>
       <div style="font-size:11px;color:var(--sub);margin-top:2px">${o.orderAt}</div>
-      <div style="font-size:12px;color:var(--sub);margin-top:8px">반품할 수량을 입력하세요 (주문 수량 이하)</div>
+      <div style="font-size:12px;color:var(--sub);margin-top:8px">ë°íí  ìëì ìë ¥íì¸ì (ì£¼ë¬¸ ìë ì´í)</div>
     </div>
     <div class="prod-wrap"><table>
-      <thead><tr><th>제품명</th><th style="text-align:center">주문</th><th style="text-align:center">반품수량</th><th style="text-align:right">금액</th></tr></thead>
+      <thead><tr><th>ì íëª</th><th style="text-align:center">ì£¼ë¬¸</th><th style="text-align:center">ë°íìë</th><th style="text-align:right">ê¸ì¡</th></tr></thead>
       <tbody>`;
   o.items.forEach(it=>{
     html+=`<tr>
       <td class="prod-name">${it.name}</td>
-      <td style="text-align:center;color:var(--sub);font-size:12px">×${it.qty}</td>
+      <td style="text-align:center;color:var(--sub);font-size:12px">Ã${it.qty}</td>
       <td style="text-align:center">
         <div class="qty-wrap" style="justify-content:center">
-          <button class="qty-btn" onclick="changeReturnQty('${it.id}',-1,${it.qty})">−</button>
+          <button class="qty-btn" onclick="changeReturnQty('${it.id}',-1,${it.qty})">â</button>
           <input class="qty-input" id="rq_${it.id}" type="number" min="0" max="${it.qty}" value="0"
             onchange="setReturnQty('${it.id}',this.value,${it.qty},${it.price})">
           <button class="qty-btn" onclick="changeReturnQty('${it.id}',1,${it.qty})">+</button>
         </div>
       </td>
-      <td class="sub-cell" style="text-align:right" id="rsub_${it.id}">₩0</td>
+      <td class="sub-cell" style="text-align:right" id="rsub_${it.id}">â©0</td>
     </tr>`;
   });
   html+=`</tbody></table></div></div>`;
   area.innerHTML=html;
-  // total bar 리셋
-  document.getElementById('bar-amt').textContent='₩0';
+  // total bar ë¦¬ì
+  document.getElementById('bar-amt').textContent='â©0';
   document.getElementById('total-bar').classList.remove('show');
 }
 function backToReturnHistory(){
   returnFromOrder=null;
   cart={};
-  document.getElementById('bar-amt').textContent='₩0';
+  document.getElementById('bar-amt').textContent='â©0';
   document.getElementById('total-bar').classList.remove('show');
   document.getElementById('order-card').style.display='none';
   renderReturnHistory();
@@ -1506,27 +1506,27 @@ function setReturnQty(id,val,maxQty,price){
   cart[id]=q;
   const sub=price*q;
   const subEl=document.getElementById('rsub_'+id);
-  if(subEl) subEl.textContent=q>0?fmt(sub):'₩0';
-  // 합계 업데이트
+  if(subEl) subEl.textContent=q>0?fmt(sub):'â©0';
+  // í©ê³ ìë°ì´í¸
   let total=0;
   for(const [k,qty] of Object.entries(cart)) if(qty>0){
     const it=returnFromOrder?returnFromOrder.items.find(i=>i.id===k):null;
     if(it) total+=it.price*qty;
   }
   const bar=document.getElementById('bar-amt');
-  if(bar) bar.textContent=total>0?fmt(total):'₩0';
+  if(bar) bar.textContent=total>0?fmt(total):'â©0';
   if(total>0) document.getElementById('total-bar').classList.add('show');
   else document.getElementById('total-bar').classList.remove('show');
 }
 
-// ─── Submit ───
+// âââ Submit âââ
 async function submitOrder(){
   const items=[];
   if(mode==='return'&&returnFromOrder){
     for(const [id,q] of Object.entries(cart)) if(q>0){
       const p=returnFromOrder.items.find(i=>i.id===id);
       if(p) items.push({id,name:p.name,price:p.price,qty:q,sub:p.price*q,
-        refOrderAt:returnFromOrder.orderAt,refQuarter:`${returnFromOrder.year}년 ${returnFromOrder.quarter}분기`});
+        refOrderAt:returnFromOrder.orderAt,refQuarter:`${returnFromOrder.year}ë ${returnFromOrder.quarter}ë¶ê¸°`});
     }
   } else {
     for(const [id,q] of Object.entries(cart)) if(q>0){
@@ -1534,17 +1534,17 @@ async function submitOrder(){
       if(p) items.push({id,name:p.name,price:p.price,qty:q,sub:p.price*q});
     }
   }
-  if(!items.length){showToast(mode==='return'?'⚠️ 반품할 제품을 선택해주세요':'⚠️ 제품을 선택해주세요');return;}
+  if(!items.length){showToast(mode==='return'?'â ï¸ ë°íí  ì íì ì íí´ì£¼ì¸ì':'â ï¸ ì íì ì íí´ì£¼ì¸ì');return;}
   if(mode==='return'){
     const reason=document.getElementById('return-reason').value;
-    if(!reason){showToast('⚠️ 반품 사유를 선택해주세요');return;}
+    if(!reason){showToast('â ï¸ ë°í ì¬ì ë¥¼ ì íí´ì£¼ì¸ì');return;}
   }
   const total=items.reduce((s,i)=>s+i.sub,0);
   const memo=document.getElementById('memo').value.trim();
   const returnReason=mode==='return'?document.getElementById('return-reason').value:'';
   const btn=document.getElementById('submit-btn');
   btn.disabled=true;
-  btn.textContent='⏳ 접수 중...';
+  btn.textContent='â³ ì ì ì¤...';
   document.getElementById('loading').classList.add('show');
   try{
     const payload={
@@ -1552,24 +1552,24 @@ async function submitOrder(){
       school:selSchool.name,schoolType:selSchool.type,
       mode,returnReason,
       items,total,memo,
-      quarter:selQ,year:selYear,quarterLabel:`${selYear}년 ${selQ}분기`,
+      quarter:selQ,year:selYear,quarterLabel:`${selYear}ë ${selQ}ë¶ê¸°`,
       orderAt:new Date().toLocaleString('ko-KR'),vendor:selSchool.vendor||''
     };
     const result = await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify(payload),redirect:'follow'}).then(r=>r.json());
-    if (!result || result.status !== 'ok') throw new Error((result && result.message) || '주문 전송 오류');
+    if (!result || result.status !== 'ok') throw new Error((result && result.message) || 'ì£¼ë¬¸ ì ì¡ ì¤ë¥');
         document.getElementById('loading').classList.remove('show');
     document.getElementById('modal-detail').innerHTML=
       mode==='return'
-        ? `<strong>${instData.name}</strong> 강사 / <strong>${selSchool.name}</strong><br>반품 사유: ${returnReason}<br>총 ${items.length}개 품목<br><br>반품 신청이 접수되었습니다.`
-        : `<strong>${instData.name}</strong> 강사 / <strong>${selSchool.name}</strong><br>총 ${items.length}개 품목 / <strong>${fmt(total)}</strong><br><br>주문 내역이 접수되었습니다.`;
-    document.querySelector('.modal-box h2').textContent=mode==='return'?'반품 신청 완료!':'주문 접수 완료!';
-    document.querySelector('.modal-icon').textContent=mode==='return'?'↩️':'✅';
+        ? `<strong>${instData.name}</strong> ê°ì¬ / <strong>${selSchool.name}</strong><br>ë°í ì¬ì : ${returnReason}<br>ì´ ${items.length}ê° íëª©<br><br>ë°í ì ì²­ì´ ì ìëììµëë¤.`
+        : `<strong>${instData.name}</strong> ê°ì¬ / <strong>${selSchool.name}</strong><br>ì´ ${items.length}ê° íëª© / <strong>${fmt(total)}</strong><br><br>ì£¼ë¬¸ ë´ì­ì´ ì ìëììµëë¤.`;
+    document.querySelector('.modal-box h2').textContent=mode==='return'?'ë°í ì ì²­ ìë£!':'ì£¼ë¬¸ ì ì ìë£!';
+    document.querySelector('.modal-icon').textContent=mode==='return'?'â©ï¸':'â';
     document.getElementById('modal').classList.add('show');
     if(mode==='order') saveOrderToHistory(payload);
     cart={};
     returnFromOrder=null;
     document.getElementById('return-reason').value='';
-    document.getElementById('bar-amt').textContent='₩0';
+    document.getElementById('bar-amt').textContent='â©0';
     document.getElementById('total-bar').classList.remove('show');
     document.getElementById('order-card').style.display='none';
     if(mode==='return'){
@@ -1580,9 +1580,9 @@ async function submitOrder(){
     }
   }catch(e){
     document.getElementById('loading').classList.remove('show');
-    showToast('❌ 접수 실패. 다시 시도해주세요.');
+    showToast('â ì ì ì¤í¨. ë¤ì ìëí´ì£¼ì¸ì.');
     btn.disabled=false;
-    btn.textContent='📦 주문 접수하기';
+    btn.textContent='ð¦ ì£¼ë¬¸ ì ìíê¸°';
   }
 }
 
@@ -1595,34 +1595,34 @@ function closeModal(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ─── 주문내역 조회 ───
+// âââ ì£¼ë¬¸ë´ì­ ì¡°í âââ
 let histAllOrders=[], histCurFilter='all';
 
 async function openHistory(){
   document.getElementById('history-overlay').classList.add('show');
-  document.getElementById('history-content').innerHTML='<div class="hist-loading">⏳ 불러오는 중...</div>';
+  document.getElementById('history-content').innerHTML='<div class="hist-loading">â³ ë¶ë¬ì¤ë ì¤...</div>';
   histCurFilter='all';
   document.querySelectorAll('.hist-filter-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
 
   let orders=[];
-  // GAS 우선
+  // GAS ì°ì 
   if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec'){
     try{
       const url=APPS_SCRIPT_URL+'?action=history&uid='+encodeURIComponent(instId);
       const res=await fetch(url,{redirect:'follow'});
       const data=await res.json();
       if(Array.isArray(data)){ orders=data; }
-    }catch(e){ console.warn('GAS 조회 실패, localStorage 사용',e); }
+    }catch(e){ console.warn('GAS ì¡°í ì¤í¨, localStorage ì¬ì©',e); }
   }
-  // localStorage 폴백
+  // localStorage í´ë°±
   if(!orders.length){
     orders=getOrderHistory().map(o=>({
       mode:o.mode||'order', orderId:String(o.id),
       orderAt:o.orderAt, school:o.school,
-      quarterLabel:`${o.year}년 ${o.quarter}분기`,
-      items:o.items.map(i=>i.name+'×'+i.qty).join(' / '),
+      quarterLabel:`${o.year}ë ${o.quarter}ë¶ê¸°`,
+      items:o.items.map(i=>i.name+'Ã'+i.qty).join(' / '),
       qty:o.items.reduce((s,i)=>s+i.qty,0),
-      total:o.total, status:'정상', returnReason:''
+      total:o.total, status:'ì ì', returnReason:''
     }));
   }
   histAllOrders=orders;
@@ -1638,35 +1638,35 @@ function histFilter(type,btn){
   document.querySelectorAll('.hist-filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const filtered = type==='all' ? histAllOrders
-    : type==='cancel' ? histAllOrders.filter(o=>o.status==='취소')
-    : histAllOrders.filter(o=>o.mode===type && o.status!=='취소');
+    : type==='cancel' ? histAllOrders.filter(o=>o.status==='ì·¨ì')
+    : histAllOrders.filter(o=>o.mode===type && o.status!=='ì·¨ì');
   renderHistoryList(filtered);
 }
 
 function renderHistoryList(orders){
   const el=document.getElementById('history-content');
   if(!orders.length){
-    el.innerHTML='<div class="hist-empty">📭 주문 내역이 없습니다.</div>';
+    el.innerHTML='<div class="hist-empty">ð­ ì£¼ë¬¸ ë´ì­ì´ ììµëë¤.</div>';
     return;
   }
   el.innerHTML=orders.map((o,i)=>{
-    const isCanceled=o.status==='취소';
+    const isCanceled=o.status==='ì·¨ì';
     const isRet=o.mode==='return';
     const badgeClass=isCanceled?'cancel':isRet?'return':'order';
-    const badgeText=isCanceled?'취소됨':isRet?'↩️ 반품':'📦 주문';
-    // 제품 파싱
+    const badgeText=isCanceled?'ì·¨ìë¨':isRet?'â©ï¸ ë°í':'ð¦ ì£¼ë¬¸';
+    // ì í íì±
     const itemParts=(o.items||'').split(' / ').map(s=>{
-      const m=s.match(/^(.+)×(\d+)/);
+      const m=s.match(/^(.+)Ã(\d+)/);
       return m?{name:m[1],qty:m[2]}:{name:s,qty:''};
     });
     const itemRows=itemParts.map(p=>`
       <div class="hist-item-row">
         <span class="hist-item-name">${p.name}</span>
-        <span class="hist-item-qty">×${p.qty}</span>
+        <span class="hist-item-qty">Ã${p.qty}</span>
       </div>`).join('');
     const cancelBtn=(!isCanceled && !isRet)
-      ?`<button class="hist-cancel-btn" onclick="requestCancel('${o.orderId}',${i},this)">🚫 이 주문 취소 요청</button>`:'';
-    const retReason=isRet&&o.returnReason?`<div style="font-size:12px;color:var(--red);margin-top:6px">사유: ${o.returnReason}</div>`:'';
+      ?`<button class="hist-cancel-btn" onclick="requestCancel('${o.orderId}',${i},this)">ð« ì´ ì£¼ë¬¸ ì·¨ì ìì²­</button>`:'';
+    const retReason=isRet&&o.returnReason?`<div style="font-size:12px;color:var(--red);margin-top:6px">ì¬ì : ${o.returnReason}</div>`:'';
     return `<div class="hist-card">
       <div class="hist-card-hdr" onclick="toggleHistCard(this)">
         <div class="hist-card-meta">
@@ -1674,7 +1674,7 @@ function renderHistoryList(orders){
             <span class="hist-mode-badge ${badgeClass}">${badgeText}</span>
             <span class="hist-school">${o.school}</span>
           </div>
-          <div class="hist-sub">${o.quarterLabel} · ${o.orderAt}</div>
+          <div class="hist-sub">${o.quarterLabel} Â· ${o.orderAt}</div>
         </div>
         <div class="hist-total">${fmt(o.total)}</div>
       </div>
@@ -1693,9 +1693,9 @@ function toggleHistCard(hdr){
 }
 
 async function requestCancel(orderId, idx, btn){
-  if(!confirm('이 주문을 취소 요청하시겠습니까?\n취소 후에는 되돌릴 수 없습니다.')) return;
+  if(!confirm('ì´ ì£¼ë¬¸ì ì·¨ì ìì²­íìê² ìµëê¹?\nì·¨ì íìë ëëë¦´ ì ììµëë¤.')) return;
   btn.disabled=true;
-  btn.textContent='⏳ 처리 중...';
+  btn.textContent='â³ ì²ë¦¬ ì¤...';
 
   if(APPS_SCRIPT_URL && APPS_SCRIPT_URL!=='https://script.google.com/macros/s/AKfycbzFgkFapXVIfcaZ8sj1Pk4sXNTDKDhu5_4MWdrugVtV2MFz0GdEE2elfFBmTblVwSE2/exec'){
     try{
@@ -1703,25 +1703,25 @@ async function requestCancel(orderId, idx, btn){
       const res=await fetch(url,{redirect:'follow'});
       const data=await res.json();
       if(data.ok){
-        showToast('✅ 취소 요청이 접수되었습니다');
-        histAllOrders[idx].status='취소';
-        // localStorage도 업데이트
-        updateLocalOrderStatus(orderId,'취소');
+        showToast('â ì·¨ì ìì²­ì´ ì ìëììµëë¤');
+        histAllOrders[idx].status='ì·¨ì';
+        // localStorageë ìë°ì´í¸
+        updateLocalOrderStatus(orderId,'ì·¨ì');
         openHistory();
         return;
       }
     }catch(e){ console.error(e); }
   } else {
-    // GAS 없을 때 localStorage만 처리
-    updateLocalOrderStatus(orderId,'취소');
-    histAllOrders[idx].status='취소';
-    showToast('✅ 취소 처리되었습니다 (로컬)');
+    // GAS ìì ë localStorageë§ ì²ë¦¬
+    updateLocalOrderStatus(orderId,'ì·¨ì');
+    histAllOrders[idx].status='ì·¨ì';
+    showToast('â ì·¨ì ì²ë¦¬ëììµëë¤ (ë¡ì»¬)');
     openHistory();
     return;
   }
   btn.disabled=false;
-  btn.textContent='🚫 이 주문 취소 요청';
-  showToast('❌ 취소 처리 실패. 다시 시도해주세요.');
+  btn.textContent='ð« ì´ ì£¼ë¬¸ ì·¨ì ìì²­';
+  showToast('â ì·¨ì ì²ë¦¬ ì¤í¨. ë¤ì ìëí´ì£¼ì¸ì.');
 }
 
 function updateLocalOrderStatus(orderId, status){
@@ -1733,7 +1733,7 @@ function updateLocalOrderStatus(orderId, status){
   }catch(e){}
 }
 
-// ─── PWA Install ───
+// âââ PWA Install âââ
 let deferredPrompt=null;
 function setupInstall(){
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1742,27 +1742,27 @@ function setupInstall(){
   const guide=document.getElementById('install-guide');
   if(isIOS){
     guide.classList.add('show');
-    document.getElementById('install-guide-text').textContent=' Safari에서 공유 버튼(⬆) → "홈 화면에 추가"를 탭하세요.';
+    document.getElementById('install-guide-text').textContent=' Safariìì ê³µì  ë²í¼(â¬) â "í íë©´ì ì¶ê°"ë¥¼ í­íì¸ì.';
     return;
   }
   window.addEventListener('beforeinstallprompt',e=>{
     e.preventDefault(); deferredPrompt=e;
     document.getElementById('install-btn').style.display='block';
     guide.classList.add('show');
-    document.getElementById('install-guide-text').textContent=' 상단 "앱 설치" 버튼을 누르면 홈 화면에 추가됩니다.';
+    document.getElementById('install-guide-text').textContent=' ìë¨ "ì± ì¤ì¹" ë²í¼ì ëë¥´ë©´ í íë©´ì ì¶ê°ë©ëë¤.';
   });
 }
 async function installPWA(){
   if(!deferredPrompt) return;
   deferredPrompt.prompt();
   const r=await deferredPrompt.userChoice;
-  if(r.outcome==='accepted') showToast('✅ 설치 완료!');
+  if(r.outcome==='accepted') showToast('â ì¤ì¹ ìë£!');
   deferredPrompt=null;
   document.getElementById('install-btn').style.display='none';
 }
 
-// ─── Utils ───
-function fmt(n){return '₩'+n.toLocaleString('ko-KR');}
+// âââ Utils âââ
+function fmt(n){return 'â©'+n.toLocaleString('ko-KR');}
 function showToast(msg,dur=2500){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
