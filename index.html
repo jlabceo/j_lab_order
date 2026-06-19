@@ -346,6 +346,7 @@ textarea:focus{outline:none;border-color:var(--blue2)}
   <div class="card" id="order-card" style="display:none">
     <div class="card-header" id="order-card-hdr"><div class="step-num">3</div><span id="order-card-title">&#xC8FC;&#xBB38; &#xD655;&#xC778; &#xBC0F; &#xC811;&#xC218;</span></div>
     <div class="card-body">
+      <div id="order-date" style="text-align:center;color:#888;font-size:13px;margin-bottom:10px;padding:6px 0;border-bottom:1px solid #f0f0f0"></div>
       <div id="sum-items"></div>
       <div class="total-box">
         <span class="total-label">&#xD569;&#xACC4;</span>
@@ -1286,8 +1287,18 @@ function renderSummary(total){
   document.getElementById('total-amt').textContent=fmt(total);
 }
 
+function fmtDate(dt){
+  const days=['일','월','화','수','목','금','토'];
+  const y=dt.getFullYear(),mo=dt.getMonth()+1,d=dt.getDate(),day=days[dt.getDay()];
+  const h=dt.getHours(),m=dt.getMinutes();
+  const ampm=h<12?'오전':'오후'; const hh=h%12||12; const mm=String(m).padStart(2,'0');
+  return y+'년 '+mo+'월 '+d+'일 (​'+day+') '+ampm+' '+hh+':'+mm;
+}
 function scrollToSummary(){
-  document.getElementById('order-card').scrollIntoView({behavior:'smooth',block:'start'});
+  const el=document.getElementById('order-card');
+  const navH=(document.querySelector('nav')||{offsetHeight:56}).offsetHeight;
+  const top=el.getBoundingClientRect().top+window.scrollY-navH-8;
+  window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
 }
 
 
